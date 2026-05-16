@@ -2,265 +2,3112 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>월간 성장 상담지</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>헤어디자이너 성장 나침반</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;}
+/* ━━━ 토큰 ━━━ */
+:root {
+  --bg: #F5F3EF;
+  --surface: #FFFFFF;
+  --surface2: #EDEBE6;
+  --border: #DDD9D1;
+  --text: #1A1916;
+  --text2: #6B6860;
+  --text3: #AДAA9F;
+  --green: #2D5F40;
+  --green-lt: #E8F2EB;
+  --r: 16px;
+  --rsm: 10px;
+  --rfull: 999px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 100%;
+  overflow-x: hidden;
+}
 
-  @page{
-    size: A4 landscape;
-    margin: 10mm 12mm;
-  }
+/* ━━━ 앱 껍데기 ━━━ */
+.app { display: flex; flex-direction: column; min-height: 100vh; }
 
-  html,body{
-    width:277mm;
-    height:190mm;
-    font-family:'Noto Sans KR',sans-serif;
-    background:#fff;
-    color:#1a1a1a;
-    font-size:9px;
-  }
+/* ━━━ 헤더 ━━━ */
+.hdr {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  flex-shrink: 0;
+}
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  color: var(--green);
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.logo-admin-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--green); display: none;
+}
+.logo-admin-dot.on { display: block; }
+.hdr-right { display: flex; gap: 0; }
+.hdr-btn {
+  padding: 0 10px;
+  height: 52px;
+  font-size: 12px;
+  color: var(--text2);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  transition: all .15s;
+  font-family: 'Noto Sans KR', sans-serif;
+  white-space: nowrap;
+}
+.hdr-btn.on { color: var(--green); border-bottom-color: var(--green); font-weight: 700; }
 
-  .page{
-    width:100%;
-    height:190mm;
-    display:flex;
-    flex-direction:column;
-    gap:5px;
-  }
+/* ━━━ 페이지 시스템 ━━━ */
+.screen { display: none; flex: 1; }
+.screen.on { display: flex; flex-direction: column; }
 
-  .top{
-    display:grid;
-    grid-template-columns:1fr auto 1fr;
-    align-items:center;
-    border-bottom:1.5px solid #2D5F40;
-    padding-bottom:4px;
-    flex-shrink:0;
-  }
-  .top h1{font-size:14px;font-weight:700;color:#2D5F40;}
-  .top p{font-size:8px;color:#999;text-align:center;}
-  .legend{display:flex;gap:10px;align-items:center;}
-  .legend-item{display:flex;align-items:center;gap:4px;font-size:8px;color:#666;}
-  .leg-box{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
-  .leg-w{background:#F8F8F6;border:0.5px solid #ccc;}
-  .leg-y{background:#FFF8EC;border:0.5px dashed #D4B96A;}
+/* ━━━━━━━━━━━━━━━━━━━━
+   홈 화면
+━━━━━━━━━━━━━━━━━━━━ */
+.home-scroll { flex: 1; overflow-y: auto; }
+.home-inner { max-width: 520px; margin: 0 auto; padding: 28px 20px calc(32px + var(--safe-bottom)); }
 
-  .meta{
-    display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
-    flex-shrink:0;
-  }
-  .meta-item label{font-size:8px;font-weight:700;color:#999;letter-spacing:.06em;display:block;margin-bottom:2px;}
-  .meta-item .line{border-bottom:1px solid #ddd;height:14px;}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  color: var(--green);
+  background: var(--green-lt);
+  padding: 5px 14px;
+  border-radius: var(--rfull);
+  margin-bottom: 16px;
+}
+.hero-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(26px, 7vw, 36px);
+  font-weight: 300;
+  line-height: 1.45;
+  letter-spacing: .02em;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+.hero-title em { color: var(--green); font-style: normal; font-weight: 600; }
+.hero-sub { font-size: 14px; color: var(--text2); line-height: 2; margin-bottom: 28px; font-weight: 400; }
 
-  .cols{
-    display:grid;grid-template-columns:1fr 1fr;gap:8px;
-    flex:1;
-    min-height:0;
-  }
-  .col{display:flex;flex-direction:column;gap:6px;height:100%;}
+/* 시작 카드 */
+.start-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.start-card-top {
+  background: var(--green);
+  padding: 22px 22px 20px;
+}
+.start-card-top h2 {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+  letter-spacing: -0.02em;
+}
+.start-card-top p { font-size: 12px; color: rgba(255,255,255,.72); line-height: 1.6; font-weight: 400; }
+.start-card-body { padding: 20px 22px 22px; overflow: hidden; }
+.lbl { font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 7px; display: block; }
+.inp {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 15px;
+  padding: 13px 15px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--rsm);
+  background: var(--bg);
+  color: var(--text);
+  margin-bottom: 14px;
+  outline: none;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: border .15s, background .15s;
+}
+.inp:focus { border-color: var(--green); background: var(--surface); }
+.btn-go {
+  width: 100%;
+  padding: 16px;
+  background: var(--green);
+  color: #fff;
+  border: none;
+  border-radius: var(--rsm);
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+  letter-spacing: .02em;
+  cursor: pointer;
+  transition: opacity .2s;
+}
+.btn-go:hover { opacity: .88; }
 
-  .card{
-    background:#fff;border:0.5px solid #ddd;border-radius:5px;
-    overflow:hidden;flex:1;display:flex;flex-direction:column;
-    min-height:0;
-  }
-  .card-head{
-    padding:4px 9px;display:flex;align-items:center;gap:6px;
-    background:#F4F4F2;border-bottom:0.5px solid #ddd;
-    flex-shrink:0;
-  }
-  .num{
-    width:15px;height:15px;border-radius:50%;
-    background:#2D5F40;color:#fff;
-    font-size:8px;font-weight:700;
-    display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  }
-  .card-head-text span{font-size:10px;font-weight:700;color:#1a1a1a;display:block;line-height:1.3;}
-  .timing{font-size:7.5px;color:#999;}
+/* ━━━━━━━━━━━━━━━━━━━━
+   진단 화면 (풀스크린 카드)
+━━━━━━━━━━━━━━━━━━━━ */
+.survey-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 520px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 0 var(--safe-bottom);
+}
 
-  .card-body{
-    padding:7px 9px;
-    display:flex;flex-direction:column;gap:5px;
-    flex:1;min-height:0;
-  }
+/* 진행바 */
+.prog-bar-wrap {
+  padding: 14px 20px 12px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.prog-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.prog-cat { font-size: 12px; font-weight: 700; color: var(--green); }
+.prog-cnt { font-size: 12px; color: var(--text2); }
+.prog-track { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.prog-fill { height: 100%; background: var(--green); border-radius: 3px; transition: width .35s cubic-bezier(.4,0,.2,1); }
 
-  .sec-lbl{font-size:7.5px;font-weight:700;color:#888;letter-spacing:.05em;margin-bottom:2px;}
+/* 질문 영역 (스크롤 가능) */
+.q-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 20px 8px;
+}
+.q-domain {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: var(--text2);
+  background: var(--surface2);
+  padding: 3px 10px;
+  border-radius: var(--rfull);
+  margin-bottom: 14px;
+}
+.q-num { font-size: 11px; font-weight: 700; color: var(--text3); letter-spacing: .06em; margin-bottom: 8px; }
+.q-text {
+  font-size: clamp(15px, 4vw, 18px);
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--text);
+  margin-bottom: 28px;
+  letter-spacing: -0.01em;
+}
 
-  .box{border:0.5px solid #ddd;border-radius:3px;background:#F8F8F6;flex:1;min-height:18px;}
-  .box.fixed{flex:none;height:22px;}
-  .box.short{flex:none;height:16px;}
+/* 옵션 */
+.opts { display: flex; flex-direction: column; gap: 10px; padding-bottom: 16px; }
+.opt {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 15px 18px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all .15s;
+  user-select: none;
+}
+.opt:active { transform: scale(.98); }
+.opt.sel {
+  background: var(--green-lt);
+  border-color: var(--green);
+}
+.opt-dot {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.opt.sel .opt-dot { background: var(--green); border-color: var(--green); }
+.opt.sel .opt-dot::after { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #fff; }
+.opt-score { font-size: 11px; font-weight: 700; color: var(--text3); width: 16px; text-align: center; flex-shrink: 0; }
+.opt.sel .opt-score { color: var(--green); }
+.opt-label { font-size: 14px; color: var(--text2); line-height: 1.45; flex: 1; }
+.opt.sel .opt-label { color: var(--green); font-weight: 600; }
 
-  .mbox{
-    border:0.5px dashed #D4B96A;border-radius:3px;
-    background:#FFF8EC;flex:1;min-height:18px;
-    position:relative;
-  }
-  .mbox.fixed{flex:none;height:22px;}
-  .mbox::after{
-    content:'멘토';position:absolute;top:3px;right:6px;
-    font-size:7px;font-weight:700;color:#9a7b2a;
-  }
+/* 이전 버튼 - 질문 아래 인라인 */
+.q-nav {
+  padding: 0 20px 24px;
+  background: transparent;
+  border-top: none;
+  display: flex;
+  flex-shrink: 0;
+}
+.nav-btn {
+  padding: 11px 22px;
+  border-radius: var(--rfull);
+  border-radius: var(--rsm);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text2);
+  transition: all .15s;
+}
+.nav-btn:active { transform: scale(.97); }
+.nav-btn.primary { background: var(--green); color: #fff; border-color: transparent; }
+.nav-btn.primary:disabled { opacity: .35; cursor: not-allowed; transform: none; }
+.nav-btn:not(.primary):disabled { opacity: .3; cursor: not-allowed; transform: none; }
 
-  .sec{display:flex;flex-direction:column;flex:1;min-height:0;}
-  .sec.noflex{flex:none;}
+/* ━━━━━━━━━━━━━━━━━━━━
+   서술 화면
+━━━━━━━━━━━━━━━━━━━━ */
+.text-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 520px;
+  width: 100%;
+  margin: 0 auto;
+}
+.text-body { flex: 1; overflow-y: auto; padding: 24px 20px; }
+.text-step-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 700;
+  color: var(--green); background: var(--green-lt);
+  padding: 4px 12px; border-radius: var(--rfull);
+  margin-bottom: 16px;
+}
+.text-domain { font-size: 11px; font-weight: 700; color: var(--text3); letter-spacing: .06em; margin-bottom: 6px; }
+.text-q { font-size: clamp(15px, 4vw, 18px); font-weight: 500; line-height: 1.6; color: var(--text); margin-bottom: 8px; letter-spacing: -0.01em; }
+.text-hint { font-size: 12px; color: var(--text2); line-height: 1.65; margin-bottom: 18px; }
+.ta {
+  width: 100%;
+  font-size: 15px;
+  padding: 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--rsm);
+  background: var(--surface);
+  color: var(--text);
+  resize: none;
+  min-height: 110px;
+  outline: none;
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 1.7;
+  transition: border .15s;
+}
+.ta:focus { border-color: var(--green); }
 
-  .checks{display:flex;flex-direction:column;gap:2px;}
-  .check{display:flex;align-items:center;gap:4px;font-size:8.5px;color:#444;}
-  .cb{width:10px;height:10px;border:0.5px solid #ccc;border-radius:2px;flex-shrink:0;background:#fff;}
+/* ━━━━━━━━━━━━━━━━━━━━
+   결과 화면
+━━━━━━━━━━━━━━━━━━━━ */
+.result-scroll { flex: 1; overflow-y: auto; }
+.result-inner { max-width: 520px; margin: 0 auto; padding: 0 0 calc(40px + var(--safe-bottom)); }
 
-  .promises{display:flex;flex-direction:column;gap:4px;flex:1;}
-  .prow{display:flex;align-items:center;gap:6px;flex:1;}
-  .pnum{width:15px;height:15px;border-radius:50%;background:#2D5F40;color:#fff;font-size:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-  .pline{flex:1;border-bottom:1px solid #ddd;}
+/* 유형 히어로 */
+.type-hero {
+  padding: 32px 24px 28px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.type-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  opacity: .12;
+  background-image: radial-gradient(circle at 30% 30%, currentColor 1px, transparent 1px),
+                    radial-gradient(circle at 70% 70%, currentColor 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+.type-emoji { font-size: 52px; margin-bottom: 10px; display: block; position: relative; }
+.type-label { font-size: 11px; font-weight: 500; letter-spacing: .08em; opacity: .65; margin-bottom: 8px; position: relative; }
+.type-name {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(24px, 6.5vw, 32px);
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: 12px;
+  position: relative;
+  letter-spacing: -0.01em;
+}
+.type-tagline { font-size: 13.5px; opacity: .78; line-height: 1.75; position: relative; font-weight: 400; white-space: pre-line; }
 
-  @media print{
-    html,body{width:100%;height:100%;}
-  }
+/* 결과 패딩 래퍼 */
+.rp { padding: 0 20px; }
+
+/* 섹션 카드 */
+.r-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  margin: 14px 20px 0;
+}
+.r-card-tit {
+  font-size: 11px; font-weight: 700; letter-spacing: .06em;
+  color: var(--text2);
+  padding: 11px 18px;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+}
+
+/* 레이더 차트 */
+.chart-box { padding: 20px 16px; }
+.chart-inner { position: relative; width: 100%; height: 240px; }
+
+/* 점수 그리드 */
+.score-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+.sc-item {
+  padding: 14px 8px;
+  text-align: center;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.sc-item:nth-child(4n) { border-right: none; }
+.sc-item:nth-last-child(-n+4) { border-bottom: none; }
+.sc-item:nth-last-child(-n+3) { border-bottom: none; }
+.sc-cat { font-size: 10px; color: var(--text3); margin-bottom: 3px; }
+.sc-val { font-size: 20px; font-weight: 900; }
+.sc-bar { height: 3px; border-radius: 2px; background: var(--border); margin-top: 5px; overflow: hidden; }
+.sc-bar-fill { height: 100%; border-radius: 2px; }
+.sc-delta {
+  position: absolute; top: 7px; right: 6px;
+  font-size: 9px; font-weight: 700;
+  padding: 1px 4px; border-radius: var(--rfull);
+}
+.sc-delta.up { color: #1E6E40; background: #DFF0E6; }
+.sc-delta.dn { color: #B53535; background: #FDEAEA; }
+.sc-delta.eq { color: var(--text3); background: var(--surface2); }
+
+/* 유형 상세 */
+.type-detail { padding: 18px 18px; }
+.td-section { margin-bottom: 18px; }
+.td-section:last-child { margin-bottom: 0; }
+.td-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .08em;
+  padding: 3px 10px; border-radius: var(--rfull);
+  display: inline-block; margin-bottom: 10px;
+}
+.td-label.ctx { color: #1A4A8A; background: #E8F0FF; }
+.td-label.prs { color: #1E6E40; background: #DFF0E6; }
+.td-label.trp { color: #7A3A00; background: #FFF0D8; }
+.td-label.str { color: #1E6E40; background: #DFF0E6; }
+.td-label.cau { color: #7A4F00; background: #FFF0D0; }
+.td-label.tip { color: #1A4A8A; background: #E0EEFF; }
+.td-label.nxt { color: #5A3A80; background: #F3EEFF; }
+.td-label.ask { color: #7A3070; background: #F8EEFF; }
+.td-context { font-size: 13.5px; color: var(--text); line-height: 1.7; margin: 0; }
+.td-oneline {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 15px; font-weight: 600;
+  color: var(--text); line-height: 1.6;
+  padding: 16px 18px 14px;
+  border-bottom: 1px solid var(--border);
+  text-align: center; letter-spacing: -0.01em;
+}
+.td-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.td-list li {
+  font-size: 13.5px; color: var(--text); line-height: 1.55;
+  padding-left: 18px; position: relative;
+}
+.td-list li::before { content: attr(data-bullet); position: absolute; left: 0; font-size: 12px; }
+
+/* 상담 포인트 */
+.counsel-list { padding: 6px 0; }
+.cl-item { padding: 12px 18px; border-bottom: 1px solid var(--border); font-size: 13px; line-height: 1.6; }
+.cl-item:last-child { border-bottom: none; }
+.cl-item.good { color: #1E6E40; }
+.cl-item.warn { color: #7A4F00; }
+.cl-item strong { font-weight: 700; }
+
+/* 메모 결과 */
+.memo-rows { }
+.memo-row { padding: 14px 18px; border-bottom: 1px solid var(--border); }
+.memo-row:last-child { border-bottom: none; }
+.memo-row-lbl { font-size: 10px; font-weight: 700; color: var(--text3); margin-bottom: 5px; letter-spacing: .04em; }
+.memo-row-val { font-size: 14px; color: var(--text); line-height: 1.65; white-space: pre-wrap; }
+.memo-row-empty { font-size: 13px; color: var(--text3); font-style: italic; }
+
+/* 리더 코멘트 */
+.leader-box {
+  background: #FFFCF0;
+  border: 1px solid #EEE0A0;
+  border-radius: var(--r);
+  overflow: hidden;
+  margin: 14px 20px 0;
+}
+.leader-tit {
+  font-size: 11px; font-weight: 700; letter-spacing: .06em;
+  color: #7A5200;
+  padding: 11px 18px;
+  background: #FFF8DC;
+  border-bottom: 1px solid #EEE0A0;
+  display: flex; align-items: center; gap: 6px;
+}
+.leader-body { padding: 16px 18px; }
+.leader-sub { font-size: 12px; color: #A07830; margin-bottom: 12px; line-height: 1.65; }
+.leader-ta {
+  width: 100%;
+  font-size: 14px;
+  padding: 14px;
+  border: 1.5px solid #E0CC88;
+  border-radius: var(--rsm);
+  background: #FFFEF8;
+  color: var(--text);
+  resize: none;
+  min-height: 88px;
+  outline: none;
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 1.7;
+  transition: border .15s;
+}
+.leader-ta:focus { border-color: #C0A040; }
+.leader-hint { font-size: 11px; color: #B89050; margin-top: 8px; line-height: 1.5; }
+
+/* 저장 배너 */
+.save-banner {
+  margin: 14px 20px 0;
+  background: var(--green-lt);
+  border: 1px solid #BDDAC8;
+  border-radius: var(--rsm);
+  padding: 12px 16px;
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 13px; color: var(--green); line-height: 1.6;
+}
+.save-banner strong { font-weight: 700; }
+
+/* 전월 비교 */
+.compare-grid { display: grid; grid-template-columns: repeat(4,1fr); }
+.cg { padding: 12px 6px; text-align: center; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.cg:nth-child(4n) { border-right: none; }
+.cg:nth-last-child(-n+4) { border-bottom: none; }
+.cg:nth-last-child(-n+3) { border-bottom: none; }
+.cg-cat { font-size: 10px; color: var(--text3); margin-bottom: 4px; }
+.cg-val { font-size: 12px; font-weight: 700; color: var(--text); }
+.cg-arr { font-size: 11px; font-weight: 700; }
+
+/* 결과 버튼 */
+.result-btns { display: flex; gap: 10px; margin: 14px 20px 0; }
+.result-btns .bn {
+  flex: 1; padding: 15px;
+  border-radius: var(--rsm); font-size: 15px; font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer; border: 1.5px solid var(--border);
+  background: var(--surface); color: var(--text);
+  transition: all .15s;
+}
+.result-btns .bn:active { transform: scale(.97); }
+.result-btns .bn.p { background: var(--green); color: #fff; border-color: transparent; }
+
+/* ━━━ 유틸 ━━━ */
+.gap14 { margin-top: 14px; }
+
+/* 멘토 공유 버튼 */
+.btn-mentor-share {
+  width: 100%;
+  padding: 17px;
+  background: linear-gradient(135deg, #2D5F40 0%, #3A7A54 100%);
+  color: #fff;
+  border: none;
+  border-radius: var(--rsm);
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+  letter-spacing: .02em;
+  cursor: pointer;
+  transition: opacity .2s, transform .15s;
+  box-shadow: 0 4px 16px rgba(45,95,64,.25);
+}
+.btn-mentor-share:hover { opacity: .9; }
+.btn-mentor-share:active { transform: scale(.98); }
+
+/* ━━━ 결과 카드 가독성 개선 ━━━ */
+/* 유형 히어로 강화 */
+.type-hero {
+  padding: 36px 24px 32px;
+}
+.type-emoji { font-size: 60px; margin-bottom: 12px; }
+.type-name { font-size: clamp(26px, 7vw, 34px); margin-bottom: 14px; }
+.type-tagline { font-size: 14px; line-height: 1.85; }
+
+/* 신호등 배지 */
+.signal-badge { font-size: 14px; padding: 8px 18px; margin-top: 18px; }
+.signal-msg-title { font-size: 16px; font-weight: 700; margin-top: 16px; }
+.signal-msg-desc { font-size: 13.5px; margin-top: 10px; }
+
+/* r-card 제목 */
+.r-card-tit {
+  font-size: 12px; font-weight: 700; letter-spacing: .05em;
+  padding: 13px 18px;
+}
+
+/* 영역별 점수 행 */
+.area-row { padding: 14px 18px; }
+.area-name { font-size: 12px; font-weight: 700; width: 100px; white-space: nowrap; }
+.area-bar-wrap { height: 8px; }
+.area-score { font-size: 15px; font-weight: 900; width: 42px; }
+.area-desc { font-size: 13px; line-height: 1.7; padding-left: 32px; margin-top: 4px; color: var(--text2); }
+
+/* 유형 상세 섹션 */
+.type-detail { padding: 20px 20px; }
+.td-section { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+.td-section:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.td-label { font-size: 11px; padding: 4px 12px; margin-bottom: 12px; }
+.td-context { font-size: 14px; line-height: 1.8; }
+.td-oneline { font-size: 16px; padding: 20px 20px 18px; line-height: 1.7; }
+.td-list { gap: 10px; }
+.td-list li { font-size: 14px; line-height: 1.65; padding-left: 22px; }
+.td-list li::before { font-size: 13px; }
+
+/* ━━━ 히스토리 화면 ━━━ */
+.hist-scroll { flex: 1; overflow-y: auto; }
+.hist-inner { max-width: 520px; margin: 0 auto; padding: 24px 20px calc(32px + var(--safe-bottom)); }
+.hist-empty { text-align: center; padding: 60px 20px; color: var(--text3); font-size: 14px; line-height: 2; }
+.hist-empty .he-icon { font-size: 40px; margin-bottom: 12px; display: block; }
+
+/* 타임라인 */
+.timeline { position: relative; padding-left: 28px; }
+.timeline::before { content:''; position:absolute; left:10px; top:0; bottom:0; width:2px; background:var(--border); border-radius:2px; }
+.tl-item { position: relative; margin-bottom: 20px; }
+.tl-dot {
+  position: absolute; left: -23px; top: 14px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--green); border: 2px solid var(--surface);
+  box-shadow: 0 0 0 2px var(--green);
+}
+.tl-dot.burnout { background: #C03030; box-shadow: 0 0 0 2px #C03030; }
+.tl-dot.launcher { background: #7A50C0; box-shadow: 0 0 0 2px #7A50C0; }
+.tl-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow .15s;
+}
+.tl-card:active { box-shadow: 0 2px 12px rgba(0,0,0,.1); }
+.tl-card-top {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px;
+}
+.tl-emoji { font-size: 28px; flex-shrink: 0; }
+.tl-info { flex: 1; min-width: 0; }
+.tl-month { font-size: 11px; color: var(--text3); margin-bottom: 2px; }
+.tl-type { font-size: 15px; font-weight: 700; color: var(--text); }
+.tl-scores {
+  display: grid; grid-template-columns: repeat(7,1fr);
+  border-top: 1px solid var(--border);
+}
+.tl-sc { padding: 8px 4px; text-align: center; border-right: 1px solid var(--border); }
+.tl-sc:last-child { border-right: none; }
+.tl-sc-cat { font-size: 8px; color: var(--text3); margin-bottom: 2px; }
+.tl-sc-val { font-size: 12px; font-weight: 700; }
+.tl-card-expanded { display: none; border-top: 1px solid var(--border); padding: 14px 16px; background: var(--surface2); }
+.tl-card-expanded.on { display: block; }
+.tl-promise { font-size: 13px; color: var(--text); line-height: 1.6; }
+.tl-promise-lbl { font-size: 10px; font-weight: 700; color: var(--text3); margin-bottom: 4px; letter-spacing: .04em; }
+
+/* ━━━ 팀 현황판 ━━━ */
+.team-scroll { flex: 1; overflow-y: auto; }
+.team-inner { max-width: 520px; margin: 0 auto; padding: 24px 20px calc(32px + var(--safe-bottom)); }
+.team-header { margin-bottom: 20px; }
+.team-month-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.team-month-inp {
+  flex: 1; font-size: 14px; padding: 10px 13px;
+  border: 1.5px solid var(--border); border-radius: var(--rsm);
+  background: var(--surface); color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif; outline: none;
+}
+.team-month-inp:focus { border-color: var(--green); }
+.team-refresh-btn {
+  padding: 10px 16px; background: var(--green); color: #fff;
+  border: none; border-radius: var(--rsm); font-size: 13px; font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif; cursor: pointer;
+}
+
+/* 팀 요약 배너 */
+.team-summary { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 16px; }
+.ts-box {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--rsm); padding: 12px 8px; text-align: center;
+}
+.ts-box .ts-num { font-size: 24px; font-weight: 900; color: var(--text); }
+.ts-box .ts-lbl { font-size: 10px; color: var(--text3); margin-top: 2px; }
+.ts-box.warn { background: #FFF0EE; border-color: #F0C0B8; }
+.ts-box.warn .ts-num { color: #C03030; }
+
+/* 팀원 카드 */
+.team-cards { display: flex; flex-direction: column; gap: 10px; }
+.team-member-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); overflow: hidden;
+}
+.tmc-top { display: flex; align-items: center; gap: 12px; padding: 14px 16px; }
+.tmc-emoji { font-size: 24px; flex-shrink: 0; }
+.tmc-info { flex: 1; }
+.tmc-name { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.tmc-type { font-size: 12px; color: var(--text2); }
+.tmc-alert {
+  font-size: 10px; font-weight: 700; padding: 3px 8px;
+  border-radius: var(--rfull); flex-shrink: 0;
+}
+.tmc-alert.danger { color: #C03030; background: #FDEAEA; }
+.tmc-alert.ok { color: var(--green); background: var(--green-lt); }
+.tmc-bars { padding: 0 16px 14px; display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; }
+.tmc-bar-item { text-align: center; }
+.tmc-bar-cat { font-size: 8px; color: var(--text3); margin-bottom: 3px; }
+.tmc-bar-track { height: 36px; background: var(--surface2); border-radius: 3px; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; }
+.tmc-bar-fill { border-radius: 3px; transition: height .4s; }
+.tmc-bar-val { font-size: 9px; font-weight: 700; margin-top: 3px; }
+.team-empty { text-align: center; padding: 50px 20px; color: var(--text3); font-size: 13px; line-height: 2; }
+
+/* ━━━ 진단 전 약속 체크 ━━━ */
+.promise-check-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); overflow: hidden; margin-bottom: 20px;
+}
+.pcc-top { background: #FFF8E1; border-bottom: 1px solid #EEE0A0; padding: 14px 18px; }
+.pcc-top .pcc-badge { font-size: 10px; font-weight: 700; color: #7A5200; letter-spacing: .06em; margin-bottom: 4px; }
+.pcc-top .pcc-title { font-size: 15px; font-weight: 700; color: var(--text); }
+.pcc-promise-text { font-size: 14px; color: var(--text2); padding: 14px 18px; line-height: 1.65; border-bottom: 1px solid var(--border); font-style: italic; }
+.pcc-opts { display: flex; flex-direction: column; gap: 0; }
+.pcc-opt {
+  display: flex; align-items: center; gap: 14px;
+  padding: 13px 18px; cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  transition: background .12s;
+}
+.pcc-opt:last-child { border-bottom: none; }
+.pcc-opt:hover { background: var(--surface2); }
+.pcc-opt.sel { background: var(--green-lt); }
+.pcc-opt-dot {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid var(--border); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.pcc-opt.sel .pcc-opt-dot { background: var(--green); border-color: var(--green); }
+.pcc-opt.sel .pcc-opt-dot::after { content:''; width:6px; height:6px; border-radius:50%; background:#fff; }
+.pcc-opt-label { font-size: 14px; color: var(--text2); }
+.pcc-opt.sel .pcc-opt-label { color: var(--green); font-weight: 600; }
+.pcc-skip { font-size: 12px; color: var(--text3); text-align: right; padding: 10px 18px; cursor: pointer; }
+
+/* ━━━ 신호등 ━━━ */
+.signal-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 700;
+  padding: 6px 16px; border-radius: var(--rfull);
+  margin-top: 14px; position: relative;
+  letter-spacing: .02em;
+}
+.signal-badge.green  { background: #E6F7EC; color: #1A6E38; border: 1.5px solid #A8DDB8; }
+.signal-badge.yellow { background: #FFF8E0; color: #7A5800; border: 1.5px solid #F0D870; }
+.signal-badge.red    { background: #FDEAEA; color: #A82020; border: 1.5px solid #F0AAAA; }
+.signal-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.signal-badge.green  .signal-dot { background: #22C55E; box-shadow: 0 0 6px #22C55E; }
+.signal-badge.yellow .signal-dot { background: #F5C518; box-shadow: 0 0 6px #F5C518; }
+.signal-badge.red    .signal-dot { background: #EF4444; box-shadow: 0 0 6px #EF4444; }
+
+.signal-msg-title {
+  font-size: 15px; font-weight: 700;
+  margin-top: 14px; position: relative;
+  letter-spacing: -0.01em; line-height: 1.5;
+}
+.signal-msg-desc {
+  font-size: 13px; opacity: .75;
+  margin-top: 8px; position: relative;
+  line-height: 1.85; font-weight: 400;
+  white-space: pre-line;
+}
+
+/* 신호등 영역 카드 테두리 */
+.sc-item.sig-green  { border-bottom-color: #22C55E; border-bottom-width: 2px; }
+.sc-item.sig-yellow { border-bottom-color: #F5C518; border-bottom-width: 2px; }
+.sc-item.sig-red    { border-bottom-color: #EF4444; border-bottom-width: 2px; }
+
+/* ━━━ 이번 달 기록 입력 ━━━ */
+.memo-input-label { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+.memo-input-hint { font-size: 11px; color: var(--text3); margin-bottom: 8px; line-height: 1.5; }
+.memo-ta {
+  width: 100%; font-size: 14px; padding: 12px 14px;
+  border: 1.5px solid var(--border); border-radius: var(--rsm);
+  background: var(--bg); color: var(--text);
+  resize: none; min-height: 72px; outline: none;
+  font-family: 'Noto Sans KR', sans-serif; line-height: 1.7;
+  transition: border .15s, background .15s;
+}
+.memo-ta:focus { border-color: var(--green); background: var(--surface); }
+
+/* ━━━ 영역 리스트 ━━━ */
+.area-row {
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.area-row:last-child { border-bottom: none; }
+.area-row-top {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 6px;
+}
+.area-sig { font-size: 14px; flex-shrink: 0; width: 20px; text-align: center; }
+.area-name { font-size: 13px; font-weight: 600; color: var(--text); width: 92px; flex-shrink: 0; }
+.area-bar-wrap { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.area-bar-fill { height: 100%; border-radius: 3px; transition: width .5s cubic-bezier(.4,0,.2,1); }
+.area-score { font-size: 13px; font-weight: 700; width: 38px; text-align: right; flex-shrink: 0; }
+.area-desc { font-size: 12px; color: var(--text2); line-height: 1.6; padding-left: 0; }
+
+/* 강점/집중 카드 */
+.area-chip {
+  font-size: 12px; font-weight: 600;
+  padding: 6px 10px; border-radius: var(--rsm);
+  margin-bottom: 6px; display: flex; align-items: center; gap: 6px;
+  line-height: 1.4;
+}
+.area-chip:last-child { margin-bottom: 0; }
+.area-chip.good { background: #EEF7F1; color: #1A6E38; }
+.area-chip.warn { background: #FFF5E0; color: #7A4F00; }
+
+/* ━━━━━━━━━━━━━━━━━━━━
+   자료실
+━━━━━━━━━━━━━━━━━━━━ */
+.lib-scroll { flex: 1; overflow-y: auto; }
+.lib-inner { padding: 8px 16px calc(32px + var(--safe-bottom)); }
+
+.lib-section { margin-bottom: 12px; }
+.lib-section-title {
+  font-size: 13px; font-weight: 700; color: var(--text);
+  margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+}
+.lib-section-title .lib-tag {
+  background: var(--green-lt); color: var(--green);
+  font-size: 11px; padding: 3px 10px; border-radius: 999px;
+}
+.lib-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); overflow: hidden; margin-bottom: 10px;
+  cursor: pointer; transition: box-shadow .15s;
+}
+.lib-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,.08); }
+.lib-card-inner { display: flex; align-items: center; gap: 14px; padding: 14px 16px; }
+.lib-card-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: var(--green-lt); color: var(--green);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.lib-card-info { flex: 1; min-width: 0; }
+.lib-card-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+.lib-card-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+.lib-card-badge {
+  font-size: 10px; font-weight: 700; padding: 3px 8px;
+  border-radius: 999px; flex-shrink: 0;
+}
+.lib-card-badge.pdf { background: #FDEAEA; color: #B53535; }
+.lib-card-badge.link { background: #EEF3FF; color: #1E4A8A; }
+.lib-card-badge.video { background: #FFF3E8; color: #C05A10; }
+.lib-empty { text-align: center; padding: 48px 20px; color: var(--text3); font-size: 14px; line-height: 2; }
+
+/* 관리자 FAB */
+.admin-fab {
+  position: fixed; bottom: calc(24px + var(--safe-bottom)); right: 20px;
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--green); color: #fff;
+  border: none; font-size: 22px; cursor: pointer;
+  box-shadow: 0 4px 16px rgba(45,95,64,.35);
+  display: none; align-items: center; justify-content: center;
+  z-index: 300; transition: opacity .2s;
+}
+.admin-fab.on { display: flex; }
+.admin-fab:hover { opacity: .88; }
+
+/* 자료 추가 시트 */
+.admin-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.5);
+  z-index: 400; display: none; align-items: flex-end;
+}
+.admin-overlay.on { display: flex; }
+.admin-sheet {
+  background: var(--surface); width: 100%; max-width: 520px;
+  margin: 0 auto; border-radius: 20px 20px 0 0;
+  padding: 24px 20px calc(32px + var(--safe-bottom));
+  max-height: 90vh; overflow-y: auto;
+}
+.admin-sheet h3 { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 20px; }
+.admin-row { margin-bottom: 14px; }
+.admin-lbl { font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 6px; display: block; }
+.admin-inp {
+  width: 100%; font-size: 14px; padding: 12px 14px;
+  border: 1.5px solid var(--border); border-radius: var(--rsm);
+  background: var(--bg); color: var(--text); outline: none;
+  font-family: 'Noto Sans KR', sans-serif; transition: border .15s;
+}
+.admin-inp:focus { border-color: var(--green); background: var(--surface); }
+.admin-select {
+  width: 100%; font-size: 14px; padding: 12px 14px;
+  border: 1.5px solid var(--border); border-radius: var(--rsm);
+  background: var(--bg); color: var(--text); outline: none;
+  font-family: 'Noto Sans KR', sans-serif; appearance: none; cursor: pointer;
+}
+.admin-btn-row { display: flex; gap: 10px; margin-top: 20px; }
+.admin-btn {
+  flex: 1; padding: 14px; border-radius: var(--rsm);
+  font-size: 14px; font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif; cursor: pointer; border: none;
+}
+.admin-btn.primary { background: var(--green); color: #fff; }
+.admin-btn.cancel { background: var(--surface2); color: var(--text2); }
+
+/* 관리자 로그인 팝업 */
+.admin-login-wrap {
+  position: fixed; inset: 0; background: rgba(0,0,0,.5);
+  z-index: 500; display: none; align-items: center; justify-content: center; padding: 20px;
+}
+.admin-login-wrap.on { display: flex; }
+.admin-login-box {
+  background: var(--surface); border-radius: var(--r);
+  padding: 28px 24px; width: 100%; max-width: 340px;
+}
+.admin-login-box h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+.admin-login-box p { font-size: 12px; color: var(--text2); margin-bottom: 20px; line-height: 1.6; }
+.admin-login-err { font-size: 12px; color: #B53535; margin-top: 8px; display: none; }
+
+/* 자료 삭제 버튼 */
+.lib-card-del {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #FDEAEA; color: #B53535; border: none;
+  font-size: 14px; cursor: pointer; flex-shrink: 0;
+  display: none; align-items: center; justify-content: center;
+}
+.lib-card-del.on { display: flex; }
+
+/* ━━━ 인쇄 스타일 ━━━ */
+@media print {
+  .hdr, .result-btns, .leader-box, .save-banner, .compareCard { display: none !important; }
+  .screen { display: block !important; }
+  #scr-home, #scr-survey, #scr-text, #scr-history, #scr-team { display: none !important; }
+  #scr-result { display: block !important; }
+  .result-scroll { overflow: visible !important; }
+  .result-inner { padding-bottom: 0 !important; }
+  body { background: white !important; }
+  .type-hero { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .r-card, .leader-box { page-break-inside: avoid; }
+  .print-leader-section { display: block !important; }
+}
+.print-leader-section { display: none; }
 </style>
 </head>
 <body>
-<div class="page">
+<div class="app">
 
-  <div class="top">
-    <h1>월간 성장 상담지</h1>
-    <div class="legend">
-      <div class="legend-item"><div class="leg-box leg-w"></div>함께 채우는 칸</div>
-      <div class="legend-item"><div class="leg-box leg-y"></div>멘토 작성 칸</div>
-    </div>
-    <p>진단 결과를 확인한 상태에서 시작해요 · 🧭 나침반 연계</p>
+<!-- 헤더 -->
+<header class="hdr">
+  <div class="logo" onclick="onLogoClick()">
+  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
+    <circle cx="11" cy="11" r="10" stroke="var(--green)" stroke-width="1.5"/>
+    <circle cx="11" cy="11" r="2" fill="var(--green)"/>
+    <polygon points="11,2 13,10 11,9 9,10" fill="var(--green)"/>
+    <polygon points="11,20 9,12 11,13 13,12" fill="#ccc"/>
+    <line x1="2" y1="11" x2="20" y2="11" stroke="var(--border)" stroke-width="1"/>
+  </svg>
+  <span style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--green);letter-spacing:-0.02em;">나침반</span>
+  <span style="font-size:10px;color:var(--text3);font-weight:400;">당신의 성장을 응원합니다</span>
+  <span id="adminDot" class="logo-admin-dot"></span>
+</div>
+  <div class="hdr-right">
+    <div class="hdr-btn on" id="tab-home" onclick="goHome()">진단</div>
+    <div class="hdr-btn" id="tab-history" onclick="goHistory()">기록</div>
+    <div class="hdr-btn" id="tab-library" onclick="goLibrary()">자료실</div>
+    <div class="hdr-btn" id="tab-suggest" onclick="goSuggest()">건의함</div>
+    <div class="hdr-btn" id="tab-result" onclick="tryGoResult()" style="display:none">결과</div>
   </div>
+</header>
 
-  <div class="meta">
-    <div class="meta-item"><label>디자이너</label><div class="line"></div></div>
-    <div class="meta-item"><label>날짜</label><div class="line"></div></div>
-    <div class="meta-item"><label>이번 달 유형</label><div class="line"></div></div>
-    <div class="meta-item"><label>멘토</label><div class="line"></div></div>
-  </div>
+<!-- ════════ 홈 ════════ -->
+<div class="screen on" id="scr-home">
+  <div class="home-scroll">
+    <div class="home-inner">
+      <div style="padding:16px 0 8px;">
+        <h2 style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px;">🧭 진단</h2>
 
-  <div class="cols">
-
-    <!-- 왼쪽 -->
-    <div class="col">
-
-      <div class="card">
-        <div class="card-head">
-          <div class="num">1</div>
-          <div class="card-head-text">
-            <span>결과 확인</span>
-            <div class="timing">상담 시작 — 결과지 함께 읽으며</div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="sec">
-            <div class="sec-lbl">결과 보고 디자이너 반응 — 공감 / 의외 / 저항</div>
-            <div class="box"></div>
-          </div>
-          <div class="sec">
-            <div class="sec-lbl">멘토 눈에 보이는 강점 — 진단에 없는 것도 포함</div>
-            <div class="mbox"></div>
-          </div>
-          <div class="sec">
-            <div class="sec-lbl">이번 달 멘토가 걱정되는 부분</div>
-            <div class="mbox"></div>
-          </div>
-        </div>
       </div>
 
-      <div class="card">
-        <div class="card-head">
-          <div class="num">2</div>
-          <div class="card-head-text">
-            <span>목표 & 실행 점검</span>
-            <div class="timing">상담 중반 — 지난 달 돌아보고 이번 달 다듬기</div>
-          </div>
+      <!-- 진단 카테고리 그리드 -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;">
+        
+        <!-- 헤어디자이너 - 활성 -->
+        <div onclick="startDesignerDiag()" style="background:var(--surface);border:1.5px solid var(--green);border-radius:var(--r);padding:20px 16px;cursor:pointer;transition:box-shadow .15s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.1)'" onmouseout="this.style.boxShadow=''">
+          <div style="font-size:32px;margin-bottom:10px;">✂️</div>
+          <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">헤어디자이너</div>
+          <div style="font-size:11px;color:var(--text2);line-height:1.5;">월간 자가진단<br>26문항</div>
+          <div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--green);background:var(--green-lt);padding:3px 10px;border-radius:999px;display:inline-block;">진단 가능</div>
         </div>
-        <div class="card-body">
-          <div class="sec noflex">
-            <div class="sec-lbl">지난 달 약속 이행 여부</div>
-            <div class="checks">
-              <div class="check"><div class="cb"></div>했다</div>
-              <div class="check"><div class="cb"></div>했는데 잘 안됐다</div>
-              <div class="check"><div class="cb"></div>못 했다</div>
-            </div>
-          </div>
-          <div class="sec">
-            <div class="sec-lbl">이유 / 상황 — 이번 달은 어떻게 다르게 할 건지</div>
-            <div class="box"></div>
-          </div>
-          <div class="sec noflex">
-            <div class="sec-lbl">이번 달 목표 구체성 확인</div>
-            <div class="checks">
-              <div class="check"><div class="cb"></div>측정 가능한 행동으로 적혀있다</div>
-              <div class="check"><div class="cb"></div>막연하다 — 함께 구체화 필요</div>
-              <div class="check"><div class="cb"></div>목표가 너무 많다 — 하나로 좁혀야 함</div>
-            </div>
-          </div>
-          <div class="sec">
-            <div class="sec-lbl">실행 방법 보완</div>
-            <div class="mbox"></div>
-          </div>
+
+        <!-- 헤어파트너 - 준비중 -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px 16px;opacity:0.6;">
+          <div style="font-size:32px;margin-bottom:10px;">🤝</div>
+          <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">헤어파트너</div>
+          <div style="font-size:11px;color:var(--text2);line-height:1.5;">파트너십 진단<br>준비 중</div>
+          <div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--text3);background:var(--surface2);padding:3px 10px;border-radius:999px;display:inline-block;">준비 중</div>
         </div>
+
+        <!-- 헤어관리자 - 준비중 -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px 16px;opacity:0.6;">
+          <div style="font-size:32px;margin-bottom:10px;">📋</div>
+          <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">헤어관리자</div>
+          <div style="font-size:11px;color:var(--text2);line-height:1.5;">관리자 역량 진단<br>준비 중</div>
+          <div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--text3);background:var(--surface2);padding:3px 10px;border-radius:999px;display:inline-block;">준비 중</div>
+        </div>
+
+        <!-- 헤어리더 - 준비중 -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px 16px;opacity:0.6;">
+          <div style="font-size:32px;margin-bottom:10px;">👑</div>
+          <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">헤어리더</div>
+          <div style="font-size:11px;color:var(--text2);line-height:1.5;">리더십 진단<br>준비 중</div>
+          <div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--text3);background:var(--surface2);padding:3px 10px;border-radius:999px;display:inline-block;">준비 중</div>
+        </div>
+
       </div>
 
+      <div class="start-card">
+        <div class="start-card-top">
+          <h2></h2>
+          <p>매달 솔직하게, 나를 점검하는 루틴</p>
+        </div>
+        <div class="start-card-body">
+          <span class="lbl">이름 / 닉네임</span>
+          <input type="text" id="nameInput" class="inp" placeholder="예: 김미용" autocomplete="off">
+          <span class="lbl">진단 날짜</span>
+          <div style="display:flex;gap:8px;margin-bottom:14px;">
+            <select id="monthInputYear" class="inp" style="flex:1.2;margin-bottom:0;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22><path d=%22M1 1l5 5 5-5%22 stroke=%22%23888%22 stroke-width=%221.5%22 fill=%22none%22/></svg>');background-repeat:no-repeat;background-position:right 12px center;padding-right:28px;">
+              <option value="2024">2024년</option>
+              <option value="2025">2025년</option>
+              <option value="2026" selected>2026년</option>
+              <option value="2027">2027년</option>
+            </select>
+            <select id="monthInputMonth" class="inp" style="flex:1;margin-bottom:0;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22><path d=%22M1 1l5 5 5-5%22 stroke=%22%23888%22 stroke-width=%221.5%22 fill=%22none%22/></svg>');background-repeat:no-repeat;background-position:right 12px center;padding-right:28px;">
+              <option value="01">1월</option><option value="02">2월</option><option value="03">3월</option>
+              <option value="04">4월</option><option value="05" selected>5월</option><option value="06">6월</option>
+              <option value="07">7월</option><option value="08">8월</option><option value="09">9월</option>
+              <option value="10">10월</option><option value="11">11월</option><option value="12">12월</option>
+            </select>
+            <select id="monthInputDay" class="inp" style="flex:1;margin-bottom:0;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22><path d=%22M1 1l5 5 5-5%22 stroke=%22%23888%22 stroke-width=%221.5%22 fill=%22none%22/></svg>');background-repeat:no-repeat;background-position:right 12px center;padding-right:28px;">
+              <option value="01">1일</option><option value="02">2일</option><option value="03">3일</option><option value="04">4일</option><option value="05">5일</option><option value="06">6일</option><option value="07">7일</option><option value="08">8일</option><option value="09">9일</option><option value="10">10일</option><option value="11">11일</option><option value="12">12일</option><option value="13">13일</option><option value="14">14일</option><option value="15">15일</option><option value="16" selected>16일</option><option value="17">17일</option><option value="18">18일</option><option value="19">19일</option><option value="20">20일</option><option value="21">21일</option><option value="22">22일</option><option value="23">23일</option><option value="24">24일</option><option value="25">25일</option><option value="26">26일</option><option value="27">27일</option><option value="28">28일</option><option value="29">29일</option><option value="30">30일</option><option value="31">31일</option>
+            </select>
+          </div>
+          <input type="hidden" id="monthInput">
+          <button class="btn-go" onclick="startSurvey()">진단 시작하기 →</button>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!-- 오른쪽 -->
-    <div class="col">
+<!-- ════════ 진단 ════════ -->
+<div class="screen" id="scr-survey">
+  <div class="survey-wrap">
+    <div class="prog-bar-wrap">
+      <div class="prog-meta">
+        <span style="font-size:12px;color:var(--text3);">진단 중</span>
+        <span class="prog-cnt" id="progCnt"></span>
+      </div>
+      <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    </div>
+    <div class="q-body" id="qBody">
+      <div class="q-text" id="qText"></div>
+      <div class="opts" id="optList"></div>
+      <div class="q-nav">
+        <button class="nav-btn" id="btnPrev" onclick="go(-1)">← 이전</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-      <div class="card">
-        <div class="card-head">
-          <div class="num">3</div>
-          <div class="card-head-text">
-            <span>다음 달 약속</span>
-            <div class="timing">상담 마무리 — 둘이 함께 확정</div>
+<!-- ════════ 결과 ════════ -->
+<div class="screen" id="scr-result">
+  <div class="result-scroll">
+    <div class="result-inner">
+
+      <!-- ① 유형 히어로 -->
+      <div class="type-hero" id="typeHero">
+        <span class="type-emoji" id="typeEmoji"></span>
+        <div class="type-label" id="typeLabel"></div>
+        <div class="type-name" id="typeName"></div>
+        <div class="type-tagline" id="typeTagline"></div>
+        <div id="signalBadge"></div>
+      </div>
+
+      <!-- ② 레이더 차트 -->
+      <div class="r-card" style="margin:14px 20px 0;">
+        <div class="chart-box"><div class="chart-inner"><canvas id="rc"></canvas></div></div>
+      </div>
+
+      <!-- ③ 영역별 점수 + 설명 -->
+      <div class="r-card" style="margin:10px 20px 0;">
+        <div class="r-card-tit">📊 이번 달 영역별 상태</div>
+        <div id="areaList" style="padding:4px 0;"></div>
+      </div>
+
+      <!-- ④ 유형 상세 -->
+      <div class="r-card" style="margin:10px 20px 0;" id="typeDetailCard">
+        <div class="r-card-tit" id="typeDetailTit"></div>
+        <div class="type-detail" id="typeDetail"></div>
+      </div>
+
+
+      <!-- ⑤ 이번 달 나의 기록 -->
+      <div class="r-card" style="margin:10px 20px 0;">
+        <div class="r-card-tit">✍️ 이번 달 나의 기록</div>
+        <div style="padding:16px 18px;display:flex;flex-direction:column;gap:20px;">
+
+          <div>
+            <div class="memo-input-label">🎯 무엇을 — 이번 달 목표</div>
+            <div class="memo-input-hint">한 가지만 골라요. 여러 개보다 하나가 더 강해요.</div>
+            <textarea id="memoWhat" class="memo-ta" placeholder="예: 재예약 멘트 자연스럽게 하기 / 펌 시술 시간 10분 줄이기 / 인스타 주 2회 업로드"></textarea>
           </div>
-        </div>
-        <div class="card-body">
-          <div class="sec">
-            <div class="sec-lbl">함께 정한 행동 3가지</div>
-            <div class="promises">
-              <div class="prow"><div class="pnum">1</div><div class="pline"></div></div>
-              <div class="prow"><div class="pnum">2</div><div class="pline"></div></div>
-              <div class="prow"><div class="pnum">3</div><div class="pline"></div></div>
-            </div>
+
+          <div>
+            <div class="memo-input-label">💡 왜 — 이 목표를 잡은 이유</div>
+            <div class="memo-input-hint">이 목표가 나에게 왜 중요한지 적어봐요.</div>
+            <textarea id="memoWhy" class="memo-ta" placeholder="예: 재예약이 늘면 내 실력이 인정받는 느낌이라서 / 시간이 줄면 체력적으로 여유가 생겨서"></textarea>
           </div>
-          <div class="sec noflex">
-            <div class="sec-lbl">중간 점검 날짜 / 방식</div>
-            <div class="box short"></div>
+
+          <div>
+            <div class="memo-input-label">🧭 어떻게 — 구체적인 실행 방법</div>
+            <div class="memo-input-hint">막연한 목표가 아니라 내일부터 할 수 있는 행동으로 적어봐요.</div>
+            <textarea id="memoHow" class="memo-ta" placeholder="예: 매일 퇴근 전 오늘 시술 사진 1장 저장 / 주 1회 유튜브 시술 영상 보고 메모 / 고객 배웅 시 한 마디 추가"></textarea>
           </div>
+
+          <div>
+            <div class="memo-input-label">🙏 감사한 점 — 이번 달 고마웠던 것</div>
+            <div class="memo-input-hint">작은 것도 좋아요. 적어두면 다음 달이 달라져요.</div>
+            <textarea id="memoGratitude" class="memo-ta" placeholder="예: 단골 고객이 선물을 줬다 / 후배가 많이 성장한 게 보였다 / 힘들 때 동료가 먼저 말을 걸어줬다"></textarea>
+          </div>
+
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-head">
-          <div class="num">4</div>
-          <div class="card-head-text">
-            <span>멘토 총평</span>
-            <div class="timing">상담 후 멘토 혼자 작성</div>
-          </div>
+
+
+      <!-- 버튼 -->
+      <div class="result-btns">
+        <button class="bn" onclick="goHome()">다시 하기</button>
+        <button class="bn" onclick="printResult()">🖨 인쇄</button>
+        <button class="bn" onclick="saveAndShare()">링크 공유</button>
+      </div>
+
+      <div style="margin:10px 20px 0;">
+        <button class="btn-mentor-share" onclick="shareMentor()">
+          💬 멘토에게 공유하기
+        </button>
+        <div style="font-size:11px;color:var(--text3);text-align:center;margin-top:8px;line-height:1.6;">
+          결과 요약 + 알릴 것 + 물어볼 것이 복사돼요<br>카톡에 바로 붙여넣기 하세요 😊
         </div>
-        <div class="card-body">
-          <div class="sec">
-            <div class="sec-lbl">지금 이 디자이너에게 가장 중요한 것 하나</div>
-            <div class="mbox"></div>
-          </div>
-          <div class="sec">
-            <div class="sec-lbl">3개월 후 이 디자이너의 모습</div>
-            <div class="mbox"></div>
-          </div>
-          <div class="sec">
-            <div class="sec-lbl">다음 상담까지 특별히 볼 것</div>
-            <div class="mbox"></div>
-          </div>
-          <div class="sec">
-            <div class="sec-lbl">이번 달 한 마디</div>
-            <div class="mbox"></div>
-          </div>
-        </div>
+      </div>
+
+      <!-- 인쇄용 -->
+      <div class="print-leader-section" style="margin-top:20px;padding:16px;border:1px solid #ccc;border-radius:12px;">
+        <div style="font-size:11px;font-weight:700;color:#7A5200;margin-bottom:8px;">👤 멘토 한마디</div>
+        <div id="printLeaderText" style="font-size:13px;line-height:1.7;color:#333;min-height:60px;"></div>
       </div>
 
     </div>
   </div>
 </div>
+
+<!-- ════════ 히스토리 ════════ -->
+<div class="screen" id="scr-history">
+  <div class="hist-scroll">
+    <div class="hist-inner">
+      <div style="margin-bottom:12px;">
+        <div style="font-size:11px;font-weight:700;color:var(--green);letter-spacing:.08em;margin-bottom:8px;">MY HISTORY</div>
+        <div style="font-family:'Noto Serif KR',serif;font-size:22px;font-weight:600;color:var(--text);line-height:1.35;margin-bottom:12px;">나의 성장 기록</div>
+        <!-- 진단 파트 탭 -->
+        <div style="display:flex;gap:8px;margin-bottom:4px;overflow-x:auto;padding-bottom:4px;">
+          <button onclick="setHistTab('designer')" id="histTab-designer" style="flex-shrink:0;padding:7px 16px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;border:none;font-family:'Noto Sans KR',sans-serif;background:var(--green);color:#fff;">✂️ 헤어디자이너</button>
+          <button onclick="setHistTab('partner')" id="histTab-partner" style="flex-shrink:0;padding:7px 16px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--text2);font-family:'Noto Sans KR',sans-serif;">🤝 헤어파트너</button>
+          <button onclick="setHistTab('manager')" id="histTab-manager" style="flex-shrink:0;padding:7px 16px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--text2);font-family:'Noto Sans KR',sans-serif;">📋 헤어관리자</button>
+          <button onclick="setHistTab('leader')" id="histTab-leader" style="flex-shrink:0;padding:7px 16px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--text2);font-family:'Noto Sans KR',sans-serif;">👑 헤어리더</button>
+        </div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.8;">진단을 완료하면 이 기기에 자동으로 저장돼요.<br>매달 결과가 쌓이면서 내 흐름이 보여요.<br>유형이 어떻게 바뀌었는지, 어떤 달이 힘들었는지<br>멘토와 함께 보면 상담이 더 깊어져요.</div>
+      </div>
+      <div id="histContent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ 자료실 ════════ -->
+<div class="screen" id="scr-library">
+  <div class="lib-scroll">
+    <div class="lib-inner">
+      <div id="libContent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ 건의함 ════════ -->
+<div class="screen" id="scr-suggest">
+  <div class="lib-scroll">
+    <div class="lib-inner">
+      <div style="margin-bottom:16px;">
+        <p style="font-size:13px;color:var(--text2);line-height:1.8;">있었으면 하는 자료나 기능을 자유롭게 남겨주세요.<br>검토 후 반영할게요 🧭</p>
+      </div>
+      <!-- 건의 작성 폼 -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:20px;">
+        <div style="margin-bottom:10px;">
+          <span style="font-size:12px;font-weight:500;color:var(--text2);">카테고리</span>
+          <select id="suggestCat" style="width:100%;margin-top:6px;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--rsm);background:var(--bg);color:var(--text);font-size:14px;font-family:'Noto Sans KR',sans-serif;outline:none;">
+            <option value="자료 요청">자료 요청</option>
+            <option value="기능 요청">기능 요청</option>
+            <option value="오류 신고">오류 신고</option>
+            <option value="기타">기타</option>
+          </select>
+        </div>
+        <div style="margin-bottom:10px;">
+          <span style="font-size:12px;font-weight:500;color:var(--text2);">내용</span>
+          <textarea id="suggestText" placeholder="예: 스탭용 샴푸 기초 영상이 있으면 좋겠어요" style="width:100%;margin-top:6px;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--rsm);background:var(--bg);color:var(--text);font-size:14px;font-family:'Noto Sans KR',sans-serif;outline:none;resize:none;height:100px;line-height:1.7;"></textarea>
+        </div>
+        <button onclick="submitSuggest()" style="width:100%;padding:13px;background:var(--green);color:#fff;border:none;border-radius:var(--rsm);font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">건의하기</button>
+      </div>
+      <!-- 건의 목록 (관리자만) -->
+      <div id="suggestList"></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<!-- 관리자 FAB -->
+<button class="admin-fab" id="adminFab" onclick="openAdminSheet()">+</button>
+
+<!-- 자료 추가 시트 -->
+<div class="admin-overlay" id="adminOverlay" onclick="closeAdminSheet(event)">
+  <div class="admin-sheet">
+    <h3>✏️ 자료 추가</h3>
+    <div class="admin-row">
+      <span class="admin-lbl">카테고리</span>
+      <select class="admin-select" id="adminCat">
+        <option value="스탭 필독">스탭 필독</option>
+        <option value="주니어 디자이너">주니어 디자이너</option>
+        <option value="디자이너">디자이너</option>
+        <option value="기술·시술">기술·시술</option>
+        <option value="멘탈·커리어">멘탈·커리어</option>
+        <option value="경제·설계">경제·설계</option>
+        <option value="공지">공지</option>
+      </select>
+    </div>
+    <div class="admin-row">
+      <span class="admin-lbl">자료 형식</span>
+      <select class="admin-select" id="adminType" onchange="toggleAdminInputMode()">
+        <option value="link">링크</option>
+        <option value="pdf">PDF</option>
+        <option value="excel">엑셀</option>
+        <option value="word">워드</option>
+        <option value="ppt">PPT</option>
+        <option value="video">영상</option>
+        <option value="image">이미지</option>
+        <option value="file">기타 파일</option>
+      </select>
+    </div>
+    <div class="admin-row">
+      <span class="admin-lbl">제목</span>
+      <input type="text" class="admin-inp" id="adminTitle" placeholder="예: 스탭이 꼭 알아야 할 위생 기준">
+    </div>
+    <div class="admin-row">
+      <span class="admin-lbl">설명 (선택)</span>
+      <input type="text" class="admin-inp" id="adminDesc" placeholder="예: 입사 첫 주에 읽으면 좋아요">
+    </div>
+    <div class="admin-row" id="adminUrlRow">
+      <span class="admin-lbl">URL / 링크</span>
+      <input type="url" class="admin-inp" id="adminUrl" placeholder="https://">
+    </div>
+    <div class="admin-row" id="adminFileRow" style="display:none">
+      <span class="admin-lbl">파일 선택</span>
+      <label style="display:block;padding:12px 14px;border:1.5px dashed var(--border);border-radius:var(--rsm);background:var(--bg);cursor:pointer;text-align:center;font-size:13px;color:var(--text2);">
+        📎 파일 선택하기
+        <input type="file" id="adminFileInp" style="display:none" onchange="onFileSelect()" accept=".pdf,.jpg,.jpeg,.png,.mp4,.mov,.xlsx,.xls,.docx,.doc,.pptx,.ppt,.zip">
+      </label>
+      <div id="adminFileName" style="font-size:12px;color:var(--green);margin-top:6px;padding-left:4px;"></div>
+    </div>
+    <div class="admin-btn-row">
+      <button class="admin-btn cancel" onclick="closeAdminSheet()">취소</button>
+      <button class="admin-btn primary" onclick="saveLibItem()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- 관리자 로그인 팝업 -->
+<div class="admin-login-wrap" id="adminLoginWrap">
+  <div class="admin-login-box">
+    <h3>🔐 관리자 로그인</h3>
+    <p>자료실 관리 기능은 운영자만 사용할 수 있어요.</p>
+    <span class="admin-lbl">비밀번호</span>
+    <input type="password" class="admin-inp" id="adminPwInp" placeholder="비밀번호 입력" onkeydown="if(event.key==='Enter')checkAdminPw()">
+    <div class="admin-login-err" id="adminPwErr">비밀번호가 맞지 않아요.</div>
+    <div class="admin-btn-row">
+      <button class="admin-btn cancel" onclick="closeAdminLogin()">취소</button>
+      <button class="admin-btn primary" onclick="checkAdminPw()">확인</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+/* ━━━ 질문 데이터 ━━━ */
+const QS = [
+  {cat:"컨디션·멘탈",q:"이번 달 일하는 날 대부분 컨디션이 괜찮은 상태로 하루를 시작했다",opts:["전혀 그렇지 않다","거의 그렇지 않다","보통이다","대체로 그렇다","항상 그렇다"]},
+  {cat:"컨디션·멘탈",q:"이번 달 힘든 고객을 응대한 직후에도 다음 고객을 웃으며 맞을 수 있었다",opts:["거의 못했다","가끔 했다","절반 정도 했다","대체로 했다","항상 했다"]},
+  {cat:"컨디션·멘탈",q:"몸이나 마음 관리를 위해 이번 달 뭔가를 실천했다 (스트레칭, 산책, 수면 등)",opts:["안했다","1번","2번","3번","4번 이상"]},
+  {cat:"컨디션·멘탈",q:"퇴근 후 일과 분리된 나만의 시간을 이번 달 충분히 가졌다",opts:["전혀 그렇지 않다","거의 그렇지 않다","보통이다","대체로 그렇다","항상 그렇다"]},
+  {cat:"기술·전문성",q:"이번 달 내가 진행한 시술 결과물에 스스로 만족한 날이 많았다",opts:["전혀 그렇지 않다","거의 그렇지 않다","보통이다","대체로 그렇다","항상 그렇다"]},
+  {cat:"기술·전문성",q:"트렌드 공부나 시술 연습을 이번 달 했다 (유튜브, 세미나, 연습 시술 등)",opts:["안했다","1번","2번","3번","4번 이상"]},
+  {cat:"기술·전문성",q:"고객이 내가 말하지 않아도 먼저 리뷰를 남기거나 지인을 소개한 적이 이번 달 있었다",opts:["없었다","1번","2번","3번","4번 이상"]},
+  {cat:"기술·전문성",q:"이번 달 고객이 시술 결과물을 보고 사진을 찍거나 특히 만족한 반응을 보인 적이 있었다",opts:["없었다","1번","2번","3번","4번 이상"]},
+  {cat:"고객경험·마케팅",q:"이번 달 재예약을 직접 말로 권유했다",opts:["안했다","1번","2번","3번","4번 이상"]},
+  {cat:"고객경험·마케팅",q:"고객이 기대하지 않았을 작은 서비스나 선물을 이번 달 준비한 적이 있었다 (음료, 샘플, 손편지 등)",opts:["전혀 그렇지 않다","거의 그렇지 않다","보통이다","대체로 그렇다","항상 그렇다"]},
+  {cat:"고객경험·마케팅",q:"내 시술 결과물을 SNS나 포트폴리오에 이번 달 올렸다",opts:["안했다","1~2번","3번","4번","5번 이상"]},
+  {cat:"고객경험·마케팅",q:"고객에게 추가 시술이나 다음 방문 메뉴를 이번 달 제안했다",opts:["안했다","1번","2번","3번","4번 이상"]},
+  {cat:"고객경험·마케팅",q:"이번 달 고객이 음료, 간식, 팁 등 감사 표현을 먼저 한 적이 있었다",opts:["없었다","1번","2번","3번","4번 이상"]},
+  {cat:"관계·태도",q:"이번 달 동료가 바쁘거나 힘들어 보일 때 먼저 도움을 건넸다",opts:["안했다","1번","2번","3번","4번 이상"]},
+  {cat:"관계·태도",q:"멘토나 리더에게 피드백을 받았을 때 기분과 상관없이 받아들이고 적용했다",opts:["전혀 그렇지 않다","거의 그렇지 않다","보통이다","대체로 그렇다","항상 그렇다"]},
+  {cat:"관계·태도",q:"고객 앞에서 동료나 살롱을 긍정적으로 표현한 적이 이번 달 있었다",opts:["전혀 그렇지 않다","거의 그렇지 않다","보통이다","대체로 그렇다","항상 그렇다"]},
+  {cat:"관계·태도",q:"이번 달 후배나 동료에게 내가 아는 기술이나 노하우를 먼저 알려준 적이 있었다",opts:["전혀 그렇지 않다","거의 그렇지 않다","보통이다","대체로 그렇다","항상 그렇다"]},
+  {cat:"관계·태도",q:"이번 달 살롱 안에서 내가 먼저 분위기를 밝게 만들려고 노력한 적이 있었다",opts:["전혀 그렇지 않다","거의 그렇지 않다","보통이다","대체로 그렇다","항상 그렇다"]},
+  {cat:"성장·방향",q:"이번 달 일하면서 보람이나 자부심을 느낀 날이 절반 이상이었다",opts:["거의 없었다","가끔 있었다","절반 정도","절반 이상","거의 매일"]},
+  {cat:"성장·방향",q:"1년 후 내가 되고 싶은 모습이 지금 머릿속에 구체적으로 있다",opts:["전혀 없다","막연하게 있다","보통이다","어느 정도 있다","매우 구체적으로 있다"]},
+  {cat:"성장·방향",q:"이번 달 배우거나 시도한 것을 실제 시술에 적용해봤다",opts:["안했다","1번","2번","3번","4번 이상"]},
+  {cat:"성장·방향",q:"지금 내가 하고 있는 것들이 내가 원하는 방향과 맞다고 느끼는 날이 절반 이상이었다",opts:["거의 없었다","가끔 있었다","절반 정도","절반 이상","거의 매일"]},
+  {cat:"경제·설계",q:"이번 달 내 수입에서 고정 지출을 빼면 얼마가 남는지 알고 있다",opts:["전혀 모른다","대충 알 것 같다","어느 정도 안다","잘 알고 있다","정확히 알고 있다"]},
+  {cat:"경제·설계",q:"이번 달 수입이 최근 3개월 평균과 비슷하거나 늘었다",opts:["많이 줄었다","조금 줄었다","비슷하다","조금 늘었다","많이 늘었다"]},
+  {cat:"경제·설계",q:"수입을 높이기 위한 행동을 이번 달 실천했다 (재예약 권유, 객단가, 추가 시술 제안 등)",opts:["안했다","1번","2번","3번","4번 이상"]},
+  {cat:"경제·설계",q:"수입을 올리기 위한 구체적인 목표나 계획이 지금 있다",opts:["전혀 없다","막연하게 있다","보통이다","어느 정도 있다","매우 구체적으로 있다"]},
+];
+
+
+const CATS = ["컨디션·멘탈","기술·전문성","고객경험·마케팅","관계·태도","성장·방향","경제·설계"];
+const COLORS = ["#9B6DE8","#C0793A","#E05C8A","#2ECC9A","#3A6349","#B97B35"];
+const STORAGE_KEY = 'hairmgmt_v3';
+
+/* ━━━ 유형 정의 (9가지) ━━━ */
+const TYPES = {
+  CRAFTSMAN:{key:'CRAFTSMAN',emoji:'✂️',label:'이달의 나의 유형',name:'기술장인형',color:'#1E4A8A',bgColor:'#EEF3FF',
+    tagline:'손끝에서 신뢰가 만들어지는 타입이에요.\n결과물이 좋을수록 고객이 다시 오는 이유가 생겨요.',
+    strengths:['시술 완성도가 높아 고객이 결과물 사진을 찍고 자발적으로 리뷰를 남겨요','트렌드를 빠르게 익혀 현장에 적용하는 실행력이 있어요','자신 있는 전문 시술 분야가 있고 그 분야에서 인정받고 있어요'],
+    cautions:['기술에 집중하다 고객경험·마케팅이 약해질 수 있어요 — 재예약 권유, SNS 기록을 챙겨봐요','내 기준이 높아서 완성도에 스스로 가장 큰 스트레스를 받을 수 있어요','기술은 강하지만 수입으로 연결하는 전략이 부족할 수 있어요'],
+    leaderTip:['기술 성장 외에 고객경험 연결 피드백이 효과적이에요','헤어쇼·콘테스트·기술 세미나 참가 기회를 먼저 제안해주세요','"3년 후 어떤 디자이너가 되고 싶어?"를 상담 주제로 꺼내봐요'],
+    context:'기술·전문성 점수가 두드러지게 높아요. 시술 완성도와 전문성에 집중하고 있는 달이에요. 다만 고객경험·마케팅과의 격차가 크다면 실력이 수입으로 연결되지 않을 수 있어요.',
+    trap:'완벽한 결과물을 내려다 고객과의 대화가 짧아지고, "잘 해줬는데 왜 재방문을 안 하지?"라는 상황이 생길 수 있어요.'},
+  CUSTOMER_MASTER:{key:'CUSTOMER_MASTER',emoji:'💇',label:'이달의 나의 유형',name:'단골마스터형',color:'#8A2070',bgColor:'#FBEEF8',
+    tagline:'사람이 먼저 보이는 타입이에요.\n고객이 살롱이 아니라 나를 보고 다시 예약해요.',
+    strengths:['재예약률이 높고 고객이 자발적으로 지인을 소개해줘요','고객이 기대하지 않은 서비스를 먼저 준비해 감동을 주는 세심함이 있어요','살롱에 오는 것 자체를 즐기게 만드는 분위기를 만들어요'],
+    cautions:['고객 응대에 집중하느라 기술 공부나 트렌드 파악이 뒤처질 수 있어요','거절을 어려워해 무리한 요청도 다 받아버릴 수 있어요','매일 감정 노동이 쌓이면 어느 순간 갑자기 번아웃이 올 수 있어요'],
+    leaderTip:['재예약률이나 단골 수 같은 구체적인 수치로 칭찬해주세요','"이번 달 힘든 고객 있었어?"라고 먼저 물어봐 주는 것만으로도 큰 힘이 돼요','분기에 한 번은 기술 세미나나 신기술 체험 기회를 만들어줘요'],
+    context:'고객경험·마케팅 점수가 높게 나왔어요. 고객과의 관계가 안정적이고 신뢰가 쌓이고 있는 달이에요. 사람을 통해 에너지를 얻는 타입이지만 그만큼 감정 소모도 큰 달일 수 있어요.',
+    trap:'모든 고객을 기쁘게 해주려다 무리한 요청도 다 받아버리는 패턴이 생길 수 있어요. "거절"도 서비스예요.'},
+  GROWER:{key:'GROWER',emoji:'🚀',label:'이달의 나의 유형',name:'성장몰입형',color:'#1E6E40',bgColor:'#EAF7EE',
+    tagline:'배운 걸 바로 현장에 올려놓는 타입이에요.\n어제보다 오늘이 조금 더 나아지고 있어요.',
+    strengths:['세미나·유튜브·SNS로 스스로 배움을 찾아가는 능동성이 있어요','배운 것을 다음 시술에 바로 적용하는 빠른 실행력이 있어요','1년 후 내 모습이 구체적으로 그려져 있고 방향이 명확해요'],
+    cautions:['배우는 것에 집중하느라 고객경험·마케팅 관리가 소홀해질 수 있어요','"아직 부족해"라는 생각에 현재 성취를 스스로 인정하지 못해요','기술만 쌓다 보면 수입으로 연결하는 전략이 빠질 수 있어요'],
+    leaderTip:['"이번 달 배워서 시술에 써봤잖아, 그게 보였어"라고 구체적으로 말해주세요','"지금 하는 것도 충분히 잘하고 있어"라는 현재 인정의 말이 꼭 필요해요','매월 배운 기술 1가지를 함께 체크하는 루틴을 만들어봐요'],
+    context:'성장·방향 점수가 높게 나왔어요. 배우고 적용하는 흐름이 좋은 달이에요. 다만 성장에 집중하다 고객경험이나 경제 관리가 약해지지 않도록 균형이 필요해요.',
+    trap:'"더 배워야 해"라는 생각에 지금 잘하고 있는 것들을 스스로 인정하지 못하는 패턴이 반복될 수 있어요.'},
+  ALLROUNDER:{key:'ALLROUNDER',emoji:'🌟',label:'이달의 나의 유형',name:'살롱에이스형',color:'#5B6A20',bgColor:'#F5F8EA',
+    tagline:'어느 자리에 놓아도 무너지지 않는 타입이에요.\n기술, 관계, 태도 — 세 가지가 함께 돌아가고 있어요.',
+    strengths:['6개 영역이 고르게 안정적인 이번 달 — 살롱에서 기준이 되는 존재예요','신규 고객 응대부터 단골 관리, 후배 케어까지 어느 자리에서도 믿음직해요','기술·고객경험·경제까지 연결되는 선순환 구조가 만들어지고 있어요'],
+    cautions:['"딱히 특기가 없는 것 같다"는 불안감을 혼자 느끼고 있을 수 있어요','모든 걸 잘하려다 정작 본인이 가장 하고 싶은 것을 못 찾을 수 있어요','지금 이 균형을 유지하면서 한 단계 더 올라갈 집중 전략이 필요해요'],
+    leaderTip:['"어느 자리에 있어도 믿음직해"라는 말을 직접 전해주세요','"지금 가장 더 파고들고 싶은 게 뭐야?"라고 질문해서 숨은 욕구를 꺼내줘요','다음 성장 목표를 함께 하나 골라서 집중하는 분기 계획을 세워봐요'],
+    context:'전 영역이 고르게 안정적으로 나왔어요. 기술·고객경험·관계·성장·경제가 함께 돌아가는 가장 이상적인 달이에요.',
+    trap:'"나는 딱히 잘하는 게 없어"라는 불안이 생겨 스스로를 과소평가하는 함정에 빠지기 쉬워요. 균형 자체가 강점이에요.'},
+  DRIVER:{key:'DRIVER',emoji:'🔥',label:'이달의 나의 유형',name:'목표드라이브형',color:'#B03010',bgColor:'#FFF3EE',
+    tagline:'목표가 생기면 바로 행동으로 내려오는 타입이에요.\n머릿속 계획이 실제 숫자로 연결될 때 가장 살아나요.',
+    strengths:['월 매출 목표·재예약률 목표를 스스로 세우고 실행하는 추진력이 있어요','수입과 지출을 파악하고 객단가·추가 시술 제안으로 수입을 높이는 전략이 있어요','1년 후 목표가 구체적이고 지금 하는 것들이 그 방향과 맞다고 느끼는 달이에요'],
+    cautions:['목표에 집중하다 고객과의 대화·감정 케어가 줄어들 수 있어요','빠른 페이스로 달리다 몸이 먼저 지쳐서 슬럼프가 갑자기 올 수 있어요','관계·태도 영역이 상대적으로 낮아지지 않도록 챙겨봐요'],
+    leaderTip:['"이번 달 목표 중에 이룬 게 뭐야?"라고 같이 확인해줘요','"달리다 지칠 때가 있는데 요즘 페이스는 괜찮아?"라고 먼저 물어봐요','팀원들과의 관계도 함께 챙기도록 유도해줘요'],
+    context:'성장·방향과 경제·설계 점수가 다른 영역보다 두드러지게 높아요. 목표 의식과 수입 관리가 살아있는 달이에요.',
+    trap:'목표 숫자에 집중하다 고객과의 감정적 연결이 약해지는 것을 놓치기 쉬워요. 수치도 중요하지만 관계가 수치를 만들어요.'},
+  MENTOR:{key:'MENTOR',emoji:'👑',label:'이달의 나의 유형',name:'살롱멘토형',color:'#5A3A80',bgColor:'#F3EEFF',
+    tagline:'옆 사람을 먼저 챙기는 타입이에요.\n당신이 있을 때 살롱 분위기가 달라져요.',
+    strengths:['동료·후배를 먼저 챙기고 기술과 노하우를 아낌없이 나눠줘요','피드백을 잘 수용하고 살롱 분위기를 긍정적으로 만드는 힘이 있어요','고객 앞에서 팀으로 보이게 만드는 프로페셔널한 태도가 있어요'],
+    cautions:['팀을 챙기느라 본인의 기술 성장이나 경제 관리가 소홀해질 수 있어요','남을 챙기다 본인 컨디션이 소진되는 경우가 생길 수 있어요','본인의 성장·방향에도 투자할 시간이 필요해요'],
+    leaderTip:['"팀 챙기면서 본인이 힘든 건 없어?"라고 먼저 물어봐요','"본인은 요즘 뭘 배우고 싶어?"라고 본인 성장에 관심 가져줘요','멘토링 기여를 공식적으로 인정해주는 것이 큰 동기부여가 돼요'],
+    context:'관계·태도 점수가 압도적으로 높아요. 살롱 안에서 중심을 잡고 팀을 이끌어가는 달이에요.',
+    trap:'가르치는 것에 집중하다 본인의 커리어 방향이나 수입 관리가 흐릿해지는 패턴을 조심해요.'},
+  BURNOUT_RISK:{key:'BURNOUT_RISK',emoji:'🌊',label:'이달의 나의 유형',name:'번아웃위험형',color:'#C03030',bgColor:'#FDEAEA',
+    tagline:'지금 몸과 마음이 한계 신호를 보내고 있어요.\n열심히 해온 만큼 쌓인 것도 있어요 — 회복이 먼저예요.',
+    strengths:['힘든 상황에서도 현장을 지키고 있다는 것 자체가 이미 대단해요','감정 조절이 어려운 상황에서도 고객 앞에서 최선을 다하고 있어요','이 상태를 인식하고 있다는 것이 회복의 첫 번째 단계예요'],
+    cautions:['지금은 성장보다 회복이 먼저예요 — 배움은 나중에 해도 돼요','컨디션이 바닥인 상태에서 무리하면 더 긴 슬럼프로 이어질 수 있어요','멘토나 가까운 사람에게 솔직하게 말하는 게 지금 할 수 있는 가장 용감한 일이에요'],
+    leaderTip:['"요즘 어때? 진짜로."라고 물어봐줘요','"쉬어도 돼"라는 말을 직접 해줘요','"지금 제일 힘든 게 뭐야? 일 말고도."라고 깊이 들어가 봐요'],
+    context:'컨디션·멘탈 점수가 위험 수준으로 낮아요. 몸과 마음이 모두 소진된 상태예요. 지금 가장 필요한 건 쉬는 것이에요.',
+    trap:'열심히 하면 나아질 거라는 생각에 계속 달리다 완전히 무너지는 패턴을 조심해야 해요. 지금 멈추는 게 더 빠른 회복이에요.'},
+  LAUNCHER:{key:'LAUNCHER',emoji:'🧭',label:'이달의 나의 유형',name:'방향탐색형',color:'#7A50C0',bgColor:'#F0EEFF',
+    tagline:'아직 어디에 힘을 줄지 선명하지 않은 달이에요.\n하고 싶은 마음은 있는데 행동이 하나로 모이지 않아요.',
+    strengths:['지금 이 상태를 인식하고 체크하고 있다는 것 자체가 변화의 시작이에요','방향을 찾고 싶다는 마음이 있다면 언제든 달라질 수 있어요','솔직하게 자신을 바라보는 용기가 있어요'],
+    cautions:['"뭘 해야 할지 모르겠다"는 생각에 아무것도 안 하다가 시간이 흘러버릴 수 있어요','전반적으로 낮은 점수가 오래 지속되면 번아웃으로 이어질 수 있어요','지금 당장 모든 걸 바꾸려 하지 말고 하나만 골라봐요'],
+    leaderTip:['"처음 이 일 시작했을 때 어떤 디자이너가 되고 싶었어?"라고 물어봐요','"지금 가장 힘든 게 뭐야?"라고 솔직하게 꺼낼 수 있게 해줘요','"지금 가장 필요한 게 뭐야? 내가 도울 수 있어"라고 먼저 손 내밀어봐요'],
+    context:'전반적인 점수가 낮게 나왔어요. 지쳐서이거나 방향을 잃은 달일 수 있어요. 멘토와 대화가 가장 필요한 달이에요.',
+    trap:'"지금 뭘 해야 할지 모르겠다"는 생각에 작은 것 하나도 결정하지 못하는 패턴을 조심해요. 작은 것 하나만 결정해도 흐름이 바뀌어요.'},
+  PORTFOLIO:{key:'PORTFOLIO',emoji:'📸',label:'이달의 나의 유형',name:'포트폴리오형',color:'#C05A10',bgColor:'#FFF3E8',
+    tagline:'내 일을 기록하고 알리는 감각이 있는 타입이에요.\n잘한 것을 쌓아두는 것 자체가 경쟁력이에요.',
+    strengths:['SNS와 포트폴리오로 나만의 스타일을 알리는 개인 브랜딩 감각이 있어요','시술 결과물을 꾸준히 기록하는 성실함이 있어요','고객경험 영역에서 상대적으로 높은 에너지를 쏟고 있어요'],
+    cautions:['SNS에 집중하다 재예약 권유나 추가 시술 제안 같은 직접적인 마케팅이 약할 수 있어요','콘텐츠 관리에 에너지를 쓰다 시술 현장 집중도가 흐려질 수 있어요','포트폴리오와 실제 기술·고객경험이 함께 성장해야 지속 가능해요'],
+    leaderTip:['"이번 달 올린 것 중에 제일 마음에 드는 게 뭐야?"라고 관심 있게 물어봐요','"팔로워보다 재예약이 먼저야"라고 실질적 연결을 함께 고민해봐요','SNS 활동을 살롱 마케팅과 연계할 기회를 만들어줘요'],
+    context:'고객경험·마케팅 영역 중 SNS·포트폴리오 활동이 두드러져요. 기록하고 알리는 흐름이 살아있는 달이에요.',
+    trap:'콘텐츠 올리는 것에 집중하다 막상 오늘 시술한 고객과의 대화가 짧아지는 아이러니한 상황이 생길 수 있어요.'}
+};
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   유형 상세 데이터 V2
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+const TYPE_DETAIL_DATA = {
+  CRAFTSMAN: {
+    name: "기술장인형",
+    headline: "이번 달, 손끝에 가장 많은 에너지가 모였어요.",
+    diagnosis: [
+      "결과물을 보고 스스로 점검하고, 부족한 부분을 채우려는 흐름이 이번 달 내내 살아 있었어요.",
+      "고객 반응이 가장 큰 피드백이었고, 그 반응을 다음 시술의 기준으로 삼고 있었을 거예요.",
+      "다만 기술에 집중할수록 고객이 만족한 그 순간을 다음 방문으로 이어주는 말과 행동은 자연스럽게 줄어들 수 있어요. 그 연결을 의식적으로 만들어야 할 시점이에요."
+    ],
+    strengthTitle: "강점",
+    strengths: [
+      "내 기준에서 결과물을 점검하는 눈이 살아 있어요. 그게 성장의 가장 단단한 바탕이에요.",
+      "배운 것을 다음 시술에 바로 적용해보는 실행력이 있어요.",
+      "고객이 사진을 찍거나 강하게 만족을 표현하는 순간들이 쌓이고 있어요."
+    ],
+    pitfalls: [
+      "시술 마무리할 때 '다음 달에 이 부분 이어서 잡아드릴까요?' 한 마디 추가해보기 — 고객이 거울 보는 그 순간이 타이밍이에요.",
+      "이번 달 고객 반응이 가장 좋았던 시술 하나를 사진으로 남기고, 어떤 상담 흐름이었는지 메모해두기.",
+      "마음에 드는 결과물 1장을 SNS나 카카오톡 채널에 올리기 — 잘한 걸 쌓아두는 것 자체가 나를 알리는 첫 단계예요."
+    ],
+    leaderFocus: [
+      "고객이 만족한 그 순간을 그냥 넘기고 있는지, 아니면 재예약이나 다음 제안으로 자연스럽게 이어가고 있는지 같이 짚어봐요. 거울 앞에서 어떤 말 한마디가 고객의 다음 선택을 만드는지, 그 언어를 함께 만들어주면 성장 속도가 달라져요.",
+      "지금 본인이 부족하다고 느끼는 게 실제 고객 불만에서 오는 건지, 아니면 기준이 높아서 생기는 압박인지 구분해주면 좋아요. 객관적인 반응과 본인 체감 사이의 차이를 정리해주는 것만으로도 불필요한 소모가 줄어요.",
+      "지금 가장 반응 좋은 시술 하나를 대표 기술로 키울 수 있는지 같이 이야기해봐요. 사진, 상담 멘트, 후기 키워드, 재방문 루틴까지 하나로 묶으면 '잘하는 디자이너'에서 '그걸 맡기고 싶은 디자이너'로 올라갈 수 있어요."
+    ],
+    traps: [
+      "재예약 권유를 안 한 게 아니라 '결과가 좋으면 알아서 오겠지'라고 생각하고 있진 않나요.",
+      "내 기준이 높아서 생기는 스트레스인지, 실제 고객 불만인지 구분 못 하면 혼자 소모돼요."
+    ],
+    nextFocus: "시술 만족에서 멈추지 말고, 고객의 다음 선택까지 연결하기."
+  },
+  CUSTOMER_MASTER: {
+    name: "단골마스터형",
+    headline: "이번 달, 고객이 가장 편하게 마음을 열었을 거예요.",
+    diagnosis: [
+      "작은 배려를 놓치지 않고, 고객이 다음에 또 오고 싶다는 느낌을 자연스럽게 만드는 흐름이 이번 달 강하게 나타났어요.",
+      "이 유형은 단순히 친절한 게 아니에요. 고객이 살롱을 나갈 때 더 좋은 기분으로 나가게 만드는 사람이에요.",
+      "다만 고객이 좋아하는 이유가 편안함인지, 결과물인지, 전문성인지가 흐려지면 좋은 관계는 생기지만 '꼭 이 디자이너여야 하는 이유'는 약해질 수 있어요."
+    ],
+    strengthTitle: "강점",
+    strengths: [
+      "고객 마음을 풀어주는 응대력이 있어요. 이건 가르쳐서 생기는 게 아니에요.",
+      "만족을 재예약과 다음 제안으로 이어가려는 흐름이 보여요.",
+      "고객과의 관계를 한 번의 시술이 아니라 이어지는 연결로 보고 있어요."
+    ],
+    pitfalls: [
+      "고객이 자리에서 일어나기 전에 다음 방문 메뉴 하나를 자연스럽게 제안해보기 — '다음엔 이것도 해보시면 좋을 것 같아요' 정도면 충분해요.",
+      "단골 고객 한 명에게 '지인 소개해주시면 감사 서비스 드릴게요' 말로 직접 꺼내보기 — 좋아하는 사람한테 먼저 말하는 게 제일 자연스러워요.",
+      "이번 달 재방문한 고객 수를 한 번 세어보기 — 감각으로만 알고 있던 걸 숫자로 확인하면 다음 목표가 생겨요."
+    ],
+    leaderFocus: [
+      "고객이 다시 오는 이유가 편안함인지, 결과물인지, 신뢰감인지 같이 구분해봐요. 이걸 알아야 앞으로 어떤 방향으로 본인을 알릴지 더 선명하게 잡을 수 있어요.",
+      "재예약은 되는데 추가 제안이 약하다면, 고객을 불편하게 할까 봐 필요한 말을 줄이고 있는 건 아닌지 같이 봐요. 억지 세일즈가 아니라 '고객을 더 좋게 만들기 위한 말'의 구조를 함께 만들어주는 게 필요해요.",
+      "좋은 관계가 많다는 것과, 그 관계가 리뷰나 소개로 남는 건 다른 구조예요. 그 연결 장치를 같이 만들어주면 지금의 강점이 더 단단한 자산이 돼요."
+    ],
+    traps: [
+      "좋은 관계가 곧 재방문을 보장한다고 착각하기 쉬워요. 좋아하는 것과 다시 선택하는 건 달라요.",
+      "필요한 추가 제안을 '부담줄까봐' 안 하면, 오히려 고객에게 덜 도움이 되는 거예요."
+    ],
+    nextFocus: "고객이 좋아하는 나를, 고객이 다시 선택할 이유로 더 선명하게 만들기."
+  },
+  GROWER: {
+    name: "성장몰입형",
+    headline: "이번 달, 배우고 바뀌는 감각이 가장 뚜렷하게 살아 있었어요.",
+    diagnosis: [
+      "피드백을 흘려보내지 않고 붙잡아서, 다음 시술에 적용해보려는 흐름이 이번 달 내내 보였어요.",
+      "성장몰입형은 단순히 배우기 좋아하는 게 아니에요. '나는 더 나아질 수 있다'는 감각을 행동으로 옮기는 사람이에요.",
+      "다만 배움이 계속 추가되기만 하고 무엇을 남기고 무엇을 버릴지 정리되지 않으면, 바쁘게 움직이는데 실력의 축은 오히려 흐려질 수 있어요."
+    ],
+    strengthTitle: "강점",
+    strengths: [
+      "피드백을 성장 재료로 바꾸려는 태도가 있어요.",
+      "배운 것을 실제 시술에 적용하며, 지식을 현장 경험으로 바꾸고 있어요.",
+      "지금 하는 일이 미래와 연결된다는 감각이 살아 있어요."
+    ],
+    pitfalls: [
+      "이번 달 배운 것 중 딱 하나만 골라 다음 달 시술에 써보고, 고객 반응을 짧게 메모해두기 — 적용해본 것만 진짜 내 것이 돼요.",
+      "배우고 싶은 게 3개 이상이면 지금 당장 하나만 남기고 나머지는 다음 달로 미루기 — 동시에 잡으면 다 흩어져요.",
+      "이번 달 가장 잘된 시술 하나를 선배나 멘토에게 먼저 말해보기 — 인정받는 경험이 다음 성장 에너지가 돼요."
+    ],
+    leaderFocus: [
+      "이번 달 배운 것 중에서 실제 고객 반응이나 결과물 변화로 이어진 게 뭔지 같이 분리해봐요. 더 많이 배우는 것보다 '무엇이 현장에서 실제로 작동했는가'를 확인할 때 성장의 질이 달라져요.",
+      "배우고 싶은 게 많다면, 이번 달 하나만 내 것으로 남길 게 뭔지 같이 골라봐요. 배움→적용→기록→피드백 사이클을 한 번이라도 끝까지 돌리는 경험이 중요해요.",
+      "피드백은 잘 듣는데, 들은 것들이 내 기준 안에서 정리되지 않아 방향이 계속 넓어지는 건 아닌지 같이 봐요. 버릴 것과 남길 것을 함께 정리해줄수록 이 유형은 더 빠르게 선명해져요."
+    ],
+    traps: [
+      "배우는 것 자체가 성취처럼 느껴지면, 적용 안 된 배움이 쌓이기만 하고 실력은 제자리예요.",
+      "피드백을 너무 많이 받으면 기준이 흔들려요. 이번 달 하나만 골라서 끝까지 가봐야 해요."
+    ],
+    nextFocus: "더 많이 배우기보다, 하나를 끝까지 내 것으로 남기기."
+  },
+  ALLROUNDER: {
+    name: "살롱에이스형",
+    headline: "이번 달, 무너진 곳 없이 잘 굴러갔어요.",
+    diagnosis: [
+      "기술, 고객경험, 관계, 성장, 경제가 전반적으로 고르게 살아 있는 흐름이 이번 달 나타났어요.",
+      "어느 한쪽만 좋아서 버티는 게 아니라, 일 전체가 안정적으로 돌아가는 구조가 잡혀 있는 상태예요.",
+      "다만 안정적일수록 다음 도약 지점이 흐려지기 쉬워요. 지금은 부족한 곳을 메우는 시기보다, 나를 더 선명하게 만들 다음 한 축을 정하는 시기에 가까워요."
+    ],
+    strengthTitle: "강점",
+    strengths: [
+      "전 영역의 기본 체력이 고르게 살아 있어요.",
+      "고객 만족과 실행력이 서로 연결되어 있어요.",
+      "지금 성과뿐 아니라 다음 단계를 준비하는 힘도 보여요."
+    ],
+    pitfalls: [
+      "다음 달 가장 자신 있는 시술 하나를 골라 '이 시술은 나한테 맡겨' 말할 수 있을 때까지 집중해보기 — 균형이 강점이지만 대표 무기가 있어야 선택받아요.",
+      "그 시술 중심으로 상담 멘트, 사후 안내, SNS 사진까지 하나의 루틴으로 묶어보기.",
+      "이번 달 스스로 잘했다고 생각한 순간 하나를 멘토에게 먼저 말해보기 — 본인이 과소평가하는 경향이 있어서, 말로 꺼내는 연습이 필요해요."
+    ],
+    leaderFocus: [
+      "지금 잘하는 것들 중에서 다음 3개월 동안 대표 무기로 키울 게 뭔지 같이 좁혀봐요. 시그니처 메뉴, 고매출 구조, 후배 육성, 포트폴리오 확장 중 가장 확장성이 큰 하나를 정하고 1개월 실행 기준까지 내려주는 게 중요해요.",
+      "성과는 안정적인데 요즘 일이 예전만큼 설레지 않는다면, 그걸 반드시 같이 짚어야 해요. 살롱에이스형은 부족해서 멈추는 게 아니라 다음 도약축이 보이지 않아 정체감을 느끼는 경우가 많아요.",
+      "주변에서는 믿고 맡기는데 스스로 부족하다고 느끼는 게 있다면, 그게 진짜 보완점인지 아니면 높은 기준에서 오는 압박인지 같이 구분해줘요. '정말 키울 것'과 '괜히 불안해하지 않아도 되는 것'을 나눠주는 것만으로 방향이 잡혀요."
+    ],
+    traps: [
+      "다 잘하는 만큼 '나만의 것'이 없다는 공백이 생겨요. 균형이 강점이지만 대표 무기가 없으면 선택받기 어려워요.",
+      "주변 신뢰가 높을수록 정작 본인이 정체감을 먼저 느껴요. 지금 성장하고 있는 건지 확인이 필요해요."
+    ],
+    nextFocus: "균형을 유지하면서, 하나를 확실한 대표 무기로 키우기."
+  },
+  DRIVER: {
+    name: "목표드라이브형",
+    headline: "이번 달, 목표가 숫자와 행동으로 내려왔어요.",
+    diagnosis: [
+      "수입, 계획, 실행을 생각으로만 두지 않고 실제로 움직이려는 흐름이 이번 달 강하게 나타났어요.",
+      "목표드라이브형은 의욕이 넘치는 사람이 아니에요. 성과를 만들기 위해 무엇을 바꿔야 하는지 현실적으로 보는 사람이에요.",
+      "다만 실행량이 많아질수록, 무엇이 진짜 효과가 있었는지 점검하지 못하면 계속 밀어붙이는 방식으로만 일하게 될 수 있어요."
+    ],
+    strengthTitle: "강점",
+    strengths: [
+      "수입과 목표를 막연하게 두지 않고 구조로 보려는 태도가 있어요.",
+      "성과를 높이기 위한 행동을 실제로 하고 있어요.",
+      "미래 목표와 현재 행동이 어느 정도 맞물려 있어요."
+    ],
+    pitfalls: [
+      "이번 달 한 행동 중 실제로 예약이나 재방문으로 이어진 것 딱 하나 골라서, 다음 달에 매주 반복할 루틴으로 못 박아두기.",
+      "제안 후 고객 반응이 어색했던 순간을 하나 떠올리고, 그 말을 다르게 바꿔서 종이에 써보기 — 말이 바뀌면 반응이 바뀌어요.",
+      "이번 달 가장 바빴던 날을 떠올리고, 그 에너지가 실제 매출로 이어졌는지 확인해보기 — 바쁜 것과 효과적인 건 달라요."
+    ],
+    leaderFocus: [
+      "이번 달 한 행동 중에서 실제로 효과 있었던 것과, 바쁘게 했지만 결과가 약했던 걸 같이 분리해봐요. 이 유형은 동기부여보다 '어떤 행동이 실제 성과를 냈는가'를 분석할 때 훨씬 빠르게 성장해요.",
+      "다음 목표를 키우려면 고객 수, 객단가, 재방문, 소개, 콘텐츠 중 어느 레버를 먼저 올릴지 정해야 해요. 막연한 매출 목표 대신, 그 목표를 움직이는 핵심 지표 하나를 같이 골라줘요.",
+      "제안이 늘었더라도 고객이 '이건 나를 위한 말이다'라고 느끼는지 같이 봐줘요. 제안의 타이밍, 근거, 마무리 문장까지 잡아주면 실행력이 매출뿐 아니라 신뢰로도 연결돼요."
+    ],
+    traps: [
+      "바쁘게 움직이는 것과 효과적으로 움직이는 건 달라요. 행동량이 많아도 방향이 틀리면 소모예요.",
+      "목표 숫자에 집중하다 고객과의 감정적 연결이 끊기면, 수치가 올라도 단골이 빠져나가요."
+    ],
+    nextFocus: "더 많이 움직이기보다, 가장 성과 난 행동을 반복 가능하게 만들기."
+  },
+  MENTOR: {
+    name: "살롱멘토형",
+    headline: "이번 달, 사람을 살리는 힘이 가장 강하게 나왔어요.",
+    diagnosis: [
+      "동료를 돕고, 후배에게 먼저 손 내밀고, 살롱 분위기를 밝게 만들려는 흐름이 이번 달 내내 보였어요.",
+      "살롱멘토형은 그냥 착한 사람이 아니에요. 주변이 더 잘 움직일 수 있게 만드는 사람이에요.",
+      "다만 팀을 위해 쓰는 에너지와 나 자신을 위해 쓰는 에너지를 같이 관리하지 않으면, 어느 순간 스스로 소모되는 게 느껴질 거예요."
+    ],
+    strengthTitle: "강점",
+    strengths: [
+      "사람을 보고 먼저 움직이는 감각이 있어요.",
+      "아는 걸 쥐고 있기보다 나누는 편이에요.",
+      "살롱의 온도를 높이고, 팀에 대한 신뢰를 키우는 역할을 하고 있어요."
+    ],
+    pitfalls: [
+      "다음 달 내 기술·매출 목표 딱 하나를 정하고, 후배 케어와 완전히 분리된 시간을 주 1회라도 확보해보기.",
+      "지금 내가 대신 해주고 있는 일 중 하나를 골라서 후배가 직접 해보게 넘겨주기 — 도와주는 것과 떠안는 건 달라요.",
+      "이번 달 내가 배우고 싶었는데 못 한 것 하나를 멘토에게 말해보기 — 챙겨주는 사람도 채워져야 계속 줄 수 있어요."
+    ],
+    leaderFocus: [
+      "팀을 챙기는 시간만큼 내 기술, 매출, 브랜드를 키우는 시간도 실제로 확보되고 있는지 같이 점검해봐요. 기여가 많아 보이는 만큼, 자기 확장이 조용히 늦어지는 경우가 많아요.",
+      "지금 하고 있는 도움이 상대를 성장시키는 건지, 아니면 내가 대신 떠안고 있는 건지 같이 구분해봐요. 선의를 역할로 구조화해줘야 헌신이 소모가 되지 않아요.",
+      "앞으로 좋은 선배에 머물 건지, 아니면 영향력이 더 분명한 리더로 갈 건지 방향을 같이 정리해봐요. 후배 케어, 현장 피드백, 팀 분위기 관리 중 어디에 리더십을 얹을지 잡아주면 방향이 선명해져요."
+    ],
+    traps: [
+      "팀을 챙기는 사이 내 기술·매출이 조용히 뒤처지고 있을 수 있어요. 헌신이 자기 성장을 갉아먹는 구조예요.",
+      "도움과 떠안음의 경계가 흐려지면, 어느 순간 소모로 바뀌어요. 선의가 역할이 되면 안 돼요."
+    ],
+    nextFocus: "도와주는 사람에서, 영향력을 설계하는 사람으로 한 단계 올라가기."
+  },
+  BURNOUT_RISK: {
+    name: "번아웃위험형",
+    headline: "이번 달, 버티는 데 에너지를 거의 다 쓴 달이에요.",
+    diagnosis: [
+      "컨디션, 감정 회복, 보람, 방향감 중 여러 곳에서 에너지가 동시에 떨어진 흐름이 이번 달 나타났어요.",
+      "이건 의지가 약한 게 아니에요. 오히려 그동안 버텨온 힘이 있었기 때문에 이 시점까지 온 거예요.",
+      "지금 중요한 건 더 버티는 게 아니에요. 무엇이 나를 가장 많이 소모시키고 있는지를 정확하게 보는 것부터예요."
+    ],
+    strengthTitle: "지금 가장 먼저 확인해야 할 점",
+    strengths: [
+      "지금의 저하는 게으름이 아니라 신호예요. 몸과 마음이 뭔가를 알려주고 있는 거예요.",
+      "일이 싫어진 것과, 지금 방식으로는 더 못 버티겠는 것은 완전히 다른 이야기예요.",
+      "회복 구조가 정리되면, 원래 가진 강점이 다시 살아날 가능성이 충분히 있어요."
+    ],
+    pitfalls: [
+      "퇴근 후 연락 차단 시간을 하루 1시간만 정해보기 — 완벽하게 안 지켜도 괜찮아요, 의식적으로 끊는 연습이 먼저예요.",
+      "이번 주 가장 지쳤던 순간 하나를 떠올리고, 그 상황이 줄어들 수 있는지 멘토와 같이 이야기해보기 — 혼자 해결하려 하지 않아도 돼요.",
+      "지금 하고 있는 일 중 안 해도 되는 것 하나를 골라서 실제로 줄여보기 — 더 하는 게 아니라 덜 하는 게 지금 가장 필요한 행동이에요."
+    ],
+    leaderFocus: [
+      "지금 가장 먼저 줄여야 할 게 업무량인지, 고객 감정소모인지, 관계 스트레스인지, 일정 압박인지 같이 분리해봐요. 이 유형에게는 동기부여보다 소진 원인을 나눠보는 게 먼저예요.",
+      "일이 싫어진 건지, 지금 방식으로는 더 못 버티겠는 건지 꼭 같이 구분해봐야 해요. 이 차이를 못 잡으면 불필요하게 스스로를 비난하거나, 정말 바꿔야 할 구조를 그냥 넘기게 돼요.",
+      "최근에 가장 빠르게 지쳤던 장면 하나를 같이 잡아봐요. 그게 줄일 수 있는 건지 확인하고, 예약 밀도, 역할 분담, 퇴근 후 연결, 감정 소모 상황을 구체적으로 조정해줘요."
+    ],
+    traps: [
+      "지금 상태에서 세운 목표는 대부분 자기비난으로 돌아와요. 더 하려 하기 전에 뭘 줄일지를 봐야 해요.",
+      "'왜 의욕이 없지?'만 붙잡으면 원인을 못 찾아요. 어디서 에너지가 새고 있는지를 봐야 해요."
+    ],
+    nextFocus: "더 잘하려고 밀어붙이기 전에, 덜 무너지는 구조를 먼저 만들기."
+  },
+  LAUNCHER: {
+    name: "방향탐색형",
+    headline: "이번 달, 어디에 힘을 줘야 할지 아직 흐릿한 상태예요.",
+    diagnosis: [
+      "하고 싶은 마음은 있는데, 무엇을 중심으로 가야 하는지와 어떤 행동을 반복해야 하는지가 조금 흐릿한 달이었어요.",
+      "방향탐색형은 의욕이 없는 게 아니에요. 생각은 많은데 선택과 실행이 하나로 모이지 않는 상태에 가까워요.",
+      "지금 필요한 건 더 큰 비전이 아니에요. 다음 달 나를 실제로 움직이게 할 구체적인 행동 하나예요."
+    ],
+    strengthTitle: "지금 다시 잡아야 할 점",
+    strengths: [
+      "지금 못하고 있는 게 아니에요. 무엇부터 할지 아직 선명하지 않은 상태에 더 가까워요.",
+      "큰 목표가 없어도 작은 반복은 지금 당장 시작할 수 있어요.",
+      "기준이 하나 생기면 불안도, 비교도 자연스럽게 줄어들어요."
+    ],
+    pitfalls: [
+      "재예약 멘트 하루 1회, 시술 사진 주 2회 중 딱 하나만 골라서 다음 달 내내 반복해보기 — 방향은 움직이다 보면 생겨요.",
+      "이번 주 안에 멘토와 '다음 달 딱 하나의 행동'을 같이 정하고 말로 약속해보기 — 혼자 정한 것보다 훨씬 실행이 잘 돼요.",
+      "지금 하고 싶은 것 3개를 종이에 쓰고, 그 중 가장 작게 시작할 수 있는 것 하나만 골라보기 — 큰 그림보다 첫 발이 먼저예요."
+    ],
+    leaderFocus: [
+      "지금 가장 먼저 바꾸고 싶은 게 매출인지, 기술인지, 고객반응인지, 일하는 태도인지 같이 하나로 좁혀봐요. 목표가 없는 게 아니라, 목표 축이 여러 개로 퍼져 있어서 실행이 안 되는 경우가 많아요.",
+      "하고 싶은 마음은 있는데 행동으로 안 내려오는 이유가 막연함인지, 자신감 부족인지, 방법을 몰라서인지 같이 구분해봐요. 원인을 나눠줘야 다음 행동의 난이도를 맞출 수 있어요.",
+      "이번 달 딱 하나만 반복한다면 뭘 할지 같이 정해봐요. 재예약 멘트 하루 1회, 시술 사진 주 2회처럼 작고 측정 가능한 행동으로 내려주고, 다음에 실행 여부를 같이 확인하는 것만으로도 흐름이 달라져요."
+    ],
+    traps: [
+      "생각만 정리하다 한 달이 또 지나가요. 완벽한 방향보다 일단 한 번 움직이는 게 먼저예요.",
+      "주변과 비교하며 조급해지면, 정작 나에게 맞는 첫 단계가 더 안 보여요."
+    ],
+    nextFocus: "방향을 찾으려 하기보다, 방향이 생기게 할 행동 하나를 반복하기."
+  },
+  PORTFOLIO: {
+    name: "포트폴리오형",
+    headline: "이번 달, 기록하고 알리는 흐름이 살아 있었어요.",
+    diagnosis: [
+      "시술 결과물을 남기고, 나를 알리려는 흐름이 이번 달 강하게 나타났어요.",
+      "포트폴리오형은 단순히 사진 많이 찍는 게 아니에요. 내 일을 자산으로 쌓으려는 감각이 있는 사람이에요.",
+      "다만 콘텐츠를 올리는 것과 그게 실제 예약이나 신뢰로 이어지는 건 다른 구조예요. 보여주기에서 연결하기로 전환이 필요한 시점이에요."
+    ],
+    strengthTitle: "강점",
+    strengths: [
+      "시술 결과를 꾸준히 기록하는 성실함이 있어요.",
+      "SNS와 포트폴리오로 나만의 스타일을 알리는 감각이 있어요.",
+      "고객경험 영역에 높은 에너지를 쏟고 있어요."
+    ],
+    pitfalls: [
+      "다음에 올릴 콘텐츠 하나에 '예약 문의는 DM으로' 또는 '다음 달 예약 오픈했어요' 한 줄 추가해보기 — 올리는 것과 연결하는 건 달라요.",
+      "오늘 시술한 고객 중 한 명에게 결과물 사진 찍어드리고 리뷰 남겨달라고 직접 말로 부탁해보기 — 부탁해야 남겨줘요.",
+      "이번 달 올린 것 중 반응이 가장 좋았던 게 뭔지 확인하고, 그 이유를 한 줄로 정리해보기 — 잘 된 걸 알아야 반복할 수 있어요."
+    ],
+    leaderFocus: [
+      "'이번 달 올린 것 중에 제일 마음에 드는 게 뭐야?'라고 관심 있게 물어봐요. 콘텐츠를 살롱 마케팅과 연결할 기회를 만들어주는 것도 큰 동기가 돼요.",
+      "'팔로워보다 재예약이 먼저야'라는 연결을 같이 고민해봐요. SNS 활동이 실제 예약으로 이어지는 구조를 함께 만들어줘야 해요.",
+      "콘텐츠 올리는 데 집중하다 오늘 시술한 고객과의 대화가 짧아지고 있지 않은지 같이 봐줘요."
+    ],
+    traps: [
+      "콘텐츠 올리는 데 에너지를 다 쓰면, 오늘 시술한 고객과의 대화가 짧아져요.",
+      "팔로워가 느는 것과 예약이 느는 건 다른 구조예요. 연결 장치 없이 올리기만 하면 브랜딩이 아니라 일기예요."
+    ],
+    nextFocus: "콘텐츠를 실제 고객의 다음 선택과 연결하는 구조 만들기."
+  }
+};
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   유형 판정 엔진 V10
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+const TYPE_SCORE_MAP = {
+  0: [{ BURNOUT_RISK:8 },{ BURNOUT_RISK:5 },{ BURNOUT_RISK:2 },{},{}],
+  1: [{ BURNOUT_RISK:10 },{ BURNOUT_RISK:7 },{ BURNOUT_RISK:3 },{ CUSTOMER_MASTER:1 },{ CUSTOMER_MASTER:2 }],
+  2: [{ BURNOUT_RISK:6, GROWER:-1 },{ BURNOUT_RISK:4 },{ BURNOUT_RISK:2 },{ GROWER:1 },{ GROWER:2 }],
+  3: [{ BURNOUT_RISK:7 },{ BURNOUT_RISK:5 },{ BURNOUT_RISK:2 },{},{}],
+  4: [{ CRAFTSMAN:-4, LAUNCHER:2 },{ CRAFTSMAN:-2, LAUNCHER:1 },{},{ CRAFTSMAN:5, GROWER:1 },{ CRAFTSMAN:8, GROWER:2 }],
+  5: [{ GROWER:-5, CRAFTSMAN:-2, LAUNCHER:5 },{ GROWER:-2, LAUNCHER:3 },{ GROWER:2, CRAFTSMAN:1 },{ GROWER:6, CRAFTSMAN:3, DRIVER:1 },{ GROWER:9, CRAFTSMAN:5, DRIVER:2 }],
+  6: [{},{ CUSTOMER_MASTER:2, CRAFTSMAN:1 },{ CUSTOMER_MASTER:4, CRAFTSMAN:2 },{ CUSTOMER_MASTER:6, CRAFTSMAN:3 },{ CUSTOMER_MASTER:8, CRAFTSMAN:4 }],
+  7: [{ CRAFTSMAN:-3 },{ CRAFTSMAN:1 },{ CRAFTSMAN:3, CUSTOMER_MASTER:1 },{ CRAFTSMAN:6, CUSTOMER_MASTER:2 },{ CRAFTSMAN:9, CUSTOMER_MASTER:3 }],
+  8: [{ CUSTOMER_MASTER:-5, DRIVER:-3, LAUNCHER:2 },{ CUSTOMER_MASTER:-2, DRIVER:-1 },{ CUSTOMER_MASTER:2, DRIVER:1 },{ CUSTOMER_MASTER:6, DRIVER:3 },{ CUSTOMER_MASTER:9, DRIVER:5 }],
+  9: [{ CUSTOMER_MASTER:-3 },{ CUSTOMER_MASTER:-1 },{ CUSTOMER_MASTER:1 },{ CUSTOMER_MASTER:4 },{ CUSTOMER_MASTER:7 }],
+  10:[{ GROWER:-2, DRIVER:-2, LAUNCHER:2 },{ GROWER:1, DRIVER:1 },{ GROWER:3, DRIVER:2, CRAFTSMAN:1 },{ GROWER:5, DRIVER:4, CRAFTSMAN:2 },{ GROWER:7, DRIVER:6, CRAFTSMAN:3 }],
+  11:[{ DRIVER:-5, CUSTOMER_MASTER:-4, LAUNCHER:3 },{ DRIVER:-2, CUSTOMER_MASTER:-1 },{ DRIVER:2, CUSTOMER_MASTER:2 },{ DRIVER:6, CUSTOMER_MASTER:5 },{ DRIVER:10, CUSTOMER_MASTER:8 }],
+  12:[{},{ CUSTOMER_MASTER:2 },{ CUSTOMER_MASTER:4 },{ CUSTOMER_MASTER:6, CRAFTSMAN:1 },{ CUSTOMER_MASTER:8, CRAFTSMAN:2 }],
+  13:[{ MENTOR:-5 },{ MENTOR:-2 },{ MENTOR:2 },{ MENTOR:6 },{ MENTOR:9 }],
+  14:[{ GROWER:-6, MENTOR:-1, LAUNCHER:2 },{ GROWER:-3 },{ GROWER:1 },{ GROWER:5, MENTOR:1 },{ GROWER:8, MENTOR:1 }],
+  15:[{ MENTOR:-4, CUSTOMER_MASTER:-2 },{ MENTOR:-2 },{ MENTOR:1, CUSTOMER_MASTER:1 },{ MENTOR:4, CUSTOMER_MASTER:3 },{ MENTOR:7, CUSTOMER_MASTER:5 }],
+  16:[{ MENTOR:-7 },{ MENTOR:-4 },{ MENTOR:1 },{ MENTOR:7 },{ MENTOR:11 }],
+  17:[{ MENTOR:-5 },{ MENTOR:-2 },{ MENTOR:2 },{ MENTOR:6 },{ MENTOR:9 }],
+  18:[{ BURNOUT_RISK:10, LAUNCHER:3, GROWER:-2 },{ BURNOUT_RISK:7, LAUNCHER:2 },{ BURNOUT_RISK:3 },{ GROWER:3 },{ GROWER:6 }],
+  19:[{ LAUNCHER:9, DRIVER:-5, GROWER:-2 },{ LAUNCHER:6, DRIVER:-2 },{},{ DRIVER:5, GROWER:3 },{ DRIVER:9, GROWER:5 }],
+  20:[{ LAUNCHER:8, GROWER:-6, CRAFTSMAN:-2 },{ LAUNCHER:5, GROWER:-3 },{ GROWER:2, CRAFTSMAN:1 },{ GROWER:7, CRAFTSMAN:4 },{ GROWER:11, CRAFTSMAN:6 }],
+  21:[{ LAUNCHER:9, BURNOUT_RISK:7, DRIVER:-4, GROWER:-2 },{ LAUNCHER:6, BURNOUT_RISK:5, DRIVER:-2 },{ BURNOUT_RISK:2 },{ DRIVER:5, GROWER:3 },{ DRIVER:9, GROWER:5 }],
+  22:[{ DRIVER:-5, LAUNCHER:3 },{ DRIVER:-2, LAUNCHER:1 },{ DRIVER:1 },{ DRIVER:5 },{ DRIVER:8 }],
+  23:[{ BURNOUT_RISK:2 },{ BURNOUT_RISK:1 },{ DRIVER:1 },{ DRIVER:4 },{ DRIVER:7 }],
+  24:[{ DRIVER:-12, LAUNCHER:5, CUSTOMER_MASTER:-2 },{ DRIVER:-6, LAUNCHER:3 },{ DRIVER:0, CUSTOMER_MASTER:1 },{ DRIVER:8, CUSTOMER_MASTER:3, GROWER:1 },{ DRIVER:14, CUSTOMER_MASTER:5, GROWER:2 }],
+  25:[{ LAUNCHER:10, DRIVER:-6, GROWER:-2 },{ LAUNCHER:7, DRIVER:-3 },{},{ DRIVER:6, GROWER:2 },{ DRIVER:11, GROWER:4 }]
+};
+
+const TYPE_KEYS = ["CRAFTSMAN","CUSTOMER_MASTER","GROWER","DRIVER","MENTOR","BURNOUT_RISK","LAUNCHER"];
+const POSITIVE_TYPE_KEYS = ["CRAFTSMAN","CUSTOMER_MASTER","GROWER","DRIVER","MENTOR"];
+const TYPE_PRIORITY = { DRIVER:5, GROWER:4, CUSTOMER_MASTER:3, CRAFTSMAN:2, MENTOR:1 };
+const TYPE_DISPLAY_NAMES = {
+  CRAFTSMAN:"기술장인형", CUSTOMER_MASTER:"단골마스터형", GROWER:"성장몰입형",
+  ALLROUNDER:"살롱에이스형", DRIVER:"목표드라이브형", MENTOR:"살롱멘토형",
+  BURNOUT_RISK:"번아웃위험형", LAUNCHER:"방향탐색형"
+};
+
+function round1(num){ return Math.round(num*10)/10; }
+
+function calcTypeScoreRanges(){
+  const ranges={};
+  TYPE_KEYS.forEach(type=>{
+    let min=0, max=0;
+    for(let q=0;q<26;q++){
+      const opts=TYPE_SCORE_MAP[q]||[];
+      const vals=opts.map(o=>o[type]||0);
+      min+=Math.min(...vals); max+=Math.max(...vals);
+    }
+    ranges[type]={min,max};
+  });
+  return ranges;
+}
+const TYPE_SCORE_RANGES=calcTypeScoreRanges();
+
+function calcRawTypeScores(ansArr){
+  const raw={};
+  TYPE_KEYS.forEach(t=>{raw[t]=0;});
+  ansArr.forEach((ai,qi)=>{
+    const pm=TYPE_SCORE_MAP[qi]?.[ai]||{};
+    Object.entries(pm).forEach(([t,v])=>{ if(raw[t]!==undefined) raw[t]+=v; });
+  });
+  return raw;
+}
+
+function normalizeTypeScores(rawScores){
+  const norm={};
+  TYPE_KEYS.forEach(type=>{
+    const {min,max}=TYPE_SCORE_RANGES[type];
+    if(max===min){norm[type]=0;return;}
+    norm[type]=round1(((rawScores[type]-min)/(max-min))*100);
+  });
+  return norm;
+}
+
+function calcAnswerAvg(ansArr){
+  return round1((ansArr.reduce((s,v)=>s+v,0)/(26*4))*100);
+}
+function avgArr(vals){ return vals.reduce((s,v)=>s+v,0)/vals.length; }
+function countLow(ansArr,idxs,maxAI=1){ return idxs.filter(i=>ansArr[i]<=maxAI).length; }
+function countHigh(ansArr,idxs,minAI=3){ return idxs.filter(i=>ansArr[i]>=minAI).length; }
+
+function positiveGate(type,ansArr){
+  switch(type){
+    case "CRAFTSMAN":
+      return countHigh(ansArr,[4,7,20])>=2||(ansArr[7]===4&&ansArr[4]>=2);
+    case "CUSTOMER_MASTER":
+      return countHigh(ansArr,[8,9,11,12])>=2||(ansArr[8]===4&&ansArr[11]>=2)||(ansArr[11]===4&&ansArr[8]>=2);
+    case "GROWER":
+      return countHigh(ansArr,[5,14,20])>=2||(ansArr[20]===4&&ansArr[5]>=2);
+    case "DRIVER":
+      return ansArr[24]>=2&&(countHigh(ansArr,[19,22,25])>=2||ansArr[24]===4);
+    case "MENTOR":
+      return countHigh(ansArr,[13,16,17])>=2||ansArr[16]===4;
+    default: return true;
+  }
+}
+
+function calcTypeV10(ansArr){
+  const isValid=Array.isArray(ansArr)&&ansArr.length===26&&ansArr.every(v=>Number.isInteger(v)&&v>=0&&v<=4);
+  if(!isValid) return null;
+
+  const rawScores=calcRawTypeScores(ansArr);
+  const ns=normalizeTypeScores(rawScores);
+  const answerAvg=calcAnswerAvg(ansArr);
+  const posVals=POSITIVE_TYPE_KEYS.map(t=>ns[t]);
+  const positiveAvg=round1(avgArr(posVals));
+  const positiveMin=Math.min(...posVals);
+  const positiveMax=Math.max(...posVals);
+  const positiveSpread=round1(positiveMax-positiveMin);
+  const lowConditionCount=countLow(ansArr,[0,1,2,3]);
+  const deepBurnoutLowCount=countLow(ansArr,[18,21]);
+  const directionLowCount=countLow(ansArr,[19,20,21,24,25]);
+
+  const positiveRanking=POSITIVE_TYPE_KEYS
+    .map(t=>({type:t,score:ns[t]}))
+    .sort((a,b)=>b.score!==a.score?b.score-a.score:TYPE_PRIORITY[b.type]-TYPE_PRIORITY[a.type]);
+  const topPositiveScore=positiveRanking[0].score;
+
+  const isGeneralAllrounder=answerAvg>=72&&positiveAvg>=68&&positiveMin>=52&&positiveSpread<=32&&ns.BURNOUT_RISK<=45&&ns.LAUNCHER<=45;
+  const isProtectedHighPerformer=answerAvg>=80&&positiveAvg>=85&&positiveMin>=75&&ns.LAUNCHER<=25&&lowConditionCount>=3&&deepBurnoutLowCount===0;
+  const burnoutGate=ns.BURNOUT_RISK>=62&&lowConditionCount>=2&&deepBurnoutLowCount>=1;
+  const launcherGate=ns.LAUNCHER>=58&&directionLowCount>=3;
+  const neutralLauncher=answerAvg>=45&&answerAvg<=55&&topPositiveScore<55&&ns.BURNOUT_RISK<55&&!burnoutGate;
+  const burnoutFlag=ns.BURNOUT_RISK>=55||lowConditionCount>=3;
+
+  let finalType=null;
+  if(isGeneralAllrounder||isProtectedHighPerformer){ finalType="ALLROUNDER"; }
+  else if(burnoutGate&&ns.BURNOUT_RISK>=topPositiveScore+2&&ns.BURNOUT_RISK>=ns.LAUNCHER-4){ finalType="BURNOUT_RISK"; }
+  else if(launcherGate&&ns.LAUNCHER>=topPositiveScore+2){ finalType="LAUNCHER"; }
+  else if(neutralLauncher){ finalType="LAUNCHER"; }
+  else {
+    for(const c of positiveRanking){
+      if(positiveGate(c.type,ansArr)){ finalType=c.type; break; }
+    }
+    if(!finalType) finalType="LAUNCHER";
+  }
+
+  // 2순위 유형
+  const secondType = (() => {
+    const candidates = positiveRanking.filter(c => c.type !== finalType);
+    if (candidates.length > 0) return candidates[0].type;
+    const allTypes = ['CRAFTSMAN','CUSTOMER_MASTER','GROWER','ALLROUNDER','DRIVER','MENTOR','BURNOUT_RISK','LAUNCHER','PORTFOLIO'];
+    return allTypes.find(t => t !== finalType) || null;
+  })();
+
+  return {
+    type:finalType, displayName:TYPE_DISPLAY_NAMES[finalType],
+    secondType,
+    rawScores, normalizedScores:ns,
+    flags:{burnoutFlag,isGeneralAllrounder,isProtectedHighPerformer,burnoutGate,launcherGate,neutralLauncher},
+    meta:{answerAvg,positiveAvg,positiveMin,positiveMax,positiveSpread,lowConditionCount,deepBurnoutLowCount,directionLowCount,positiveRanking}
+  };
+}
+
+/* ━━━ 히스토리용 헬퍼 — 저장된 scores로 유형 역산 (fallback) ━━━ */
+function calcTypeFromScore(scores){
+  // 신규 엔진은 ans 배열 필요 → scores만 있는 히스토리는 최고점 영역으로 fallback
+  const CATS=["컨디션·멘탈","기술·전문성","고객경험·마케팅","관계·태도","성장·방향","경제·설계"];
+  const avg=CATS.reduce((s,c)=>s+scores[c],0)/CATS.length;
+  if(avg<45) return 'LAUNCHER';
+  if(getSig(scores['컨디션·멘탈'])==='red') return 'BURNOUT_RISK';
+  if(avg>=75&&CATS.filter(c=>getSig(scores[c])==='green').length>=4) return 'ALLROUNDER';
+  const top=CATS.slice().sort((a,b)=>scores[b]-scores[a])[0];
+  const MAP={'기술·전문성':'CRAFTSMAN','고객경험·마케팅':'CUSTOMER_MASTER','성장·방향':'GROWER','경제·설계':'DRIVER','관계·태도':'MENTOR','컨디션·멘탈':'BURNOUT_RISK'};
+  return MAP[top]||'LAUNCHER';
+}
+
+/* ━━━ 상태 ━━━ */
+let ans = new Array(QS.length).fill(null), cur = 0;
+let uName = '', uMonth = '', chartInst = null, done = false, textStep = 1;
+let lastResult = null; // 멘토 공유용 결과 스냅샷
+let promiseCheckVal = null;
+let moving = false; // 중복 클릭 방지
+
+/* ━━━ 화면 전환 ━━━ */
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  document.getElementById('scr-'+id).classList.add('on');
+  ['home','survey','result','history','library'].forEach(t=>{
+    const el=document.getElementById('tab-'+t);
+    if(el) el.classList.toggle('on', t===id);
+  });
+  // FAB: 자료실+관리자일 때만 표시
+  const fab = document.getElementById('adminFab');
+  if(fab) fab.classList.toggle('on', id==='library' && isAdmin);
+  window.scrollTo(0,0);
+}
+function startDesignerDiag() {
+  // 기존 헤어디자이너 진단 시작
+  document.getElementById('nameInp') && (document.getElementById('nameInp').value = '');
+  showScreen('home');
+  // start-card 스크롤
+  setTimeout(() => {
+    const card = document.querySelector('.start-card');
+    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 100);
+}
+
+function goHome() {
+  ans=new Array(QS.length).fill(null);cur=0;done=false;textStep=1;
+  if(chartInst){chartInst.destroy();chartInst=null;}
+  document.getElementById('tab-result').style.display='none';
+  showScreen('home');
+}
+function tryGoSurvey() { if(done||ans.some(a=>a!==null)) showScreen('survey'); }
+function tryGoResult() { if(done) showScreen('result'); }
+
+/* ━━━ 시작 ━━━ */
+function startSurvey() {
+  uName = document.getElementById('nameInput').value.trim()||'익명';
+  uMonth = document.getElementById('monthInput').value||new Date().toISOString().slice(0,7);
+  ans = new Array(QS.length).fill(null); cur=0; done=false; textStep=1;
+  document.getElementById('tab-result').style.display='none';
+  showScreen('survey');
+  renderQ();
+}
+
+/* ━━━ 질문 렌더 ━━━ */
+function renderQ() {
+  const q = QS[cur];
+  const pct = Math.round((cur+1)/QS.length*100);
+  document.getElementById('progFill').style.width = pct+'%';
+  document.getElementById('progCnt').textContent = (cur+1)+' / '+QS.length;
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('btnPrev').disabled = cur===0;
+  // 스크롤 맨 위로
+  document.getElementById('qBody').scrollTop = 0;
+  const ol = document.getElementById('optList'); ol.innerHTML='';
+  q.opts.forEach((txt,i)=>{
+    const d=document.createElement('div');
+    d.className='opt'+(ans[cur]===i?' sel':'');
+    d.innerHTML=`<div class="opt-dot"></div><div class="opt-score">${i+1}</div><div class="opt-label">${txt}</div>`;
+    d.onclick=()=>{
+      if(moving) return;
+      moving = true;
+      ans[cur]=i;
+      document.querySelectorAll('#optList .opt').forEach(o=>o.classList.remove('sel'));
+      d.classList.add('sel');
+      setTimeout(()=>{ moving=false; go(1); }, 220);
+    };
+    ol.appendChild(d);
+  });
+}
+function go(dir) {
+  if(dir===1 && cur===QS.length-1){ showResult(); return; }
+  cur=Math.max(0,Math.min(QS.length-1,cur+dir)); renderQ();
+}
+
+/* ━━━ 점수 계산 (영역별 실제 문항 수 기준) ━━━ */
+function calcScores() {
+  const raw={}, cnt={}, score={};
+  CATS.forEach(c=>{ raw[c]=0; cnt[c]=0; });
+  QS.forEach((q,i)=>{ if(ans[i]!==null){ raw[q.cat]+=(ans[i]+1); cnt[q.cat]++; } });
+  CATS.forEach(c=>{
+    const maxRaw = cnt[c]*5;
+    score[c] = maxRaw>0 ? Math.round(raw[c]/maxRaw*1000)/10 : 0;
+  });
+  raw._sns = ans[10]!==null ? ((ans[10]+1)/5)*100 : 0;
+  return {raw, cnt, score};
+}
+
+/* ━━━ 신호등 (환산점수 기준 0~100) ━━━ */
+function getSig(scoreVal) {
+  if(scoreVal>=75) return 'green';
+  if(scoreVal>=50) return 'yellow';
+  return 'red';
+}
+
+/* ━━━ localStorage ━━━ */
+function loadHist(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');}catch(e){return[];}}
+function saveHist(month,name,scores,promise,promiseCheck){
+  const h=loadHist().filter(x=>!(x.month===month&&x.name===name));
+  h.push({month,name,scores,promise:promise||'',promiseCheck:promiseCheck||''});
+  h.sort((a,b)=>a.month<b.month?-1:1);
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(h.slice(-24)));}catch(e){}
+}
+function getPrev(month,name){
+  const list=loadHist().filter(x=>x.name===name&&x.month<month);
+  if(!list.length)return null; list.sort((a,b)=>a.month<b.month?-1:1); return list[list.length-1];
+}
+
+/* ━━━ 결과 렌더 ━━━ */
+function showResult() {
+  done=true;
+  const {raw, cnt, score} = calcScores();
+  const v2='';
+  saveHist(uMonth,uName,score,v2,promiseCheckVal||'');
+  const typeResult = calcTypeV10(ans);
+  const typeKey = typeResult ? typeResult.type : calcTypeFromScore(score);
+  const type = TYPES[typeKey];
+  const [y,m,d]=uMonth.split('-');
+  const prev=getPrev(uMonth,uName);
+
+  // 전체 점수
+  const totalScore = Math.round(CATS.reduce((s,c)=>s+score[c],0)/CATS.length*10)/10;
+
+  // 전체 신호등
+  const avg = CATS.reduce((s,c)=>s+score[c],0)/CATS.length;
+  const totalSigKey = avg>=75?'green':avg>=50?'yellow':'red';
+
+  // 유형 히어로
+  const hero=document.getElementById('typeHero');
+  hero.style.background=type.bgColor;
+  hero.style.color=type.color;
+  document.getElementById('typeEmoji').textContent=type.emoji;
+  document.getElementById('typeLabel').textContent=y+'년 '+parseInt(m)+'월 '+parseInt(d)+'일 · '+uName+'님의 유형';
+  document.getElementById('typeName').textContent=type.name;
+  document.getElementById('typeTagline').textContent=type.tagline;
+
+  // ── 신호등 (전체 평균 원점수 기준) ──
+  const sigContent = {
+    green: { badge:'좋음 — 지금 잘 가고 있어요', title:'방향도 맞고, 속도도 좋아요.', desc:'지금 이 흐름을 유지하는 게 가장 중요해요.\n멈추지 말고, 과속도 하지 말고 — 이대로 가요.' },
+    yellow: { badge:'주의 — 방향 점검이 필요해요', title:'가고는 있는데, 어디로 가는지 모를 때.', desc:'속도보다 방향이 먼저예요.\n잠깐 멈춰서 "나 지금 왜 달리고 있지?" 한 번만 물어봐요.' },
+    red: { badge:'위험 — 지금 당장 멈춰도 괜찮아요', title:'열심히 하는 게 오히려 독이 될 수 있는 시기예요.', desc:'쉬는 것도 성장이에요.\n멘토에게 솔직하게 말하는 게 지금 할 수 있는 가장 용감한 일이에요.' }
+  };
+  const sig = sigContent[totalSigKey];
+  document.getElementById('signalBadge').innerHTML = '';
+
+  // ② 영역별 점수 + 설명
+  const AREA_DESC = {
+    '컨디션·멘탈': {
+      green: '몸과 마음 모두 안정적이에요. 컨디션이 좋은 달은 모든 것의 기반이 돼요.',
+      yellow: '가끔 지치거나 무기력한 날이 있어요. 나만의 회복 루틴을 한 번 점검해봐요.',
+      red: '지금 많이 소진된 상태예요. 기술보다 쉬는 게 먼저예요.'
+    },
+    '기술·전문성': {
+      green: '시술 완성도와 전문성 모두 자신 있는 달이에요. 고객이 먼저 알아봐요.',
+      yellow: '잘하고 있지만 한 가지씩 더 다듬을 여지가 있어요.',
+      red: '시술이나 공부에서 아쉬움이 많았던 달이에요. 작은 것 하나만 다시 잡아봐요.'
+    },
+    '고객경험·마케팅': {
+      green: '재예약, 서비스, 기록까지 고객경험이 살아있는 달이에요.',
+      yellow: '고객 관리는 하고 있는데 아직 아쉬운 부분이 있어요.',
+      red: '고객경험과 마케팅 모두 이번 달 에너지가 부족했어요. 하나만 다시 시작해봐요.'
+    },
+    '관계·태도': {
+      green: '살롱 안 관계가 편안하고 팀으로 잘 움직이고 있는 달이에요.',
+      yellow: '관계에서 신경 쓰이는 부분이 있어요. 꺼내볼 필요가 있어요.',
+      red: '관계에서 에너지가 많이 빠지고 있는 상태예요. 멘토와 솔직하게 나눠봐요.'
+    },
+    '성장·방향': {
+      green: '내가 왜 이 일을 하는지, 어디로 가는지 명확한 달이에요.',
+      yellow: '방향이 흐릿해지고 있어요. 잠깐 멈추고 나침반을 다시 확인할 때예요.',
+      red: '지금 길을 잃은 느낌이 드는 상태예요. 멘토와 대화가 가장 필요한 영역이에요.'
+    },
+    '경제·설계': {
+      green: '수입 관리와 목표 설계가 잘 되고 있어요. 다음 목표를 설계할 때예요.',
+      yellow: '수입이나 계획 면에서 아쉬움이 있어요. 구체적으로 한 번 들여다봐요.',
+      red: '경제적인 부분에서 스트레스가 있는 상태예요. 구조와 목표를 함께 점검해봐요.'
+    }
+  };
+  const sigEmoji = { green:'', yellow:'', red:'' };
+  const areaList = document.getElementById('areaList');
+  areaList.innerHTML = '';
+  CATS.forEach((c,i)=>{
+    const v=score[c], col=COLORS[i], sg=getSig(v);
+    const desc = AREA_DESC[c]?.[sg] || '';
+    areaList.innerHTML += `<div class="area-row">
+      <div class="area-row-top">
+        <span class="area-name">${c}</span>
+        <div class="area-bar-wrap"><div class="area-bar-fill" style="width:${v}%;background:${col}"></div></div>
+        <span class="area-score" style="color:${col}">${v}</span>
+      </div>
+      <div class="area-desc">${desc}</div>
+    </div>`;
+  });
+
+  // 개인화 데이터 계산
+  const lowestCat = CATS.slice().sort((a,b)=>score[a]-score[b])[0];
+  const highestCat = CATS.slice().sort((a,b)=>score[b]-score[a])[0];
+  const lowestSig = getSig(score[lowestCat]);
+
+  // 한 줄 평 (유형 × 전체신호등)
+  const ONE_LINE = {
+    CRAFTSMAN:   { green:'기술이 빛나는 달이에요. 고객이 결과물로 당신을 기억하기 시작해요.', yellow:'기술은 살아있어요. 고객 연결만 더해지면 완성이에요.', red:'손은 살아있어요. 지금 잠깐 쉬어도 기술은 사라지지 않아요.' },
+    CUSTOMER_MASTER:{ green:'고객이 나를 믿고 다시 오는 달이에요. 그 신뢰가 가장 큰 자산이에요.', yellow:'관계는 좋은데 그게 수치로도 보여야 할 타이밍이에요.', red:'사람을 챙기느라 정작 나를 못 챙긴 달이에요. 잠깐 멈춰도 돼요.' },
+    GROWER:      { green:'배우고 바뀌는 흐름이 살아있는 달이에요. 이 에너지를 유지해요.', yellow:'배우는 건 좋은데 하나를 끝까지 가져가는 게 지금 과제예요.', red:'배우고 싶은 마음은 있는데 몸이 따라주지 않는 달이에요. 회복이 먼저예요.' },
+    ALLROUNDER:  { green:'무너진 곳 없이 고르게 잘 굴러가는 달이에요. 이 균형이 강점이에요.', yellow:'전체적으로 괜찮은데 한 방향으로 더 밀 타이밍이에요.', red:'지금 이 균형을 유지하는 것 자체가 대단한 달이에요.' },
+    DRIVER:      { green:'목표가 행동으로 내려온 달이에요. 그 에너지를 정교하게 쓸 타이밍이에요.', yellow:'방향은 있는데 무엇이 실제로 효과 있는지 점검이 필요한 달이에요.', red:'달리다 지친 달이에요. 잠깐 멈추는 게 더 멀리 가는 방법이에요.' },
+    MENTOR:      { green:'팀을 살리는 힘이 강한 달이에요. 그 영향력이 나를 위해서도 써야 해요.', yellow:'팀은 챙기는데 나 자신이 뒤로 밀리고 있는 달이에요.', red:'너무 많이 주고 있는 달이에요. 채워야 줄 수 있어요.' },
+    BURNOUT_RISK:{ green:'힘든 중에도 버텨온 달이에요. 지금 쉬는 게 가장 용감한 선택이에요.', yellow:'에너지가 많이 소진된 달이에요. 줄이는 것부터 시작해요.', red:'지금은 더 잘하려고 밀어붙이기보다 덜 무너지는 구조가 먼저예요.' },
+    LAUNCHER:    { green:'방향을 찾고 있는 중이에요. 찾는 과정 자체가 이미 성장이에요.', yellow:'어디에 힘을 줘야 할지 아직 흐릿한 달이에요. 하나만 골라봐요.', red:'지금 많이 흐릿한 달이에요. 큰 목표보다 오늘 하나만 해봐요.' },
+    PORTFOLIO:   { green:'기록하고 알리는 흐름이 살아있어요. 팬이 생기기 시작하는 단계예요.', yellow:'브랜딩 의지는 있는데 실행이 아직 불규칙한 달이에요.', red:'보여주고 싶은데 여유가 없는 달이에요. 한 장만 찍어도 충분해요.' }
+  };
+
+
+  // 이번 달 가장 빛난 순간 (유형 × 가장 높은 영역)
+  const SHINE = {
+    CRAFTSMAN: {
+      '컨디션·멘탈':'몸 컨디션을 챙기면서도 시술 집중도를 잃지 않은 달이에요. 그 균형이 결과물에 고스란히 나타났어요.',
+      '기술·전문성':'이번 달 기술에서 빛이 났어요. 배운 것을 현장에 올려놓고 결과물로 확인받은 순간들이 있었을 거예요.',
+      '고객경험·마케팅':'기술에 집중하면서도 고객 응대를 놓치지 않았어요. 결과물과 관계가 함께 빛난 달이에요.',
+      '관계·태도':'살롱 안에서 신뢰를 쌓으면서도 시술 완성도를 높인 달이에요. 주변이 당신을 더 인정하기 시작하는 달이에요.',
+      '성장·방향':'배우고 성장하는 흐름이 실제 시술 결과물에 반영된 달이에요. 공부가 현장으로 연결된 순간이 있었을 거예요.',
+      '경제·설계':'기술이 수입으로 연결되기 시작한 달이에요. 잘하는 것이 숫자로도 보이는 흐름이에요.'
+    },
+    CUSTOMER_MASTER: {
+      '컨디션·멘탈':'몸이 힘든 중에도 고객을 따뜻하게 대한 달이에요. 그 마음이 고객한테 느껴졌을 거예요.',
+      '기술·전문성':'기술과 관계가 함께 올라간 달이에요. "여기서만 해요"라는 말이 나올 만한 흐름이에요.',
+      '고객경험·마케팅':'고객이 나를 다시 찾게 만드는 순간들을 만들어낸 달이에요. 그 신뢰가 이번 달 가장 빛났어요.',
+      '관계·태도':'살롱 안팎의 관계가 모두 좋은 달이에요. 고객도, 동료도 당신 곁에 있고 싶어해요.',
+      '성장·방향':'성장하면서도 고객과의 관계를 놓치지 않은 달이에요. 두 가지가 함께 올라가는 흐름이에요.',
+      '경제·설계':'고객 신뢰가 수입으로 이어지기 시작한 달이에요. 단골의 힘이 숫자로 보이는 흐름이에요.'
+    },
+    GROWER: {
+      '컨디션·멘탈':'몸을 챙기면서 배움을 이어간 달이에요. 지속 가능한 성장의 흐름을 만들고 있어요.',
+      '기술·전문성':'배운 것을 실제로 써보고 결과를 확인한 달이에요. 공부가 실력으로 쌓이는 순간이에요.',
+      '고객경험·마케팅':'성장하면서 고객경험까지 놓치지 않은 달이에요. 배움이 고객 반응으로 확인된 순간들이 있었을 거예요.',
+      '관계·태도':'배우면서 동료와의 관계도 챙긴 달이에요. 혼자 성장하는 게 아니라 함께 성장하는 흐름이에요.',
+      '성장·방향':'이번 달 성장의 방향이 가장 선명하게 보인 달이에요. 배움과 방향이 일치하는 순간이에요.',
+      '경제·설계':'성장이 수입으로 연결되기 시작한 달이에요. 배운 것이 매출로 이어지는 흐름이에요.'
+    },
+    ALLROUNDER: {
+      '컨디션·멘탈':'모든 영역을 균형 있게 유지하면서 컨디션까지 챙긴 달이에요. 이 상태가 오래 지속되면 좋겠어요.',
+      '기술·전문성':'전체 균형 위에 기술까지 올라간 달이에요. 에이스의 흐름이에요.',
+      '고객경험·마케팅':'균형 잡힌 상태에서 고객경험까지 빛난 달이에요. 살롱 안에서 없어선 안 될 존재가 되고 있어요.',
+      '관계·태도':'실력과 관계가 함께 빛난 달이에요. 주변이 당신을 믿고 따르는 흐름이에요.',
+      '성장·방향':'균형을 유지하면서 방향까지 잡힌 달이에요. 다음 단계가 선명하게 보이기 시작하는 흐름이에요.',
+      '경제·설계':'잘하는 것들이 수입으로도 연결된 달이에요. 균형과 성과가 함께 빛난 달이에요.'
+    },
+    DRIVER: {
+      '컨디션·멘탈':'목표를 향해 달리면서도 몸을 챙긴 달이에요. 오래 달릴 수 있는 기반이 만들어지고 있어요.',
+      '기술·전문성':'목표와 기술이 함께 올라간 달이에요. 실력이 성과를 만드는 흐름이에요.',
+      '고객경험·마케팅':'목표를 향해 달리면서 고객경험까지 챙긴 달이에요. 숫자와 신뢰가 함께 올라가는 흐름이에요.',
+      '관계·태도':'목표를 추진하면서도 주변을 챙긴 달이에요. 혼자 달리는 게 아니라 함께 가는 흐름이에요.',
+      '성장·방향':'목표와 방향이 일치하는 달이에요. 지금 하는 것들이 원하는 곳으로 이어지고 있어요.',
+      '경제·설계':'목표가 숫자로 보이기 시작한 달이에요. 추진력이 매출로 연결되는 흐름이에요.'
+    },
+    MENTOR: {
+      '컨디션·멘탈':'팀을 챙기면서도 나를 잃지 않은 달이에요. 그 균형이 이번 달 가장 빛났어요.',
+      '기술·전문성':'팀에 기여하면서 내 기술도 함께 올린 달이에요. 영향력과 실력이 함께 성장하고 있어요.',
+      '고객경험·마케팅':'팀을 이끌면서 고객경험까지 놓치지 않은 달이에요. 멘토의 힘이 고객에게도 전해진 달이에요.',
+      '관계·태도':'팀 안에서 신뢰와 분위기를 동시에 만들어낸 달이에요. 당신이 있어서 살롱이 달라지는 흐름이에요.',
+      '성장·방향':'팀과 함께 성장 방향을 만들어간 달이에요. 영향력이 확장되는 흐름이에요.',
+      '경제·설계':'팀에 기여하면서 수입도 함께 올린 달이에요. 헌신이 성과로 이어지는 흐름이에요.'
+    },
+    BURNOUT_RISK: {
+      '컨디션·멘탈':'힘든 중에도 버텨낸 달이에요. 그 자체가 이번 달 가장 빛난 순간이에요.',
+      '기술·전문성':'몸이 힘들어도 손은 살아있었던 달이에요. 기술이 당신을 버텨주고 있어요.',
+      '고객경험·마케팅':'이 상태에서도 고객에게 최선을 다한 달이에요. 그 마음이 고객한테 느껴졌을 거예요.',
+      '관계·태도':'힘든 중에도 주변과의 연결을 놓지 않은 달이에요. 그 연결이 당신을 버텨주고 있어요.',
+      '성장·방향':'소진된 상태에서도 방향을 잃지 않으려 한 달이에요. 그 의지가 이번 달 가장 빛났어요.',
+      '경제·설계':'힘든 중에도 수입을 유지한 달이에요. 그게 이번 달 가장 단단한 부분이에요.'
+    },
+    LAUNCHER: {
+      '컨디션·멘탈':'방향이 흐릿한 중에도 몸을 챙긴 달이에요. 준비가 되어가고 있어요.',
+      '기술·전문성':'방향은 흐릿하지만 손은 살아있는 달이에요. 기술이 당신의 가능성이에요.',
+      '고객경험·마케팅':'방향을 찾으면서도 고객에게 최선을 다한 달이에요. 그 성실함이 이번 달 빛났어요.',
+      '관계·태도':'방향이 흐릿할 때 관계가 나침반이 되어준 달이에요. 주변 사람들이 당신의 자산이에요.',
+      '성장·방향':'방향을 찾으려는 의지가 살아있는 달이에요. 찾는 과정 자체가 이미 성장이에요.',
+      '경제·설계':'방향이 흐릿해도 수입을 지킨 달이에요. 그 안정감이 다음 방향을 찾는 기반이 돼요.'
+    },
+    PORTFOLIO: {
+      '컨디션·멘탈':'콘텐츠를 만들면서도 나를 챙긴 달이에요. 지속 가능한 브랜딩의 기반이 만들어지고 있어요.',
+      '기술·전문성':'기술과 콘텐츠가 함께 올라간 달이에요. 보여주는 것과 실제가 일치하는 흐름이에요.',
+      '고객경험·마케팅':'콘텐츠가 실제 고객경험으로 연결된 달이에요. 팔로워가 단골이 되는 흐름이에요.',
+      '관계·태도':'콘텐츠를 만들면서 관계도 챙긴 달이에요. 브랜딩과 신뢰가 함께 올라가고 있어요.',
+      '성장·방향':'콘텐츠 방향이 선명해진 달이에요. 어떤 디자이너로 기억될지가 보이기 시작하는 흐름이에요.',
+      '경제·설계':'콘텐츠가 수입으로 이어지기 시작한 달이에요. 브랜딩이 매출로 연결되는 흐름이에요.'
+    }
+  };
+
+  const shineMsg = SHINE[type.key]?.[highestCat] || `이번 달 ${highestCat} 영역이 가장 높게 나왔어요. 그 영역에서 빛난 순간들이 있었을 거예요.`;
+  // 개인화 코멘트
+  const PERSONAL = {
+    CRAFTSMAN: {
+      '컨디션·멘탈':'기술에 집중할수록 몸이 먼저 신호를 보내요.①이번 주 퇴근 후 30분은 아무것도 하지 말고 몸을 쉬게 해줘요.②수면 시간을 한 시간만 늘려봐요. 손이 살아있으려면 몸이 먼저 살아있어야 해요.③무거운 시술 전날엔 일찍 자는 루틴을 만들어봐요.',
+      '기술·전문성':'배우고 싶은 게 많을수록 하나도 남지 않는 경우가 많아요.①이번 달 배우고 싶은 것 딱 하나만 골라요.②그 기술을 이번 달 고객에게 최소 3번 써봐요.③다음 달 멘토에게 "이게 달라졌어요"라고 말할 수 있는 것 하나를 목표로 잡아요.',
+      '고객경험·마케팅':'시술 결과가 좋아도 다음 방문으로 이어지는 말이 없으면 고객은 다음을 생각하지 않아요.①시술 끝나고 거울 앞에서 "다음에 어떻게 유지할지 같이 봐도 될까요?" 한 마디 연습해봐요.②재예약 권유 타이밍을 시술 마무리 단계로 고정해봐요.③다음 방문 시 어떤 시술을 할지 미리 이야기하고 마무리하는 루틴을 만들어봐요.',
+      '관계·태도':'기술에 에너지를 다 쓰다 보면 주변이 보이지 않는 날들이 생겨요.①오늘 동료에게 먼저 말 한마디 건네봐요.②후배가 어려워하는 시술 하나를 같이 봐줘봐요.③살롱 안에서 편한 사람 한 명을 만들어두면 일이 훨씬 가벼워져요.',
+      '성장·방향':'기술에 집중하다 보면 어떤 디자이너가 되고 싶은지가 흐려질 때가 있어요.①지금 가장 잘하고 싶은 시술 하나를 정해봐요.②3개월 후 그 시술로 어떤 고객에게 기억되고 싶은지 한 문장으로 써봐요.③그 목표를 멘토에게 말하고 월별 점검을 부탁해봐요.',
+      '경제·설계':'기술이 올라가는 만큼 수입도 함께 올라가야 해요.①내 시술 메뉴 중 추가 제안하기 어색한 것 하나를 골라요.②어떻게 말할지 멘트를 만들어서 연습해봐요.③이번 달 그 제안을 고객 3명에게 해봐요. 말 한마디가 수입 구조를 바꿔요.'
+    },
+    CUSTOMER_MASTER: {
+      '컨디션·멘탈':'고객을 잘 챙길수록 정작 나는 못 챙기고 있을 수 있어요.①오늘 퇴근 후 30분은 연락도 끊고 쉬어봐요.②내가 제일 편한 것 하나만 해봐요 — 산책이든 음악이든.③다음 주 하루는 야근 없이 정시 퇴근을 목표로 잡아봐요.',
+      '기술·전문성':'고객 관계는 탄탄해요. 거기에 기술 하나가 더 올라가면 "여기서만 해요"라는 말이 나오기 시작해요.①이번 달 배우고 싶은 기술 하나를 유튜브나 세미나에서 찾아봐요.②그 기술을 단골 고객에게 먼저 제안해봐요.③배운 기술을 써본 후 고객 반응을 메모해봐요.',
+      '고객경험·마케팅':'관계는 좋은데 그게 숫자로도 보여야 해요.①이번 달 재방문 고객 수를 세어봐요.②재예약 권유를 몇 번 했는지 체크해봐요.③숫자가 보이면 어디서 새고 있는지 알 수 있어요. 감이 아니라 숫자로 봐야 해요.',
+      '관계·태도':'고객은 잘 챙기는데 살롱 안 동료 관계에서 신경 쓰이는 부분이 생긴 달이에요.①가장 불편한 것 하나만 먼저 풀어봐요.②그냥 두면 나중에 더 커져요.③멘토에게 상황을 말하고 어떻게 접근할지 같이 생각해봐요.',
+      '성장·방향':'이번 달 기억에 남는 고객 한 명을 떠올려봐요. 그게 방향이에요.①그 고객에게 뭘 더 잘해줄 수 있을지 생각해봐요.②그 방향으로 이번 달 한 가지 행동을 정해봐요.③1년 후 어떤 고객에게 어떤 디자이너로 기억되고 싶은지 한 줄 써봐요.',
+      '경제·설계':'단골이 많다면 지금이 객단가를 올릴 타이밍이에요.①단골 고객 중 추가 시술 제안을 아직 안 해본 분을 한 명 골라봐요.②"지난번보다 모발이 건조해 보이는데 트리트먼트 한 번 해볼까요?" 이 멘트를 연습해봐요.③이번 달 추가 제안을 3번 해봐요.'
+    },
+    GROWER: {
+      '컨디션·멘탈':'배우고 싶은 마음이 크다는 게 강점인데, 몸이 지쳐있으면 배워도 흡수가 안 돼요.①이번 주 배움보다 회복에 하루를 써봐요.②수면을 한 시간 늘려봐요.③몸이 채워져야 머리도 돌아가요. 쉬는 것도 성장이에요.',
+      '기술·전문성':'새로운 걸 또 배우기 전에, 지난달에 배운 것을 먼저 적용해봐요.①지난달 배운 기술을 이번 주 실제 고객에게 한 번 써봐요.②적용 후 잘 된 점과 아쉬운 점을 메모해봐요.③다음에 배울 것은 이걸 끝낸 다음에 골라요. 적용이 학습을 완성해요.',
+      '고객경험·마케팅':'배우는 걸 고객에게 바로 연결하면 배움의 속도가 2배가 돼요.①이번 달 배운 기술로 고객에게 "이번에 새로 배운 방법으로 해봤어요"라고 말해봐요.②고객 반응을 메모해봐요.③좋은 반응이 나오면 그 시술을 다음 메뉴 제안에 써봐요.',
+      '관계·태도':'성장에 집중하다 보면 주변을 못 챙기는 날이 생겨요.①배운 것 하나를 오늘 동료에게 나눠줘봐요.②가르치면서 나도 정리가 돼요.③그게 관계도 성장도 동시에 만들어줘요.',
+      '성장·방향':'배우고 싶은 게 많다는 건 방향이 살아있다는 거예요. 근데 너무 많으면 흩어져요.①이번 달 딱 하나만 — "이걸 완성하면 내 실력이 달라진다"는 것 하나를 골라봐요.②그 하나를 끝까지 가져가봐요.③다음 달 멘토에게 "이게 달라졌어요"라고 말할 수 있는 게 있어야 해요.',
+      '경제·설계':'배움이 수입으로 연결되는 구조를 만들어야 해요.①이번 달 배운 기술로 추가 시술 제안을 한 번 해봐요.②그 제안이 어떻게 받아들여졌는지 메모해봐요.③배움이 수입으로 연결되는 순간을 경험해봐요. 그게 진짜 성장이에요.'
+    },
+    ALLROUNDER: {
+      '컨디션·멘탈':'이 균형을 오래 가져가려면 에너지 관리가 핵심이에요.①지금 컨디션이 내려가고 있다면, 이번 주 하나만 줄여봐요.②주 1회 정시 퇴근 루틴을 만들어봐요.③줄이는 것부터 시작해야 이 균형을 오래 유지할 수 있어요.',
+      '기술·전문성':'전체 균형이 좋은 만큼 기술 하나를 대표 무기로 키울 타이밍이에요.①지금 가장 자신 있는 시술이 뭔지 정해봐요.②그 시술을 살롱의 시그니처 메뉴로 만드는 전략을 멘토와 이야기해봐요.③이번 달 그 시술 관련 사진 5장을 모아봐요.',
+      '고객경험·마케팅':'안정적인 상태에서 한 단계 올리면 재예약률이 눈에 띄게 달라져요.①시술 후 다음 방문 시점을 먼저 제안해봐요. "3~4주 후에 오시면 좋을 것 같아요"②이번 달 재방문율을 직접 계산해봐요.③한 번 더 온 고객이 왜 왔는지 이유를 물어봐요.',
+      '관계·태도':'지금 이 균형을 흔드는 요소가 있다면 그게 관계에서 오는 경우가 많아요.①가장 불편한 관계 하나를 먼저 풀어봐요.②혼자 해결하려 하지 말고 멘토에게 말해봐요.③그냥 두면 나중에 더 커져요.',
+      '성장·방향':'잘하고 있는데 "다음엔 뭘 하지?"가 흐릿해진 달이에요.①1년 후 어떤 디자이너가 되고 싶은지 한 줄 써봐요.②그걸 위해 이번 달 뭘 해야 하는지 하나만 정해봐요.③그 방향을 멘토에게 말하고 같이 점검해봐요.',
+      '경제·설계':'잘하고 있는 만큼 수입도 함께 올라가야 해요.①이번 달 내 매출을 직접 계산해봐요.②어떤 시술에서 수입이 가장 많이 나왔는지 확인해봐요.③그게 다음 달 집중할 시술이에요.'
+    },
+    DRIVER: {
+      '컨디션·멘탈':'가장 빠르게 달리는 사람이 가장 먼저 쉬어야 오래 달릴 수 있어요.①주 1회 정시 퇴근 루틴을 만들어봐요.②퇴근 후 목표 생각 없이 쉬는 30분을 만들어봐요.③쉬는 것도 목표 달성 전략이에요.',
+      '기술·전문성':'목표 매출을 만드는 시술 하나에 기술을 집중해야 해요.①목표 매출에 가장 기여하는 시술 하나를 골라봐요.②그 시술을 이번 달 집중적으로 연습해봐요.③기술 완성도가 올라가면 고객이 먼저 알아보기 시작해요.',
+      '고객경험·마케팅':'재예약 권유 멘트 하나가 목표 달성 속도를 바꿔요.①자연스러운 재예약 권유 멘트를 하나 만들어봐요.②이번 달 매 시술 마무리 때 써봐요.③자연스럽게 나올 때까지 연습하면 목표 달성이 훨씬 빨라져요.',
+      '관계·태도':'목표를 향해 달리다 보면 주변을 못 챙기는 날이 생겨요.①동료 한 명에게 오늘 어땠는지 먼저 물어봐요.②목표 이야기 말고 그냥 안부만 물어봐요.③오래 달리려면 주변이 함께해야 해요.',
+      '성장·방향':'방향은 있는데 지금 하는 것들이 그 방향과 맞는지 확인이 필요해요.①지금 가장 많이 하는 행동 3가지를 적어봐요.②그게 1년 후 목표와 연결되는지 확인해봐요.③맞으면 더 밀어요. 안 맞으면 지금 바꾸는 게 나중에 후회하는 것보다 나아요.',
+      '경제·설계':'더 많이 하기보다 효과 있는 행동을 반복하는 게 먼저예요.①이번 달 목표 매출을 숫자로 적어봐요.②그걸 위해 어떤 시술을 몇 번 해야 하는지 역산해봐요.③그 숫자를 매주 체크해봐요.'
+    },
+    MENTOR: {
+      '컨디션·멘탈':'팀을 이끌 수 있는 건 내가 먼저 채워져 있어야 가능해요.①이번 주 팀이 아니라 나를 위한 시간 30분을 만들어봐요.②가장 좋아하는 것 하나를 해봐요 — 혼자 밥 먹기, 산책, 아무것도 안 하기.③내가 채워져야 팀에게 줄 수 있어요.',
+      '기술·전문성':'팀을 챙기면서 내 기술 성장이 뒤로 밀리고 있을 수 있어요.①후배에게 가르치면서 나도 같이 복습하는 방식을 써봐요.②가르치는 게 가장 빠른 학습이에요.③이번 달 내 기술 중 더 올리고 싶은 것 하나를 정하고 연습 시간을 따로 잡아봐요.',
+      '고객경험·마케팅':'팀을 챙기는 만큼 내 숫자도 챙겨야 해요.①이번 달 내 고객 재방문율을 직접 계산해봐요.②팀을 챙기는 시간과 내 고객을 챙기는 시간의 비율을 점검해봐요.③두 가지가 같이 올라가야 지속 가능해요.',
+      '관계·태도':'도움과 떠안음의 경계가 흐려지면 나중에 소모돼요.①지금 가장 에너지가 많이 빠지는 관계 하나를 떠올려봐요.②그 관계에서 내가 대신 떠안고 있는 게 뭔지 찾아봐요.③멘토에게 말하고 어떻게 경계를 만들지 같이 이야기해봐요.',
+      '성장·방향':'좋은 선배에 머물 건지, 영향력 있는 리더로 갈 건지 방향을 정해야 해요.①1년 후 내가 원하는 역할 하나를 써봐요.②그걸 위해 이번 달 뭘 해야 하는지 하나만 정해봐요.③멘토에게 말하고 같이 방향을 잡아봐요.',
+      '경제·설계':'팀을 이끌면서 내 수입 관리가 소홀해지기 쉬워요.①이번 달 내 매출을 직접 확인해봐요.②객단가를 올릴 수 있는 시술이 있는지 봐봐요.③팀을 잘 이끌면서 내 수입도 올라가야 이 역할을 오래 할 수 있어요.'
+    },
+    BURNOUT_RISK: {
+      '컨디션·멘탈':'지금 당장 하나만 줄이는 것부터 시작해요. 이건 의지의 문제가 아니에요.①이번 주 예약 하나, 야근 하나, 아무거나 하나를 줄여봐요.②줄이는 게 어렵다면 멘토에게 말하고 같이 조정해봐요.③줄이는 것부터 시작해야 회복이 시작돼요.',
+      '기술·전문성':'지금은 배우는 것보다 버티는 게 먼저예요.①배우는 걸 잠깐 멈춰도 괜찮아요.②몸이 회복되면 손도 다시 살아나요.③지금 가장 중요한 건 쉬는 거예요.',
+      '고객경험·마케팅':'혼자 버티지 말고 말해봐요.①오늘 가장 힘들었던 고객 상황 하나를 멘토에게 말해봐요.②말하는 것만으로도 무게가 절반으로 줄어요.③반복되는 상황이 있다면 구조를 바꿔야 해요. 혼자 해결하려 하지 말아요.',
+      '관계·태도':'지금 가장 불편한 관계 하나를 멘토에게 말해봐요.①풀어달라는 게 아니라, 그냥 말하는 것만으로도 돼요.②들어주는 사람이 있다는 것만으로 에너지가 달라져요.③관계에서 오는 소모를 줄이는 방법을 같이 찾아봐요.',
+      '성장·방향':'지금은 방향을 찾으려고 힘쓰기보다 일단 쉬어야 해요.①오늘 하루만 "잘 쉬는 것"을 목표로 해봐요.②회복되면 방향은 자연스럽게 보여요.③지금 방향을 모르는 게 문제가 아니에요. 쉬는 게 답이에요.',
+      '경제·설계':'지금 수입 관리까지 신경 쓸 여유가 없어도 괜찮아요.①일단 이번 달 내가 번 돈이 얼마인지만 확인해봐요.②그것도 힘들면 멘토에게 맡겨봐요.③몸이 돌아오면 수입 전략은 그때 같이 봐요.'
+    },
+    LAUNCHER: {
+      '컨디션·멘탈':'방향을 찾으려면 에너지가 필요해요.①오늘 하루 일찍 퇴근하고 아무것도 하지 말아봐요.②쉬고 나면 뭘 하고 싶은지가 보이기 시작해요.③방향은 달리면서 찾는 게 아니라 멈췄을 때 보여요.',
+      '기술·전문성':'새로운 걸 배우기보다 지금 하는 것을 더 잘하는 데 집중해봐요.①이미 하고 있는 시술 중 가장 자신 없는 것 하나를 골라봐요.②그것만 이번 달 집중해서 연습해봐요.③작은 완성이 자신감을 만들고, 자신감이 방향을 만들어요.',
+      '고객경험·마케팅':'방향이 흐릿할 때 고객 반응이 나침반이 돼요.①오늘 시술한 고객 한 명에게 "제가 어떤 부분을 더 신경 써드리면 좋을까요?" 물어봐요.②그 대답이 방향을 알려줄 거예요.③좋은 반응이 나온 시술을 기억해봐요. 그게 내가 잘하는 것이에요.',
+      '관계·태도':'혼자 방향을 찾으려 하지 말아요.①가장 편한 동료 한 명에게 요즘 어떤지 먼저 말해봐요.②말하는 것만으로 연결이 생겨요.③연결이 생기면 방향도 같이 보여요.',
+      '성장·방향':'큰 방향을 찾으려 하지 말고, 딱 하나만 해봐요.①이번 달 해보고 싶은 것 하나를 골라봐요.②완벽한 선택이 아니어도 돼요. 일단 한 번 움직이는 게 먼저예요.③다음 달 멘토에게 "이걸 해봤어요"라고 말할 수 있는 것 하나를 정해봐요.',
+      '경제·설계':'지금 수입 관리까지 생각할 여유가 없어도 괜찮아요.①일단 이번 달 내가 번 돈이 얼마인지만 확인해봐요.②숫자를 보는 것부터가 설계의 시작이에요.③거창하게 계획을 세우지 않아도 돼요.'
+    },
+    PORTFOLIO: {
+      '컨디션·멘탈':'컨디션이 좋을 때 찍은 사진이 더 좋은 콘텐츠가 돼요.①업로드보다 쉬는 게 먼저예요.②이번 주 하루는 SNS 없이 쉬어봐요.③회복된 에너지가 결국 더 좋은 콘텐츠를 만들어요.',
+      '기술·전문성':'보여주는 것과 실제 기술이 함께 올라가야 해요.①SNS에 올린 시술 중 기술적으로 가장 아쉬웠던 것 하나를 골라봐요.②그것만 이번 달 집중해서 연습해봐요.③다음에 올릴 때 "이게 달라졌어요"를 느낄 수 있어야 해요.',
+      '고객경험·마케팅':'팔로워를 단골로 만드는 한 마디가 있어요.①시술 끝날 때 "다음에 이렇게 해드릴게요"라고 먼저 제안해봐요.②SNS DM이나 댓글에 빠르게 답하는 루틴을 만들어봐요.③이번 달 SNS를 통해 온 신규 고객이 몇 명인지 세어봐요.',
+      '관계·태도':'콘텐츠 작업에 집중하다 살롱 안 관계가 소홀해지는 날이 있어요.①오늘 동료에게 시술 사진 같이 찍어달라고 부탁해봐요.②부탁 하나가 관계를 만들어요.③같이 찍으면 콘텐츠도 더 좋아져요.',
+      '성장·방향':'어떤 디자이너로 기억되고 싶은지가 흐릿한 달이에요.①내 SNS 피드를 처음부터 쭉 봐봐요.②어떤 패턴이 보여요? 그게 내가 가고 싶은 방향이에요.③그 방향을 한 줄로 써보고 멘토에게 말해봐요.',
+      '경제·설계':'팔로워가 수입으로 이어지고 있는지 확인이 필요해요.①이번 달 SNS를 통해 들어온 신규 고객이 몇 명인지 세어봐요.②어떤 콘텐츠에서 왔는지 물어봐요.③숫자가 보이면 어떤 콘텐츠에 집중할지 알 수 있어요.'
+    }
+  };
+
+    const LEADER_Q = {
+    CRAFTSMAN: {
+      show:['기술에 대한 자부심이 높은 달이에요 — 시술 이야기를 꺼내면 잘 열려요','새로운 기술이나 세미나에 대한 관심이 있어요 — 기회를 제안해주면 좋아요','고객경험이나 마케팅 쪽은 아직 약해요 — 그 방향으로 자연스럽게 연결해줘요'],
+      ask:['"지금 가장 더 배우고 싶은 기술이 있다면 세미나나 기회를 만들어줄 수 있어요?"','"3년 후 어떤 디자이너가 되고 싶은지 함께 방향을 잡아봐도 될까요?"']
+    },
+    CUSTOMER_MASTER:{
+      show:['고객 이야기를 꺼내면 말이 잘 열려요 — 어떤 고객이 기억에 남았는지 물어봐요','감정 소모가 많은 달일 수 있어요 — 힘든 고객 있었는지 먼저 물어봐요','기술 성장보다 관계에 에너지를 쓰고 있어요 — 기술도 함께 챙겨줘요'],
+      ask:['"이번 달 가장 기억에 남는 고객이 누구야?"','"요즘 힘든 고객이나 상황 있어? 같이 어떻게 대응할지 이야기해봐요."']
+    },
+    GROWER: {
+      show:['배움 이야기를 꺼내면 눈이 빛나요 — 이번 달 뭘 배웠는지 물어봐요','현장 적용 경험을 나누면 자신감이 올라가요 — 칭찬 포인트예요','아직 스스로를 과소평가하는 경향이 있어요 — 잘하고 있다는 말이 필요해요'],
+      ask:['"이번 달 배운 것 중에 현장에서 써봤어? 어떤 반응이었어?"','"지금 잘하고 있는 것도 충분히 많아. 스스로는 어떻게 평가하고 있어?"']
+    },
+    ALLROUNDER: {
+      show:['전체적으로 안정적이에요 — 다음 단계 목표 이야기를 꺼내기 좋은 달이에요','어느 영역이든 대화가 잘 열려요 — 가장 하고 싶은 것을 물어봐요','롤모델 역할을 하고 있을 가능성이 높아요 — 그 역할을 인정해줘요'],
+      ask:['"지금 가장 더 파고들고 싶은 게 뭐야?"','"요즘 일하면서 가장 재밌는 순간이 언제야?"']
+    },
+    DRIVER: {
+      show:['목표와 수입 이야기에 잘 반응해요 — 이번 달 이룬 것을 함께 확인해줘요','달리느라 지치지 않도록 페이스 체크가 필요해요','관계 쪽이 약해질 수 있어요 — 팀원들과의 관계도 챙겨줘요'],
+      ask:['"이번 달 목표 중에 이룬 게 뭐야? 같이 확인해봐요."','"달리다 지칠 때가 있는데 요즘 페이스는 괜찮아?"']
+    },
+    MENTOR: {
+      show:['팀 이야기를 꺼내면 잘 열려요 — 후배 성장 이야기를 나눠봐요','본인 성장에는 에너지가 덜 가고 있어요 — 본인 배움 기회를 제안해줘요','본인이 힘든 건 잘 말 안 할 수 있어요 — 먼저 물어봐줘요'],
+      ask:['"팀 챙기면서 본인이 힘든 건 없어?"','"본인은 요즘 뭘 배우고 싶어? 기회 만들어줄 수 있어."']
+    },
+    BURNOUT_RISK: {
+      show:['지금 많이 소진된 상태예요 — 성과 이야기보다 회복 이야기가 먼저예요','쉬어도 된다는 허락이 필요한 상태일 수 있어요','솔직하게 말할 수 있는 분위기를 만들어줘요 — 판단 없이 들어줘요'],
+      ask:['"요즘 어때? 진짜로. 솔직하게 말해줘도 괜찮아."','"지금 제일 힘든 게 뭐야? 일 말고도."']
+    },
+    LAUNCHER: {
+      show:['방향 이야기를 꺼내면 잘 열려요 — 처음 이 일 시작한 이유를 물어봐요','작은 성취를 함께 확인해주는 게 지금 가장 필요해요','혼자 안고 있을 가능성이 높아요 — 먼저 손 내밀어줘요'],
+      ask:['"처음 미용 시작했을 때 어떤 디자이너가 되고 싶었어?"','"지금 가장 필요한 게 뭐야? 내가 도울 수 있어."']
+    },
+    PORTFOLIO: {
+      show:['콘텐츠나 SNS 이야기를 꺼내면 잘 열려요 — 이번 달 올린 것 중 뭐가 좋았는지 물어봐요','브랜딩이 수입으로 이어지는지 함께 점검해줘요','시술 퀄리티와 브랜딩이 함께 가고 있는지 확인이 필요해요'],
+      ask:['"이번 달 올린 것 중에 제일 마음에 드는 게 뭐야?"','"팔로워보다 재예약이 먼저야 — 지금 그 연결이 되고 있어?"']
+    }
+  };
+
+  const oneLine = ONE_LINE[type.key]?.[totalSigKey] || '';
+  const personalMsg = PERSONAL[type.key]?.[lowestCat] || `이번 달 ${lowestCat} 영역이 가장 낮게 나왔어요. 멘토와 함께 이 부분을 먼저 이야기해봐요.`;
+  const leaderQs = LEADER_Q[type.key] || [];
+
+  const td = TYPE_DETAIL_DATA[type.key] || {};
+
+  document.getElementById('typeDetailTit').textContent=type.emoji+' '+type.name+' 유형 상세';
+  document.getElementById('typeDetail').innerHTML=`
+    ${td.headline ? `<div class="td-oneline" style="font-size:15px;font-weight:700;line-height:1.6;color:var(--text);padding:4px 0 8px;">"${td.headline}"</div>` : (oneLine ? `<div class="td-oneline">"${oneLine}"</div>` : '')}
+
+    ${td.diagnosis && td.diagnosis.length ? `<div class="td-section">
+      <span class="td-label ctx">🔍 이번 달 진단</span>
+      ${td.diagnosis.map(d=>`<p class="td-context" style="margin-bottom:6px;">${d}</p>`).join('')}
+    </div>` : ''}
+
+    <div class="td-section">
+      <span class="td-label ctx">✨ 이번 달 가장 빛난 순간</span>
+      <p class="td-context" style="margin-top:6px;line-height:1.8;">${shineMsg}</p>
+    </div>
+
+    ${td.strengths && td.strengths.length ? `<div class="td-section">
+      <span class="td-label str">💚 ${td.strengthTitle||'강점'}</span>
+      <ul class="td-list">${td.strengths.map(s=>`<li data-bullet="✓">${s}</li>`).join('')}</ul>
+    </div>` : ''}
+
+    ${td.traps && td.traps.length ? `<div class="td-section">
+      <span class="td-label trp">⚠️ 놓치기 쉬운 함정</span>
+      <ul class="td-list">${td.traps.map(s=>`<li data-bullet="△">${s}</li>`).join('')}</ul>
+    </div>` : ''}
+
+    ${td.pitfalls && td.pitfalls.length ? `<div class="td-section">
+      <span class="td-label tip">🎯 다음 달 바로 해볼 것</span>
+      <ul class="td-list">${td.pitfalls.map(s=>`<li data-bullet="→">${s}</li>`).join('')}</ul>
+    </div>` : ''}
+
+    ${td.leaderFocus && td.leaderFocus.length ? `<div class="td-section">
+      <span class="td-label tip">🧭 멘토와 소통하면 좋을 것</span>
+      <ul class="td-list">${td.leaderFocus.map((s,i)=>`<li data-bullet="${i+1}">${s}</li>`).join('')}</ul>
+    </div>` : ''}
+
+    ${td.nextFocus ? `<div class="td-section" style="background:var(--green-lt);border-radius:var(--rsm);padding:12px 14px;margin-top:4px;">
+      <span class="td-label" style="color:var(--green);font-size:12px;font-weight:700;">📌 다음 달 집중 포인트</span>
+      <p class="td-context" style="color:var(--green);font-weight:600;margin-top:6px;">${td.nextFocus}</p>
+    </div>` : ''}
+  `;
+
+  // 헤더 탭
+  document.getElementById('tab-result').style.display='flex';
+  showScreen('result');
+
+  // 차트
+  if(chartInst){chartInst.destroy();chartInst=null;}
+  setTimeout(()=>{
+    const ds=[{
+      label:uName, data:CATS.map(c=>score[c]),
+      backgroundColor:'rgba(58,99,73,0.12)', borderColor:'#3A6349', borderWidth:2,
+      pointBackgroundColor:COLORS, pointBorderColor:'#fff', pointBorderWidth:2, pointRadius:5
+    }];
+    chartInst=new Chart(document.getElementById('rc').getContext('2d'),{
+      type:'radar', data:{labels:CATS,datasets:ds},
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        plugins:{legend:{display:false}},
+        scales:{r:{min:20,max:100,ticks:{stepSize:20,font:{size:9},color:'#bbb',backdropColor:'transparent'},
+          pointLabels:{font:{size:11,weight:'700'},color:'#6A6760'},
+          grid:{color:'rgba(0,0,0,0.06)'},angleLines:{color:'rgba(0,0,0,0.06)'}}}
+      }
+    });
+  },80);
+
+  // 멘토 공유용 스냅샷 저장
+  lastResult = {
+    name: uName,
+    date: uMonth,
+    typeName: type.name,
+    typeEmoji: type.emoji,
+    typeKey: type.key,
+    signal: totalSigKey,
+    signalBadge: sig.badge,
+    score,
+    personalMsg,
+    leaderShow: (LEADER_Q[type.key]||{}).show||[],
+    leaderAsk:  (LEADER_Q[type.key]||{}).ask||[]
+  };
+}
+
+function toggleSecondType() {
+  const detail = document.getElementById('secondTypeDetail');
+  const btn = document.getElementById('secToggleBtn');
+  if (!detail || !btn) return;
+  const isOpen = detail.style.display !== 'none';
+  detail.style.display = isOpen ? 'none' : 'block';
+  btn.textContent = isOpen ? '자세히 보기 ↓' : '접기 ↑';
+}
+
+function saveAndShare() {
+  if(navigator.share) navigator.share({title:'나침반 결과',text:uName+'님의 '+uMonth+' 결과',url:window.location.href});
+  else if(navigator.clipboard) navigator.clipboard.writeText(window.location.href).then(()=>alert('링크가 복사됐어요!'));
+}
+
+/* ━━━ 멘토 공유 ━━━ */
+function shareMentor() {
+  if(!lastResult) return;
+  const r = lastResult;
+  // memo 값 실시간으로 가져오기
+  r.memoWhat = document.getElementById('memoWhat')?.value||'';
+  r.memoWhy = document.getElementById('memoWhy')?.value||'';
+  r.memoHow = document.getElementById('memoHow')?.value||'';
+  r.memoGratitude = document.getElementById('memoGratitude')?.value||'';
+  const [y,m,d] = r.date.split('-');
+  const dateStr = y+'년 '+parseInt(m)+'월 '+(d?parseInt(d)+'일':'');
+  const sigLabel = {green:'좋음', yellow:'주의', red:'위험'}[r.signal]||'';
+
+  // 영역 점수 텍스트
+  const scoreLines = ["컨디션·멘탈","기술·전문성","고객경험·마케팅","관계·태도","성장·방향","경제·설계"]
+    .map(c=>{
+      const v = r.score[c]||0;
+      const bar = '';
+      return `  ${c}: ${v}점`;
+    }).join('\n');
+
+  // 알릴 것
+  const showLines = r.leaderShow.map(s=>'  → '+s).join('\n');
+  // 물어봐 주면 좋을 것
+  const askLines = r.leaderAsk.map(s=>'  '+s).join('\n');
+
+  // 결과를 URL에 인코딩 (멘토가 열 수 있는 링크)
+  const payload = btoa(encodeURIComponent(JSON.stringify({
+    n: r.name, d: r.date, t: r.typeName, e: r.typeEmoji,
+    s: r.signal, sc: r.score
+  })));
+  const shareUrl = window.location.href.split('?')[0] + '?view=' + payload;
+
+  const sigMark = {green:'[좋음]', yellow:'[주의]', red:'[위험]'}[r.signal]||'';
+  // 리더와 함께 보면 좋은 핵심
+  const td2 = TYPE_DETAIL_DATA[r.typeKey] || {};
+  const leaderFocusLines = (td2.leaderFocus||[]).map((s,i)=>`${i+1}. ${s}`).join('\n');
+  const headlineText = td2.headline || '';
+  const personalMsgText = r.personalMsg || '';
+
+  const shareUrl2 = window.location.href;
+  const text = `[나침반 결과 공유]
+
+유형: ${r.typeEmoji} ${r.typeName}
+헤드라인: ${headlineText}
+🔗 ${shareUrl2}
+
+[리더와 함께 보면 좋은 핵심]
+${leaderFocusLines}
+
+[이번 달 나의 기록]
+- 이번 달 목표: ${r.memoWhat||''}
+- 이 목표를 잡은 이유: ${r.memoWhy||''}
+- 구체적 실행 방법: ${r.memoHow||''}
+- 이번 달 고마웠던 점: ${r.memoGratitude||''}
+`;
+
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(()=>{
+      showToast('📋 복사됐어요! 카톡에 바로 붙여넣기 하세요 😊');
+    });
+  } else {
+    // fallback: textarea 임시 생성
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); showToast('📋 복사됐어요!'); }
+    catch(e){ alert(text); }
+    document.body.removeChild(ta);
+  }
+}
+
+/* ━━━ 토스트 메시지 ━━━ */
+function showToast(msg) {
+  let t = document.getElementById('toast');
+  if(!t){
+    t = document.createElement('div');
+    t.id = 'toast';
+    t.style.cssText = `
+      position:fixed; bottom:calc(80px + env(safe-area-inset-bottom,0px)); left:50%;
+      transform:translateX(-50%) translateY(20px);
+      background:#1A1916; color:#fff; font-size:14px; font-weight:500;
+      padding:13px 22px; border-radius:999px; z-index:9999;
+      opacity:0; transition:all .3s; pointer-events:none;
+      font-family:'Noto Sans KR',sans-serif; white-space:nowrap;
+      box-shadow:0 4px 20px rgba(0,0,0,.25);
+    `;
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity='1'; t.style.transform='translateX(-50%) translateY(0)';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(()=>{
+    t.style.opacity='0'; t.style.transform='translateX(-50%) translateY(10px)';
+  }, 2800);
+}
+
+/* ━━━ URL 공유 결과 뷰어 (멘토가 링크 열었을 때) ━━━ */
+(function checkSharedView(){
+  const params = new URLSearchParams(window.location.search);
+  const view = params.get('view');
+  if(!view) return;
+  try {
+    const data = JSON.parse(decodeURIComponent(atob(view)));
+    // 멘토 뷰 화면 생성
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+      position:fixed; inset:0; background:#F5F3EF; z-index:9998;
+      overflow-y:auto; font-family:'Noto Sans KR',sans-serif;
+    `;
+    const [y,m,d2] = (data.d||'').split('-');
+    const dateStr = y+'년 '+parseInt(m)+'월 '+(d2?parseInt(d2)+'일':'');
+    const sigLabel = {green:'좋음', yellow:'주의', red:'위험'}[data.s]||'';
+    const CATS2 = ["컨디션·멘탈","기술·전문성","고객경험·마케팅","관계·태도","성장·방향","경제·설계"];
+    const COLORS2 = ["#9B6DE8","#C0793A","#E05C8A","#2ECC9A","#3A6349","#B97B35"];
+    const scoreBars = CATS2.map((c,i)=>{
+      const v = data.sc[c]||0;
+      const sig = '';
+      return `<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #DDD9D1;">
+        <span style="font-size:13px;font-weight:600;width:78px;color:#1A1916;">${c}</span>
+        <div style="flex:1;height:8px;background:#EDEBE6;border-radius:4px;overflow:hidden;">
+          <div style="height:100%;width:${v}%;background:${COLORS2[i]};border-radius:4px;"></div>
+        </div>
+        <span style="font-size:14px;font-weight:900;color:${COLORS2[i]};width:40px;text-align:right;">${v}</span>
+      </div>`;
+    }).join('');
+    overlay.innerHTML = `
+      <div style="max-width:520px;margin:0 auto;padding:28px 20px 60px;">
+        <div style="font-size:11px;font-weight:700;color:#2D5F40;letter-spacing:.08em;margin-bottom:16px;">📋 나침반 진단 결과 공유</div>
+        <div style="background:#fff;border:1px solid #DDD9D1;border-radius:16px;overflow:hidden;margin-bottom:14px;">
+          <div style="background:#2D5F40;padding:22px 22px 20px;">
+            <div style="font-size:32px;margin-bottom:8px;">${data.e||''}</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.7);margin-bottom:4px;">${dateStr} · ${data.n||''}님의 유형</div>
+            <div style="font-size:22px;font-weight:700;color:#fff;">${data.t||''}</div>
+            <div style="margin-top:10px;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;
+              padding:6px 14px;border-radius:999px;
+              background:${data.s==='green'?'#E6F7EC':data.s==='yellow'?'#FFF8E0':'#FDEAEA'};
+              color:${data.s==='green'?'#1A6E38':data.s==='yellow'?'#7A5800':'#A82020'};
+              border:1.5px solid ${data.s==='green'?'#A8DDB8':data.s==='yellow'?'#F0D870':'#F0AAAA'};">
+              ${sigLabel}
+            </div>
+          </div>
+          <div style="padding:16px 18px;">
+            <div style="font-size:11px;font-weight:700;color:#6B6860;letter-spacing:.05em;margin-bottom:6px;">📊 영역별 점수</div>
+            ${scoreBars}
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:20px;">
+          <button onclick="document.body.removeChild(document.getElementById('mentorView'));history.pushState({},'',window.location.pathname);"
+            style="padding:14px 28px;background:#2D5F40;color:#fff;border:none;border-radius:999px;
+            font-size:15px;font-weight:700;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">
+            진단 시작하기
+          </button>
+        </div>
+      </div>
+    `;
+    overlay.id = 'mentorView';
+    document.addEventListener('DOMContentLoaded', ()=>document.body.appendChild(overlay));
+  } catch(e){ console.warn('공유 링크 파싱 실패', e); }
+})();
+
+/* ━━━ 인쇄 ━━━ */
+function printResult() {
+  // 인쇄용 리더 코멘트 동기화
+  const lt = document.getElementById('leaderTA').value.trim();
+  document.getElementById('printLeaderText').textContent = lt || '(작성된 내용 없음)';
+  window.print();
+}
+
+/* ━━━ 히스토리 ━━━ */
+function goHistory() {
+  renderHistory();
+  showScreen('history');
+}
+let currentHistTab = 'designer';
+
+function setHistTab(tab) {
+  currentHistTab = tab;
+  // 탭 스타일 업데이트
+  ['designer','partner','manager','leader'].forEach(t => {
+    const btn = document.getElementById('histTab-' + t);
+    if (!btn) return;
+    if (t === tab) {
+      btn.style.background = 'var(--green)';
+      btn.style.color = '#fff';
+      btn.style.border = 'none';
+    } else {
+      btn.style.background = 'var(--surface)';
+      btn.style.color = 'var(--text2)';
+      btn.style.border = '1.5px solid var(--border)';
+    }
+  });
+  renderHistory();
+}
+
+function renderHistory() {
+  const hist = loadHist();
+  const el = document.getElementById('histContent');
+  if (currentHistTab !== 'designer') {
+    el.innerHTML = `<div class="hist-empty"><span class="he-icon">🧭</span>아직 준비 중인 진단이에요.<br>곧 업데이트될 예정이에요.</div>`;
+    return;
+  }
+  if(!hist.length){
+    el.innerHTML = `<div class="hist-empty"><span class="he-icon">📋</span>아직 진단 기록이 없어요.<br>첫 번째 진단을 완료하면<br>여기에 기록이 쌓여요.</div>`;
+    return;
+  }
+  const names = [...new Set(hist.map(h=>h.name))];
+  let html = '';
+  names.forEach(name => {
+    const records = hist.filter(h=>h.name===name).sort((a,b)=>b.month>a.month?1:-1);
+    html += `<div style="margin-bottom:28px;">
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+        <span style="background:var(--green-lt);color:var(--green);font-size:11px;padding:3px 10px;border-radius:999px;font-weight:700;">${name}</span>
+        <span style="font-size:11px;color:var(--text3);">${records.length}회 진단</span>
+      </div>
+      <div class="timeline">`;
+    records.forEach((rec, ri) => {
+      const t = TYPES[calcTypeFromScore(rec.scores)];
+      const parts = rec.month.split('-'); const [y,m] = parts; const d2 = parts[2]||'';
+      const dotCls = t.key==='BURNOUT_RISK'?'burnout':t.key==='LAUNCHER'?'launcher':'';
+      const prevRec = records[ri+1]; // 이전 기록 (시간순 역정렬이므로 다음 인덱스)
+      
+      // 변화 피드백 계산
+      let feedbackHtml = '';
+      if (prevRec) {
+        const CAT_CONTEXT = {
+          '컨디션·멘탈': {
+            up: ['몸과 마음 상태가 나아지고 있어요. 체력이나 멘탈 관리가 잘 되고 있는 달이에요.', '컨디션 회복이 느껴지는 달이에요. 좋은 흐름이에요.'],
+            down: ['이번 달 몸이나 마음이 좀 지쳐있는 상태예요. 무리하지 않도록 챙겨봐요.', '컨디션이 떨어진 달이에요. 번아웃 신호일 수 있으니 쉬는 시간을 확보해봐요.']
+          },
+          '기술·전문성': {
+            up: ['시술 완성도나 전문 기술에 집중한 결과가 나타나고 있어요.', '기술적으로 성장하고 있는 달이에요. 이 흐름을 유지해봐요.'],
+            down: ['기술 연습이나 공부 시간이 줄어든 달이에요. 작은 것 하나라도 다시 챙겨봐요.', '기술·전문성 관리가 약해진 달이에요. 트렌드 공부나 연습 시간을 확보해봐요.']
+          },
+          '고객경험·마케팅': {
+            up: ['고객 응대나 재예약 관리가 좋아지고 있어요. 고객과의 관계가 더 단단해지고 있어요.', '고객경험이 향상된 달이에요. SNS나 재예약 흐름도 확인해봐요.'],
+            down: ['고객과의 소통이나 재예약 관리가 소홀해진 달이에요. 작은 연락 한 번부터 다시 시작해봐요.', '이번 달 고객경험 관리가 약해졌어요. 리뷰나 재방문율을 점검해봐요.']
+          },
+          '관계·태도': {
+            up: ['동료나 후배와의 관계, 살롱 내 분위기가 좋아진 달이에요.', '관계에서 긍정적인 에너지가 느껴지는 달이에요.'],
+            down: ['살롱 내 관계나 태도에서 피로감이 쌓인 달이에요. 주변을 챙기는 여유를 되찾아봐요.', '이번 달 관계 에너지가 많이 소진됐어요. 나 자신을 먼저 돌봐야 할 시기예요.']
+          },
+          '성장·방향': {
+            up: ['배우고 성장하는 흐름이 살아있는 달이에요. 방향이 잡히고 있어요.', '성장 의욕이 올라간 달이에요. 배운 것을 현장에 적용해봐요.'],
+            down: ['성장 방향이나 목표 의식이 흐릿해진 달이에요. 1개월 후 내가 원하는 것을 다시 적어봐요.', '이번 달 성장 에너지가 낮아졌어요. 작은 배움 하나라도 다시 찾아봐요.']
+          },
+          '경제·설계': {
+            up: ['수입 관리나 경제적 목표 의식이 높아진 달이에요. 객단가나 추가 시술 제안을 확인해봐요.', '경제 설계가 잘 되고 있는 달이에요. 이 흐름을 수치로 기록해봐요.'],
+            down: ['수입 관리나 경제 설계가 약해진 달이에요. 이번 달 지출과 수입을 한번 정리해봐요.', '경제·설계 점수가 낮아졌어요. 목표 매출이나 저축 계획을 다시 점검해봐요.']
+          }
+        };
+
+        const changes = CATS.map(c => ({
+          cat: c,
+          diff: (rec.scores[c]??0) - (prevRec.scores[c]??0),
+          now: rec.scores[c]??0,
+          prev: prevRec.scores[c]??0
+        })).filter(x => Math.abs(x.diff) >= 5).sort((a,b) => Math.abs(b.diff)-Math.abs(a.diff));
+
+        const avgNow = CATS.reduce((s,c)=>s+(rec.scores[c]??0),0)/CATS.length;
+        const avgPrev = CATS.reduce((s,c)=>s+(prevRec.scores[c]??0),0)/CATS.length;
+        const avgDiff = Math.round(avgNow - avgPrev);
+
+        if (changes.length > 0) {
+          const feedItems = changes.map(x => {
+            const dir = x.diff > 0 ? 'up' : 'down';
+            const icon = x.diff > 0 ? '📈' : '📉';
+            const sign = x.diff > 0 ? '+' : '';
+            const ctxArr = CAT_CONTEXT[x.cat]?.[dir] || [];
+            const ctx = ctxArr[Math.abs(x.diff) >= 15 ? 0 : 1] || ctxArr[0] || '';
+            return `<div style="padding:8px 0;border-bottom:1px solid var(--border);">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+                <span>${icon}</span>
+                <span style="font-weight:700;color:var(--text);font-size:13px;">${x.cat} ${sign}${x.diff}점</span>
+                <span style="font-size:11px;color:var(--text3);">${x.prev}→${x.now}</span>
+              </div>
+              <div style="font-size:12px;color:var(--text2);line-height:1.7;padding-left:22px;">${ctx}</div>
+            </div>`;
+          }).join('');
+
+          const avgLine = avgDiff > 0
+            ? `<div style="font-size:12px;color:var(--green);font-weight:700;">전체 평균 +${avgDiff}점 향상됐어요 🎉</div>`
+            : avgDiff < 0
+            ? `<div style="font-size:12px;color:#B53535;font-weight:700;">전체 평균 ${avgDiff}점 하락했어요. 어떤 부분이 힘들었는지 돌아봐요.</div>`
+            : `<div style="font-size:12px;color:var(--text3);">전체 평균은 전달과 비슷해요.</div>`;
+
+          feedbackHtml = `<div style="margin-top:12px;padding:12px 14px;background:var(--bg);border-radius:var(--rsm);">
+            <div style="font-weight:700;color:var(--text);font-size:13px;margin-bottom:10px;">📊 전달 대비 변화</div>
+            ${avgLine}
+            <div style="margin-top:10px;">${feedItems}</div>
+          </div>`;
+        } else {
+          feedbackHtml = `<div style="margin-top:10px;padding:10px 14px;background:var(--bg);border-radius:var(--rsm);font-size:12px;color:var(--text3);line-height:1.7;">
+            📊 전달과 큰 변화가 없어요. 안정적인 한 달을 보냈어요.
+          </div>`;
+        }
+      }
+
+      html += `<div class="tl-item" onclick="toggleTlCard(this)">
+        <div class="tl-dot ${dotCls}"></div>
+        <div class="tl-card">
+          <div class="tl-card-top">
+            <span class="tl-emoji">${t.emoji}</span>
+            <div class="tl-info">
+              <div class="tl-month">${y}년 ${parseInt(m)}월${d2 ? " "+parseInt(d2)+"일" : ""}</div>
+              <div class="tl-type">${t.name}</div>
+            </div>
+            <span style="font-size:18px;color:var(--text3);">›</span>
+          </div>
+          <div class="tl-scores">
+            ${CATS.map((c,i)=>`<div class="tl-sc"><div class="tl-sc-cat">${c.replace('·서비스','')}</div><div class="tl-sc-val" style="color:${COLORS[i]}">${rec.scores[c]??'-'}</div></div>`).join('')}
+          </div>
+          ${feedbackHtml}
+        </div>
+      </div>`;
+    });
+    html += `</div></div>`;
+  });
+  el.innerHTML = html;
+}
+function toggleTlCard(item) {
+  const exp = item.querySelector('.tl-card-expanded');
+  if(exp) exp.classList.toggle('on');
+}
+
+
+/* ━━━━━━━━━━━━━━━━━━━━
+   자료실 JS (Supabase 연동)
+━━━━━━━━━━━━━━━━━━━━ */
+const SUPA_URL = 'https://hnefbbhghaariovikags.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuZWZiYmhnaGFhcmlvdmlrYWdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NjMwOTEsImV4cCI6MjA5NDMzOTA5MX0.vP2A3eI6WDHmVrFO-B4qi9Ova09FD8quazbSK8CFI6M';
+const REST_URL = SUPA_URL + '/rest/v1';
+const STORAGE_URL = SUPA_URL + '/storage/v1';
+const BUCKET = 'library-files';
+let ADMIN_PW = null; // DB에서 로드
+let isAdmin = false;
+
+async function supaFetch(path, options={}) {
+  const defaultHeaders = {
+    'apikey': SUPA_KEY,
+    'Authorization': 'Bearer ' + SUPA_KEY,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Prefer': 'return=representation'
+  };
+  const mergedHeaders = Object.assign({}, defaultHeaders, options.headers||{});
+  const fetchOptions = Object.assign({}, options, { headers: mergedHeaders });
+  delete fetchOptions.headers.undefined;
+  const url = path.startsWith('http') ? path : SUPA_URL + path;
+  console.log('supaFetch:', url);
+  const res = await fetch(url, fetchOptions);
+  console.log('supaFetch response:', res.status, res.statusText);
+  return res;
+}
+
+const TYPE_ICON = { link: '🔗', pdf: '📄', video: '▶️', image: '🖼️', excel: '📊', word: '📝', ppt: '📑', file: '📎' };
+const TYPE_LABEL = { link: '링크', pdf: 'PDF', video: '영상', image: '이미지', excel: '엑셀', word: '워드', ppt: 'PPT', file: '파일' };
+
+const DEFAULT_CATS = ['스탭 필독', '주니어 디자이너', '디자이너', '기술·시술', '멘탈·커리어', '경제·설계', '공지'];
+const CAT_ICON = {};
+function getCatIcon(cat) { return '🧭'; }
+
+function loadCats() {
+  try { return JSON.parse(localStorage.getItem('compass_cats_v1') || 'null') || [...DEFAULT_CATS]; }
+  catch(e) { return [...DEFAULT_CATS]; }
+}
+function saveCats(cats) { localStorage.setItem('compass_cats_v1', JSON.stringify(cats)); }
+
+function goLibrary() {
+  document.querySelectorAll('.hdr-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById('tab-library').classList.add('on');
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
+  document.getElementById('scr-library').classList.add('on');
+  document.getElementById('adminFab').classList.toggle('on', isAdmin);
+  window.scrollTo(0,0);
+  setTimeout(() => renderLibrary(), 50);
+}
+
+async function renderLibrary() {
+  const el = document.getElementById('libContent');
+  if (!el) return;
+  el.innerHTML = '<div style="padding:16px;font-size:13px;color:var(--text3);">불러오는 중...</div>';
+  try {
+    const res = await supaFetch(REST_URL + '/library_items?select=*&order=created_at.asc');
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error('Supabase ' + res.status + ': ' + errText.slice(0,100));
+    }
+    const items = await res.json();
+    const cats = loadCats();
+    const groups = {};
+    items.forEach(item => {
+      if (!groups[item.cat]) groups[item.cat] = [];
+      groups[item.cat].push(item);
+    });
+
+    let html = '';
+
+    // 카테고리 관리 버튼 (관리자만)
+    if (isAdmin) {
+      html += `<div style="margin-bottom:16px;display:flex;justify-content:flex-end;">
+        <button onclick="openCatManager()" style="font-size:12px;color:var(--green);background:var(--green-lt);border:none;padding:6px 12px;border-radius:999px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">⚙️ 카테고리 관리</button>
+      </div>`;
+    }
+
+    // 카테고리별 렌더링 (자료 없어도 폴더 표시)
+    cats.forEach(cat => {
+      const catItems = groups[cat] || [];
+      const icon = getCatIcon(cat);
+      html += `<div class="lib-section">
+        <div class="lib-section-title">${icon} ${cat} <span class="lib-tag">${catItems.length}개</span></div>`;
+      if (catItems.length === 0) {
+        html += `<div style="padding:14px 16px;background:var(--surface);border:1px dashed var(--border);border-radius:var(--r);font-size:12px;color:var(--text3);text-align:center;">
+          ${isAdmin ? '+ 버튼으로 자료를 추가해봐요.' : '아직 등록된 자료가 없어요.'}
+        </div>`;
+      } else {
+        catItems.forEach(item => {
+          const fileUrl = item.file_path
+            ? `${SUPA_URL}/storage/v1/object/public/${BUCKET}/${item.file_path}`
+            : item.url;
+          html += `<div class="lib-card" onclick="openLibItem('${fileUrl}')">
+            <div class="lib-card-inner">
+              <div class="lib-card-icon">${TYPE_ICON[item.type]||'📄'}</div>
+              <div class="lib-card-info">
+                <div class="lib-card-title">${item.title}</div>
+                ${item.item_desc ? `<div class="lib-card-desc">${item.item_desc}</div>` : ''}
+              </div>
+              <span class="lib-card-badge ${item.type}">${TYPE_LABEL[item.type]||item.type}</span>
+              <button class="lib-card-del ${isAdmin?'on':''}" onclick="delLibItem(event,${item.id})">✕</button>
+            </div>
+          </div>`;
+        });
+      }
+      html += '</div>';
+    });
+
+    // 카테고리에 없는 자료 처리
+    const uncatItems = items.filter(item => !cats.includes(item.cat));
+    if (uncatItems.length > 0) {
+      html += `<div class="lib-section"><div class="lib-section-title">📁 기타 <span class="lib-tag">${uncatItems.length}개</span></div>`;
+      uncatItems.forEach(item => {
+        const fileUrl = item.file_path ? `${SUPA_URL}/storage/v1/object/public/${BUCKET}/${item.file_path}` : item.url;
+        html += `<div class="lib-card" onclick="openLibItem('${fileUrl}')"><div class="lib-card-inner">
+          <div class="lib-card-icon">${TYPE_ICON[item.type]||'📄'}</div>
+          <div class="lib-card-info"><div class="lib-card-title">${item.title}</div></div>
+          <span class="lib-card-badge ${item.type}">${TYPE_LABEL[item.type]||item.type}</span>
+          <button class="lib-card-del ${isAdmin?'on':''}" onclick="delLibItem(event,${item.id})">✕</button>
+        </div></div>`;
+      });
+      html += '</div>';
+    }
+
+    el.innerHTML = html;
+  } catch(e) {
+    console.error('Library load error:', e);
+    // 실패해도 카테고리 구조는 보여줌
+    const cats = loadCats();
+    let html = '';
+    if (isAdmin) {
+      html += `<div style="margin-bottom:16px;display:flex;justify-content:flex-end;">
+        <button onclick="openCatManager()" style="font-size:12px;color:var(--green);background:var(--green-lt);border:none;padding:6px 12px;border-radius:999px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">⚙️ 카테고리 관리</button>
+      </div>`;
+    }
+    cats.forEach(cat => {
+      const icon = getCatIcon(cat);
+      html += `<div class="lib-section">
+        <div class="lib-section-title">${icon} ${cat} <span class="lib-tag">0개</span></div>
+        <div style="padding:14px 16px;background:var(--surface);border:1px dashed var(--border);border-radius:var(--r);font-size:12px;color:var(--text3);text-align:center;">
+          ${isAdmin ? '+ 버튼으로 자료를 추가해봐요.' : '아직 등록된 자료가 없어요.'}
+        </div>
+      </div>`;
+    });
+    el.innerHTML = html;
+  }
+}
+
+/* 카테고리 관리 */
+function openCatManager() {
+  const cats = loadCats();
+  const modal = document.createElement('div');
+  modal.id = 'catModal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:600;display:flex;align-items:flex-end;';
+  modal.innerHTML = `<div style="background:var(--surface);width:100%;max-width:520px;margin:0 auto;border-radius:20px 20px 0 0;padding:24px 20px 40px;max-height:80vh;overflow-y:auto;">
+    <div style="font-size:16px;font-weight:700;margin-bottom:16px;">⚙️ 카테고리 관리</div>
+    <div id="catList" style="margin-bottom:16px;">
+      ${cats.map((c,i) => `<div style="display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--border);">
+        <span style="flex:1;font-size:14px;">${CAT_ICON[c]||'📁'} ${c}</span>
+        <button onclick="deleteCat(${i})" style="background:#FDEAEA;color:#B53535;border:none;padding:4px 10px;border-radius:6px;font-size:12px;cursor:pointer;">삭제</button>
+      </div>`).join('')}
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:16px;">
+      <input type="text" id="newCatInp" placeholder="새 카테고리 이름" style="flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--rsm);font-size:14px;background:var(--bg);color:var(--text);outline:none;font-family:'Noto Sans KR',sans-serif;">
+      <button onclick="addCat()" style="background:var(--green);color:#fff;border:none;padding:10px 16px;border-radius:var(--rsm);font-size:14px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">추가</button>
+    </div>
+    <button onclick="closeCatModal()" style="width:100%;padding:14px;background:var(--surface2);border:none;border-radius:var(--rsm);font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">닫기</button>
+  </div>`;
+  document.body.appendChild(modal);
+}
+
+function closeCatModal() {
+  const m = document.getElementById('catModal');
+  if (m) m.remove();
+  renderLibrary();
+}
+
+function deleteCat(i) {
+  const cats = loadCats();
+  if (!confirm(`"${cats[i]}" 카테고리를 삭제할까요?`)) return;
+  cats.splice(i, 1);
+  saveCats(cats);
+  closeCatModal();
+  openCatManager();
+}
+
+function addCat() {
+  const inp = document.getElementById('newCatInp');
+  const name = inp.value.trim();
+  if (!name) return;
+  const cats = loadCats();
+  if (cats.includes(name)) { alert('이미 있는 카테고리예요.'); return; }
+  cats.push(name);
+  saveCats(cats);
+  inp.value = '';
+  closeCatModal();
+  openCatManager();
+}
+
+function openLibItem(url) {
+  if (url) window.open(url, '_blank');
+}
+
+async function delLibItem(e, id) {
+  e.stopPropagation();
+  if (!confirm('이 자료를 삭제할까요?')) return;
+  await supaFetch(REST_URL + `/library_items?id=eq.${id}`, { method: 'DELETE' });
+  renderLibrary();
+}
+
+function openAdminSheet() {
+  // 카테고리 select 동적 업데이트
+  const cats = loadCats();
+  const sel = document.getElementById('adminCat');
+  sel.innerHTML = cats.map(c => `<option value="${c}">${c}</option>`).join('');
+  document.getElementById('adminOverlay').classList.add('on');
+  document.getElementById('adminTitle').value = '';
+  document.getElementById('adminDesc') && (document.getElementById('adminDesc').value = '');
+  document.getElementById('adminUrl').value = '';
+  document.getElementById('adminFileInp').value = '';
+  document.getElementById('adminFileName').textContent = '';
+  toggleAdminInputMode();
+}
+
+function closeAdminSheet(e) {
+  if (e && e.target !== document.getElementById('adminOverlay')) return;
+  document.getElementById('adminOverlay').classList.remove('on');
+}
+
+function toggleAdminInputMode() {
+  const type = document.getElementById('adminType').value;
+  const fileRow = document.getElementById('adminFileRow');
+  const urlRow = document.getElementById('adminUrlRow');
+  if (type === 'link') {
+    fileRow.style.display = 'none';
+    urlRow.style.display = 'block';
+  } else {
+    fileRow.style.display = 'block';
+    urlRow.style.display = 'none';
+  }
+}
+
+async function saveLibItem() {
+  const title = document.getElementById('adminTitle').value.trim();
+  const type = document.getElementById('adminType').value;
+  if (!title) { alert('제목을 입력해주세요.'); return; }
+
+  const btn = document.querySelector('.admin-btn.primary');
+  btn.textContent = '저장 중...';
+  btn.disabled = true;
+
+  try {
+    let filePath = null;
+    let url = null;
+
+    if (type === 'link') {
+      url = document.getElementById('adminUrl').value.trim();
+      if (!url) { alert('URL을 입력해주세요.'); btn.textContent='저장'; btn.disabled=false; return; }
+    } else {
+      const fileInp = document.getElementById('adminFileInp');
+      const file = fileInp.files[0];
+      if (!file) { alert('파일을 선택해주세요.'); btn.textContent='저장'; btn.disabled=false; return; }
+      
+      // Storage 업로드
+      const ext = file.name.split('.').pop();
+      const path = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+      const upRes = await fetch(`${STORAGE_URL}/object/${BUCKET}/${path}`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPA_KEY,
+          'Authorization': 'Bearer ' + SUPA_KEY,
+          'Content-Type': file.type,
+          'x-upsert': 'true'
+        },
+        body: file
+      });
+      if (!upRes.ok) { throw new Error('파일 업로드 실패'); }
+      filePath = path;
+    }
+
+    const item = {
+      cat: document.getElementById('adminCat').value,
+      type,
+      title,
+      item_desc: document.getElementById('adminDesc').value.trim(),
+      url: url || null,
+      file_path: filePath || null
+    };
+
+    const res = await supaFetch(REST_URL + '/library_items', {
+      method: 'POST',
+      headers: { 'Prefer': 'return=minimal' },
+      body: JSON.stringify(item)
+    });
+
+    if (!res.ok) throw new Error('저장 실패');
+    document.getElementById('adminOverlay').classList.remove('on');
+    renderLibrary();
+  } catch(e) {
+    alert('저장 중 오류가 발생했어요: ' + e.message);
+  } finally {
+    btn.textContent = '저장';
+    btn.disabled = false;
+  }
+}
+
+/* ━━━ 건의함 ━━━ */
+function goSuggest() {
+  document.querySelectorAll('.hdr-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById('tab-suggest').classList.add('on');
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
+  document.getElementById('scr-suggest').classList.add('on');
+  document.getElementById('adminFab').classList.remove('on');
+  window.scrollTo(0,0);
+  renderSuggestList();
+}
+
+async function submitSuggest() {
+  const cat = document.getElementById('suggestCat').value;
+  const text = document.getElementById('suggestText').value.trim();
+  if (!text) { alert('내용을 입력해주세요.'); return; }
+  const btn = document.querySelector('#scr-suggest button');
+  btn.textContent = '전송 중...'; btn.disabled = true;
+  try {
+    const res = await supaFetch(REST_URL + '/suggestions', {
+      method: 'POST',
+      headers: { 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ cat, content: text, created_at: new Date().toISOString() })
+    });
+    if (!res.ok) throw new Error('전송 실패');
+    document.getElementById('suggestText').value = '';
+    alert('건의가 전달됐어요! 감사해요 🧭');
+    renderSuggestList();
+  } catch(e) {
+    alert('전송 실패. 잠시 후 다시 시도해주세요.');
+  } finally {
+    btn.textContent = '건의하기'; btn.disabled = false;
+  }
+}
+
+async function renderSuggestList() {
+  const el = document.getElementById('suggestList');
+  if (!isAdmin) { el.innerHTML = ''; return; }
+  try {
+    const res = await supaFetch(REST_URL + '/suggestions?select=*&order=created_at.desc');
+    if (!res.ok) return;
+    const items = await res.json();
+    if (!items.length) { el.innerHTML = '<div style="font-size:12px;color:var(--text3);text-align:center;padding:20px;">아직 건의가 없어요.</div>'; return; }
+    el.innerHTML = '<div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px;">📬 건의 목록 (' + items.length + '개)</div>' +
+      items.map(i => `<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <span style="font-size:11px;background:var(--green-lt);color:var(--green);padding:2px 8px;border-radius:999px;">${i.cat}</span>
+          <span style="font-size:11px;color:var(--text3);">${i.created_at?.slice(0,10)||''}</span>
+        </div>
+        <div style="font-size:13px;color:var(--text);line-height:1.7;">${i.content}</div>
+        <button onclick="deleteSuggest(${i.id})" style="margin-top:8px;font-size:11px;color:#B53535;background:#FDEAEA;border:none;padding:3px 10px;border-radius:6px;cursor:pointer;">삭제</button>
+      </div>`).join('');
+  } catch(e) {}
+}
+
+async function deleteSuggest(id) {
+  if (!confirm('삭제할까요?')) return;
+  await supaFetch(REST_URL + '/suggestions?id=eq.' + id, { method: 'DELETE' });
+  renderSuggestList();
+}
+
+/* 관리자 로그인 */
+function openAdminLogin() {
+  document.getElementById('adminLoginWrap').classList.add('on');
+  document.getElementById('adminPwInp').value = '';
+  document.getElementById('adminPwErr').style.display = 'none';
+  setTimeout(() => document.getElementById('adminPwInp').focus(), 100);
+}
+function closeAdminLogin() {
+  document.getElementById('adminLoginWrap').classList.remove('on');
+}
+async function checkAdminPw() {
+  const pw = document.getElementById('adminPwInp').value;
+  try {
+    const res = await supaFetch(REST_URL + '/admin_config?key=eq.admin_pw&select=value');
+    const data = await res.json();
+    const correctPw = data[0]?.value;
+    if (pw === correctPw) {
+      isAdmin = true;
+      closeAdminLogin();
+      updateAdminDot();
+      document.getElementById('adminFab').classList.add('on');
+      goLibrary();
+    } else {
+      document.getElementById('adminPwErr').style.display = 'block';
+    }
+  } catch(e) {
+    document.getElementById('adminPwErr').style.display = 'block';
+  }
+}
+
+// 파일 선택시 파일명 표시
+function onFileSelect() {
+  const file = document.getElementById('adminFileInp').files[0];
+  document.getElementById('adminFileName').textContent = file ? file.name : '';
+}
+
+// 로고 클릭 동작
+let _logoClickCount = 0;
+let _logoClickTimer = null;
+function onLogoClick() {
+  if (isAdmin) {
+    goLibrary();
+    setTimeout(() => openAdminSheet(), 200);
+    return;
+  }
+  _logoClickCount++;
+  clearTimeout(_logoClickTimer);
+  _logoClickTimer = setTimeout(() => { _logoClickCount = 0; }, 1500);
+  if (_logoClickCount >= 5) {
+    _logoClickCount = 0;
+    openAdminLogin();
+  }
+}
+
+// 관리자 뱃지 업데이트
+function updateAdminDot() {
+  const dot = document.querySelector('.logo-admin-dot');
+  if (dot) dot.classList.toggle('on', isAdmin);
+}
+
+// 초기값
+// date select 연동
+function getMonthInputValue() {
+  const y = document.getElementById('monthInputYear')?.value || '';
+  const m = document.getElementById('monthInputMonth')?.value || '';
+  const d = document.getElementById('monthInputDay')?.value || '';
+  return y && m && d ? y+'-'+m+'-'+d : '';
+}
+// hidden input 동기화
+['monthInputYear','monthInputMonth','monthInputDay'].forEach(id => {
+  const el = document.getElementById(id);
+  if(el) el.addEventListener('change', () => {
+    const mi = document.getElementById('monthInput');
+    if(mi) mi.value = getMonthInputValue();
+  });
+});
+const mi=document.getElementById('monthInput');
+if(mi){ mi.value = getMonthInputValue(); }
+</script>
 </body>
 </html>
