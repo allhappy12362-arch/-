@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>월간 성장 상담지</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  @page{
+    size: A4 landscape;
+    margin: 12mm 14mm;
+  }
+
+  body{
+    font-family:'Noto Sans KR',sans-serif;
+    background:#fff;
+    color:#1a1a1a;
+    width:271mm;
+    min-height:182mm;
+    padding:0;
+  }
+
+  .page{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+
+  /* 상단 */
+  .top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1.5px solid #2D5F40;
+    padding-bottom:6px;
+  }
+  .top h1{
+    font-size:16px;font-weight:700;color:#2D5F40;
+  }
+  .top p{font-size:9px;color:#999;}
+  .legend{
+    display:flex;gap:12px;align-items:center;
+  }
+  .legend-item{
+    display:flex;align-items:center;gap:4px;
+    font-size:9px;color:#666;
+  }
+  .leg-box{
+    width:11px;height:11px;border-radius:2px;flex-shrink:0;
+  }
+  .leg-w{background:#F8F8F6;border:0.5px solid #ccc;}
+  .leg-y{background:#FFF8EC;border:0.5px dashed #D4B96A;}
+
+  /* 기본정보 */
+  .meta{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
+  }
+  .meta-item label{
+    font-size:8.5px;font-weight:700;color:#999;
+    letter-spacing:.07em;display:block;margin-bottom:3px;
+  }
+  .meta-item .line{
+    border-bottom:1px solid #ddd;height:18px;
+  }
+
+  /* 2컬럼 */
+  .cols{
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;
+    flex:1;
+  }
+  .col{display:flex;flex-direction:column;gap:8px;}
+
+  /* 카드 */
+  .card{
+    background:#fff;
+    border:0.5px solid #ddd;
+    border-radius:6px;
+    overflow:hidden;
+    flex:1;
+  }
+  .card-head{
+    padding:5px 11px;
+    display:flex;align-items:center;gap:7px;
+    background:#F4F4F2;
+    border-bottom:0.5px solid #ddd;
+  }
+  .num{
+    width:17px;height:17px;border-radius:50%;
+    background:#2D5F40;color:#fff;
+    font-size:9px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .card-head-text span{
+    font-size:11.5px;font-weight:700;color:#1a1a1a;display:block;line-height:1.3;
+  }
+  .timing{font-size:8px;color:#999;}
+
+  .card-body{
+    padding:9px 11px;
+    display:flex;flex-direction:column;gap:7px;
+  }
+
+  /* 라벨 */
+  .sec-lbl{
+    font-size:8.5px;font-weight:700;color:#888;
+    letter-spacing:.06em;margin-bottom:3px;
+  }
+
+  /* 흰 칸 */
+  .box{
+    border:0.5px solid #ddd;border-radius:4px;
+    background:#F8F8F6;
+  }
+  .box.h1{height:28px;}
+  .box.h2{height:40px;}
+  .box.h3{height:52px;}
+  .box.hfull{height:68px;}
+
+  /* 멘토 칸 */
+  .mbox{
+    border:0.5px dashed #D4B96A;border-radius:4px;
+    background:#FFF8EC;position:relative;
+  }
+  .mbox::after{
+    content:'멘토';position:absolute;top:4px;right:7px;
+    font-size:7.5px;font-weight:700;color:#9a7b2a;letter-spacing:.05em;
+  }
+  .mbox.h1{height:28px;}
+  .mbox.h2{height:40px;}
+  .mbox.h3{height:52px;}
+  .mbox.hfull{height:68px;}
+
+  /* 체크 */
+  .checks{display:flex;flex-direction:column;gap:3px;}
+  .check{display:flex;align-items:center;gap:5px;font-size:9.5px;color:#444;}
+  .cb{
+    width:11px;height:11px;border:0.5px solid #ccc;
+    border-radius:2px;flex-shrink:0;background:#fff;
+  }
+
+  /* 약속 */
+  .promises{display:flex;flex-direction:column;gap:6px;}
+  .prow{display:flex;align-items:center;gap:7px;}
+  .pnum{
+    width:17px;height:17px;border-radius:50%;
+    background:#2D5F40;color:#fff;font-size:9px;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .pline{flex:1;border-bottom:1px solid #ddd;height:18px;}
+
+  @media print{
+    body{width:100%;}
+    .page{min-height:182mm;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- 상단 -->
+  <div class="top">
+    <h1>월간 성장 상담지</h1>
+    <div class="legend">
+      <div class="legend-item"><div class="leg-box leg-w"></div>함께 채우는 칸</div>
+      <div class="legend-item"><div class="leg-box leg-y"></div>멘토 작성 칸</div>
+    </div>
+    <p>진단 결과를 확인한 상태에서 시작해요 · 🧭 나침반 연계</p>
+  </div>
+
+  <!-- 기본정보 -->
+  <div class="meta">
+    <div class="meta-item"><label>디자이너</label><div class="line"></div></div>
+    <div class="meta-item"><label>날짜</label><div class="line"></div></div>
+    <div class="meta-item"><label>이번 달 유형</label><div class="line"></div></div>
+    <div class="meta-item"><label>멘토</label><div class="line"></div></div>
+  </div>
+
+  <!-- 2컬럼 -->
+  <div class="cols">
+
+    <!-- 왼쪽 -->
+    <div class="col">
+
+      <div class="card">
+        <div class="card-head">
+          <div class="num">1</div>
+          <div class="card-head-text">
+            <span>결과 확인</span>
+            <div class="timing">상담 시작 — 결과지 함께 읽으며</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="sec-lbl">결과 보고 디자이너 반응 — 공감 / 의외 / 저항</div>
+            <div class="box h3"></div>
+          </div>
+          <div>
+            <div class="sec-lbl">멘토 눈에 보이는 강점 — 진단에 없는 것도 포함</div>
+            <div class="mbox h3"></div>
+          </div>
+          <div>
+            <div class="sec-lbl">이번 달 멘토가 걱정되는 부분</div>
+            <div class="mbox h2"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="num">2</div>
+          <div class="card-head-text">
+            <span>목표 & 실행 점검</span>
+            <div class="timing">상담 중반 — 지난 달 돌아보고 이번 달 다듬기</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="sec-lbl">지난 달 약속 이행 여부</div>
+            <div class="checks">
+              <div class="check"><div class="cb"></div>했다</div>
+              <div class="check"><div class="cb"></div>했는데 잘 안됐다</div>
+              <div class="check"><div class="cb"></div>못 했다</div>
+            </div>
+          </div>
+          <div>
+            <div class="sec-lbl">이유 / 상황 — 이번 달은 어떻게 다르게 할 건지</div>
+            <div class="box h3"></div>
+          </div>
+          <div>
+            <div class="sec-lbl">이번 달 목표 구체성 확인</div>
+            <div class="checks">
+              <div class="check"><div class="cb"></div>측정 가능한 행동으로 적혀있다</div>
+              <div class="check"><div class="cb"></div>막연하다 — 함께 구체화 필요</div>
+              <div class="check"><div class="cb"></div>목표가 너무 많다 — 하나로 좁혀야 함</div>
+            </div>
+          </div>
+          <div>
+            <div class="sec-lbl">실행 방법 보완 — 더 잘게 쪼개거나 추가할 것</div>
+            <div class="mbox h2"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 오른쪽 -->
+    <div class="col">
+
+      <div class="card">
+        <div class="card-head">
+          <div class="num">3</div>
+          <div class="card-head-text">
+            <span>다음 달 약속</span>
+            <div class="timing">상담 마무리 — 둘이 함께 확정</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="sec-lbl">함께 정한 행동 3가지</div>
+            <div class="promises">
+              <div class="prow"><div class="pnum">1</div><div class="pline"></div></div>
+              <div class="prow"><div class="pnum">2</div><div class="pline"></div></div>
+              <div class="prow"><div class="pnum">3</div><div class="pline"></div></div>
+            </div>
+          </div>
+          <div>
+            <div class="sec-lbl">중간 점검 날짜 / 방식</div>
+            <div class="box h1"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="num">4</div>
+          <div class="card-head-text">
+            <span>멘토 총평</span>
+            <div class="timing">상담 후 멘토 혼자 작성</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="sec-lbl">지금 이 디자이너에게 가장 중요한 것 하나</div>
+            <div class="mbox h2"></div>
+          </div>
+          <div>
+            <div class="sec-lbl">3개월 후 이 디자이너의 모습</div>
+            <div class="mbox h3"></div>
+          </div>
+          <div>
+            <div class="sec-lbl">다음 상담까지 특별히 볼 것</div>
+            <div class="mbox h2"></div>
+          </div>
+          <div>
+            <div class="sec-lbl">이번 달 한 마디</div>
+            <div class="mbox h2"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>
