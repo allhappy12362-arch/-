@@ -2726,6 +2726,7 @@ async function renderLibrary() {
               </div>
               <span class="lib-card-badge ${item.type}">${TYPE_LABEL[item.type]||item.type}</span>
               <button class="lib-card-del ${isAdmin?'on':''}" onclick="delLibItem(event,${item.id})">✕</button>
+              <button class="lib-card-del ${isAdmin?'on':''}" onclick="moveLibItem(event,${item.id})" style="right:36px;background:var(--green);font-size:13px;">↗</button>
             </div>
           </div>`;
         });
@@ -2744,6 +2745,7 @@ async function renderLibrary() {
           <div class="lib-card-info"><div class="lib-card-title">${item.title}</div></div>
           <span class="lib-card-badge ${item.type}">${TYPE_LABEL[item.type]||item.type}</span>
           <button class="lib-card-del ${isAdmin?'on':''}" onclick="delLibItem(event,${item.id})">✕</button>
+          <button class="lib-card-del ${isAdmin?'on':''}" onclick="moveLibItem(event,${item.id})" style="right:36px;background:var(--green);font-size:13px;">↗</button>
         </div></div>`;
       });
       html += '</div>';
@@ -2894,6 +2896,34 @@ async function delLibItem(e, id) {
   e.stopPropagation();
   if (!confirm('이 자료를 삭제할까요?')) return;
   await supaFetch(REST_URL + `/library_items?id=eq.${id}`, { method: 'DELETE' });
+  renderLibrary();
+}
+
+function moveLibItem(e, id) {
+  e.stopPropagation();
+  const cats = loadCats();
+  const existing = document.getElementById('moveModal');
+  if (existing) existing.remove();
+  const modal = document.createElement('div');
+  modal.id = 'moveModal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:700;display:flex;align-items:flex-end;';
+  modal.innerHTML = `<div style="background:var(--surface);width:100%;max-width:520px;margin:0 auto;border-radius:20px 20px 0 0;padding:24px 20px 40px;">
+    <div style="font-size:16px;font-weight:700;margin-bottom:16px;">↗ 폴더 이동</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;">
+      ${cats.map(c => `<button onclick="confirmMoveLibItem(${id},'${c}')" style="text-align:left;padding:12px 16px;border-radius:var(--rsm);border:1.5px solid var(--border);background:var(--bg);font-size:14px;font-family:'Noto Sans KR',sans-serif;cursor:pointer;color:var(--text);">${c}</button>`).join('')}
+    </div>
+    <button onclick="document.getElementById('moveModal').remove()" style="width:100%;padding:14px;background:var(--surface2);border:none;border-radius:var(--rsm);font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">취소</button>
+  </div>`;
+  document.body.appendChild(modal);
+}
+
+async function confirmMoveLibItem(id, newCat) {
+  document.getElementById('moveModal')?.remove();
+  await supaFetch(REST_URL + `/library_items?id=eq.${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ cat: newCat })
+  });
   renderLibrary();
 }
 
