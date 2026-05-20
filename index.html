@@ -1800,11 +1800,41 @@ function startDesignerDiag() {
   }, 100);
 }
 
+let _homeTabClickCount = 0;
+let _homeTabClickTimer = null;
 function goHome() {
   ans=new Array(QS.length).fill(null);cur=0;done=false;textStep=1;
   if(chartInst){chartInst.destroy();chartInst=null;}
   document.getElementById('tab-result').style.display='none';
   showScreen('home');
+
+  _homeTabClickCount++;
+  clearTimeout(_homeTabClickTimer);
+  _homeTabClickTimer = setTimeout(() => { _homeTabClickCount = 0; }, 3000);
+  if (_homeTabClickCount >= 5) {
+    _homeTabClickCount = 0;
+    clearTimeout(_homeTabClickTimer);
+    openSecretModal();
+  }
+}
+function openSecretModal() {
+  document.getElementById('secretModalOverlay').style.display = 'flex';
+  document.getElementById('secretPwInput').value = '';
+  document.getElementById('secretPwError').style.display = 'none';
+  setTimeout(() => document.getElementById('secretPwInput').focus(), 100);
+}
+function closeSecretModal() {
+  document.getElementById('secretModalOverlay').style.display = 'none';
+}
+function checkSecretPw() {
+  const val = document.getElementById('secretPwInput').value;
+  if (val === 'gmldksgpdj0000') {
+    closeSecretModal();
+    isAdmin = true;
+    goLibrary();
+  } else {
+    document.getElementById('secretPwError').style.display = 'block';
+  }
 }
 function tryGoSurvey() { if(done||ans.some(a=>a!==null)) showScreen('survey'); }
 function tryGoResult() { if(done) showScreen('result'); }
@@ -2704,7 +2734,7 @@ async function renderLibrary() {
           const fileUrl = item.file_path
             ? `${SUPA_URL}/storage/v1/object/public/${BUCKET}/${item.file_path}`
             : item.url;
-          html += `<div class="lib-card" onclick="openLibItem('${fileUrl}',${item.id})">
+          html += `<div class="lib-card" onclick="openLibItem('${fileUrl}')">
             <div class="lib-card-inner">
               <div class="lib-card-icon">${TYPE_ICON[item.type]||'📄'}</div>
               <div class="lib-card-info">
@@ -2726,7 +2756,7 @@ async function renderLibrary() {
       html += `<div class="lib-section"><div class="lib-section-title">📁 기타 <span class="lib-tag">${uncatItems.length}개</span></div>`;
       uncatItems.forEach(item => {
         const fileUrl = item.file_path ? `${SUPA_URL}/storage/v1/object/public/${BUCKET}/${item.file_path}` : item.url;
-        html += `<div class="lib-card" onclick="openLibItem('${fileUrl}',${item.id})"><div class="lib-card-inner">
+        html += `<div class="lib-card" onclick="openLibItem('${fileUrl}')"><div class="lib-card-inner">
           <div class="lib-card-icon">${TYPE_ICON[item.type]||'📄'}</div>
           <div class="lib-card-info"><div class="lib-card-title">${item.title}</div></div>
           <span class="lib-card-badge ${item.type}">${TYPE_LABEL[item.type]||item.type}</span>
@@ -2873,20 +2903,8 @@ function addCat() {
   renderCatList();
 }
 
-function openLibItem(url, id) {
-  if (id <= 4) {
-    showSection('home');
-    return;
-  }
-  // id 5 이상 — 비밀번호 확인
-  const pw = prompt('비밀번호를 입력하세요');
-  if (pw === null) return;
-  const adminPw = localStorage.getItem('adminPw') || '1234';
-  if (pw === adminPw) {
-    if (url) window.open(url, '_blank');
-  } else {
-    alert('비밀번호가 틀렸습니다.');
-  }
+function openLibItem(url) {
+  if (url) window.open(url, '_blank');
 }
 
 async function delLibItem(e, id) {
@@ -3110,5 +3128,19 @@ function updateAdminDot() {
 const mi=document.getElementById('monthInput');
 if(mi){const n=new Date();mi.value=n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0');}
 </script>
+<!-- ════════ 비밀 관리자 모달 ════════ -->
+<div id="secretModalOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9999;align-items:center;justify-content:center;" onclick="if(event.target===this)closeSecretModal()">
+  <div style="background:var(--surface,#fff);border-radius:18px;padding:32px 28px;width:300px;max-width:90vw;box-shadow:0 8px 32px rgba(0,0,0,0.18);display:flex;flex-direction:column;gap:16px;">
+    <div style="font-size:17px;font-weight:700;color:var(--text,#111);text-align:center;">🔒 관리자 인증</div>
+    <div style="font-size:13px;color:var(--text2,#666);text-align:center;">비밀번호를 입력하세요</div>
+    <input id="secretPwInput" type="password" placeholder="비밀번호" onkeydown="if(event.key==='Enter')checkSecretPw()"
+      style="border:1.5px solid var(--border,#ddd);border-radius:10px;padding:11px 14px;font-size:15px;font-family:'Noto Sans KR',sans-serif;outline:none;color:var(--text,#111);background:var(--bg,#f8f8f8);">
+    <div id="secretPwError" style="display:none;color:#e53935;font-size:12px;text-align:center;">비밀번호가 맞지 않아요.</div>
+    <div style="display:flex;gap:10px;">
+      <button onclick="closeSecretModal()" style="flex:1;padding:11px;border-radius:10px;border:1.5px solid var(--border,#ddd);background:var(--surface,#fff);font-size:14px;font-family:'Noto Sans KR',sans-serif;cursor:pointer;color:var(--text2,#666);">취소</button>
+      <button onclick="checkSecretPw()" style="flex:1;padding:11px;border-radius:10px;border:none;background:var(--green,#2ecc71);color:#fff;font-size:14px;font-weight:700;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">확인</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
