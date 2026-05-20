@@ -1816,26 +1816,7 @@ function tabHomeClick() {
   if (_homeTabClickCount >= 5) {
     _homeTabClickCount = 0;
     clearTimeout(_homeTabClickTimer);
-    openSecretModal();
-  }
-}
-function openSecretModal() {
-  document.getElementById('secretModalOverlay').style.display = 'flex';
-  document.getElementById('secretPwInput').value = '';
-  document.getElementById('secretPwError').style.display = 'none';
-  setTimeout(() => document.getElementById('secretPwInput').focus(), 100);
-}
-function closeSecretModal() {
-  document.getElementById('secretModalOverlay').style.display = 'none';
-}
-function checkSecretPw() {
-  const val = document.getElementById('secretPwInput').value;
-  if (val === 'gmldksgpdj0000') {
-    closeSecretModal();
-    isAdmin = true;
-    goLibrary();
-  } else {
-    document.getElementById('secretPwError').style.display = 'block';
+    openAdminLogin();
   }
 }
 function tryGoSurvey() { if(done||ans.some(a=>a!==null)) showScreen('survey'); }
@@ -3109,13 +3090,20 @@ function onFileSelect() {
 }
 
 // 로고 클릭 동작
+let _logoClickCount = 0;
+let _logoClickTimer = null;
 function onLogoClick() {
   if (isAdmin) {
-    // 관리자면 자료실로 이동 + 업로드 시트 열기
     goLibrary();
     setTimeout(() => openAdminSheet(), 200);
-  } else {
-    // 비관리자면 로그인 팝업
+    return;
+  }
+  _logoClickCount++;
+  clearTimeout(_logoClickTimer);
+  _logoClickTimer = setTimeout(() => { _logoClickCount = 0; }, 3000);
+  if (_logoClickCount >= 5) {
+    _logoClickCount = 0;
+    clearTimeout(_logoClickTimer);
     openAdminLogin();
   }
 }
@@ -3130,19 +3118,6 @@ function updateAdminDot() {
 const mi=document.getElementById('monthInput');
 if(mi){const n=new Date();mi.value=n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0');}
 </script>
-<!-- ════════ 비밀 관리자 모달 ════════ -->
-<div id="secretModalOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9999;align-items:center;justify-content:center;" onclick="if(event.target===this)closeSecretModal()">
-  <div style="background:var(--surface,#fff);border-radius:18px;padding:32px 28px;width:300px;max-width:90vw;box-shadow:0 8px 32px rgba(0,0,0,0.18);display:flex;flex-direction:column;gap:16px;">
-    <div style="font-size:17px;font-weight:700;color:var(--text,#111);text-align:center;">🔒 관리자 인증</div>
-    <div style="font-size:13px;color:var(--text2,#666);text-align:center;">비밀번호를 입력하세요</div>
-    <input id="secretPwInput" type="password" placeholder="비밀번호" onkeydown="if(event.key==='Enter')checkSecretPw()"
-      style="border:1.5px solid var(--border,#ddd);border-radius:10px;padding:11px 14px;font-size:15px;font-family:'Noto Sans KR',sans-serif;outline:none;color:var(--text,#111);background:var(--bg,#f8f8f8);">
-    <div id="secretPwError" style="display:none;color:#e53935;font-size:12px;text-align:center;">비밀번호가 맞지 않아요.</div>
-    <div style="display:flex;gap:10px;">
-      <button onclick="closeSecretModal()" style="flex:1;padding:11px;border-radius:10px;border:1.5px solid var(--border,#ddd);background:var(--surface,#fff);font-size:14px;font-family:'Noto Sans KR',sans-serif;cursor:pointer;color:var(--text2,#666);">취소</button>
-      <button onclick="checkSecretPw()" style="flex:1;padding:11px;border-radius:10px;border:none;background:var(--green,#2ecc71);color:#fff;font-size:14px;font-weight:700;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">확인</button>
-    </div>
-  </div>
-</div>
 </body>
+
 </html>
