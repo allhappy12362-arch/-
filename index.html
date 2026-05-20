@@ -936,7 +936,7 @@ body {
   <span id="adminDot" class="logo-admin-dot"></span>
 </div>
   <div class="hdr-right">
-    <div class="hdr-btn on" id="tab-home" onclick="goHome()">진단</div>
+    <div class="hdr-btn on" id="tab-home" onclick="tabHomeClick()">진단</div>
     <div class="hdr-btn" id="tab-history" onclick="goHistory()">기록</div>
     <div class="hdr-btn" id="tab-library" onclick="goLibrary()">자료실</div>
     <div class="hdr-btn" id="tab-suggest" onclick="goSuggest()">건의함</div>
@@ -1807,7 +1807,9 @@ function goHome() {
   if(chartInst){chartInst.destroy();chartInst=null;}
   document.getElementById('tab-result').style.display='none';
   showScreen('home');
-
+}
+function tabHomeClick() {
+  goHome();
   _homeTabClickCount++;
   clearTimeout(_homeTabClickTimer);
   _homeTabClickTimer = setTimeout(() => { _homeTabClickCount = 0; }, 3000);
