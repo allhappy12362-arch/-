@@ -4,12 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>헤어디자이너 성장 나침반</title>
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="성장 나침반">
-<link rel="apple-touch-icon" href="/icon.png">
-<link rel="icon" type="image/png" href="/icon.png">
-
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
@@ -74,9 +68,9 @@ body {
 .logo-admin-dot.on { display: block; }
 .hdr-right { display: flex; gap: 0; }
 .hdr-btn {
-  padding: 0 10px;
+  padding: 0 14px;
   height: 52px;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text2);
   cursor: pointer;
   border-bottom: 2px solid transparent;
@@ -84,7 +78,6 @@ body {
   align-items: center;
   transition: all .15s;
   font-family: 'Noto Sans KR', sans-serif;
-  white-space: nowrap;
 }
 .hdr-btn.on { color: var(--green); border-bottom-color: var(--green); font-weight: 700; }
 
@@ -143,11 +136,10 @@ body {
   letter-spacing: -0.02em;
 }
 .start-card-top p { font-size: 12px; color: rgba(255,255,255,.72); line-height: 1.6; font-weight: 400; }
-.start-card-body { padding: 20px 22px 22px; overflow: hidden; }
+.start-card-body { padding: 20px 22px 22px; }
 .lbl { font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 7px; display: block; }
 .inp {
   width: 100%;
-  box-sizing: border-box;
   font-size: 15px;
   padding: 13px 15px;
   border: 1.5px solid var(--border);
@@ -780,11 +772,11 @@ body {
   margin-bottom: 6px;
 }
 .area-sig { font-size: 14px; flex-shrink: 0; width: 20px; text-align: center; }
-.area-name { font-size: 13px; font-weight: 600; color: var(--text); width: 92px; flex-shrink: 0; }
+.area-name { font-size: 13px; font-weight: 600; color: var(--text); width: 76px; flex-shrink: 0; }
 .area-bar-wrap { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
 .area-bar-fill { height: 100%; border-radius: 3px; transition: width .5s cubic-bezier(.4,0,.2,1); }
 .area-score { font-size: 13px; font-weight: 700; width: 38px; text-align: right; flex-shrink: 0; }
-.area-desc { font-size: 12px; color: var(--text2); line-height: 1.6; padding-left: 0; }
+.area-desc { font-size: 12px; color: var(--text2); line-height: 1.6; padding-left: 30px; }
 
 /* 강점/집중 카드 */
 .area-chip {
@@ -958,7 +950,7 @@ body {
     <div class="home-inner">
       <div style="padding:16px 0 8px;">
         <h2 style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px;">🧭 진단</h2>
-
+        <p style="font-size:12px;color:var(--text2);">나에게 맞는 진단을 선택해봐요.</p>
       </div>
 
       <!-- 진단 카테고리 그리드 -->
@@ -1007,24 +999,7 @@ body {
           <span class="lbl">이름 / 닉네임</span>
           <input type="text" id="nameInput" class="inp" placeholder="예: 김미용" autocomplete="off">
           <span class="lbl">진단 날짜</span>
-          <div style="display:flex;gap:8px;margin-bottom:14px;">
-            <select id="monthInputYear" class="inp" style="flex:1.2;margin-bottom:0;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22><path d=%22M1 1l5 5 5-5%22 stroke=%22%23888%22 stroke-width=%221.5%22 fill=%22none%22/></svg>');background-repeat:no-repeat;background-position:right 12px center;padding-right:28px;">
-              <option value="2024">2024년</option>
-              <option value="2025">2025년</option>
-              <option value="2026" selected>2026년</option>
-              <option value="2027">2027년</option>
-            </select>
-            <select id="monthInputMonth" class="inp" style="flex:1;margin-bottom:0;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22><path d=%22M1 1l5 5 5-5%22 stroke=%22%23888%22 stroke-width=%221.5%22 fill=%22none%22/></svg>');background-repeat:no-repeat;background-position:right 12px center;padding-right:28px;">
-              <option value="01">1월</option><option value="02">2월</option><option value="03">3월</option>
-              <option value="04">4월</option><option value="05" selected>5월</option><option value="06">6월</option>
-              <option value="07">7월</option><option value="08">8월</option><option value="09">9월</option>
-              <option value="10">10월</option><option value="11">11월</option><option value="12">12월</option>
-            </select>
-            <select id="monthInputDay" class="inp" style="flex:1;margin-bottom:0;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22><path d=%22M1 1l5 5 5-5%22 stroke=%22%23888%22 stroke-width=%221.5%22 fill=%22none%22/></svg>');background-repeat:no-repeat;background-position:right 12px center;padding-right:28px;">
-              <option value="01">1일</option><option value="02">2일</option><option value="03">3일</option><option value="04">4일</option><option value="05">5일</option><option value="06">6일</option><option value="07">7일</option><option value="08">8일</option><option value="09">9일</option><option value="10">10일</option><option value="11">11일</option><option value="12">12일</option><option value="13">13일</option><option value="14">14일</option><option value="15">15일</option><option value="16" selected>16일</option><option value="17">17일</option><option value="18">18일</option><option value="19">19일</option><option value="20">20일</option><option value="21">21일</option><option value="22">22일</option><option value="23">23일</option><option value="24">24일</option><option value="25">25일</option><option value="26">26일</option><option value="27">27일</option><option value="28">28일</option><option value="29">29일</option><option value="30">30일</option><option value="31">31일</option>
-            </select>
-          </div>
-          <input type="hidden" id="monthInput">
+          <input type="date" id="monthInput" class="inp">
           <button class="btn-go" onclick="startSurvey()">진단 시작하기 →</button>
         </div>
       </div>
@@ -1116,7 +1091,15 @@ body {
         </div>
       </div>
 
-
+      <!-- ⑥ 리더 코멘트 -->
+      <div class="leader-box" style="margin:10px 20px 0;">
+        <div class="leader-tit">👤 멘토 한마디</div>
+        <div class="leader-body">
+          <div class="leader-sub">멘토가 이 결과를 보고 한마디 남겨줘요. 상담 시작점이 돼요.</div>
+          <textarea id="leaderTA" class="leader-ta" placeholder="이번 달 느낀 점, 잘한 점, 함께 이야기하고 싶은 것..."></textarea>
+          <div class="la-hint">💡 이 화면을 함께 펼쳐놓고 대화를 시작해봐요.</div>
+        </div>
+      </div>
 
       <!-- 버튼 -->
       <div class="result-btns">
@@ -1320,63 +1303,63 @@ const STORAGE_KEY = 'hairmgmt_v3';
 /* ━━━ 유형 정의 (9가지) ━━━ */
 const TYPES = {
   CRAFTSMAN:{key:'CRAFTSMAN',emoji:'✂️',label:'이달의 나의 유형',name:'기술장인형',color:'#1E4A8A',bgColor:'#EEF3FF',
-    tagline:'손끝에서 신뢰가 만들어지는 타입이에요.\n결과물이 좋을수록 고객이 다시 오는 이유가 생겨요.',
+    tagline:'결과물로 신뢰를 쌓는 타입이에요.\n기술이 쌓일수록 고객이 당신을 찾는 이유가 선명해져요.',
     strengths:['시술 완성도가 높아 고객이 결과물 사진을 찍고 자발적으로 리뷰를 남겨요','트렌드를 빠르게 익혀 현장에 적용하는 실행력이 있어요','자신 있는 전문 시술 분야가 있고 그 분야에서 인정받고 있어요'],
     cautions:['기술에 집중하다 고객경험·마케팅이 약해질 수 있어요 — 재예약 권유, SNS 기록을 챙겨봐요','내 기준이 높아서 완성도에 스스로 가장 큰 스트레스를 받을 수 있어요','기술은 강하지만 수입으로 연결하는 전략이 부족할 수 있어요'],
     leaderTip:['기술 성장 외에 고객경험 연결 피드백이 효과적이에요','헤어쇼·콘테스트·기술 세미나 참가 기회를 먼저 제안해주세요','"3년 후 어떤 디자이너가 되고 싶어?"를 상담 주제로 꺼내봐요'],
     context:'기술·전문성 점수가 두드러지게 높아요. 시술 완성도와 전문성에 집중하고 있는 달이에요. 다만 고객경험·마케팅과의 격차가 크다면 실력이 수입으로 연결되지 않을 수 있어요.',
     trap:'완벽한 결과물을 내려다 고객과의 대화가 짧아지고, "잘 해줬는데 왜 재방문을 안 하지?"라는 상황이 생길 수 있어요.'},
   CUSTOMER_MASTER:{key:'CUSTOMER_MASTER',emoji:'💇',label:'이달의 나의 유형',name:'단골마스터형',color:'#8A2070',bgColor:'#FBEEF8',
-    tagline:'사람이 먼저 보이는 타입이에요.\n고객이 살롱이 아니라 나를 보고 다시 예약해요.',
+    tagline:'고객이 살롱이 아니라 나를 보고 오는 타입이에요.\n그 신뢰가 이번 달 가장 큰 자산이에요.',
     strengths:['재예약률이 높고 고객이 자발적으로 지인을 소개해줘요','고객이 기대하지 않은 서비스를 먼저 준비해 감동을 주는 세심함이 있어요','살롱에 오는 것 자체를 즐기게 만드는 분위기를 만들어요'],
     cautions:['고객 응대에 집중하느라 기술 공부나 트렌드 파악이 뒤처질 수 있어요','거절을 어려워해 무리한 요청도 다 받아버릴 수 있어요','매일 감정 노동이 쌓이면 어느 순간 갑자기 번아웃이 올 수 있어요'],
     leaderTip:['재예약률이나 단골 수 같은 구체적인 수치로 칭찬해주세요','"이번 달 힘든 고객 있었어?"라고 먼저 물어봐 주는 것만으로도 큰 힘이 돼요','분기에 한 번은 기술 세미나나 신기술 체험 기회를 만들어줘요'],
     context:'고객경험·마케팅 점수가 높게 나왔어요. 고객과의 관계가 안정적이고 신뢰가 쌓이고 있는 달이에요. 사람을 통해 에너지를 얻는 타입이지만 그만큼 감정 소모도 큰 달일 수 있어요.',
     trap:'모든 고객을 기쁘게 해주려다 무리한 요청도 다 받아버리는 패턴이 생길 수 있어요. "거절"도 서비스예요.'},
   GROWER:{key:'GROWER',emoji:'🚀',label:'이달의 나의 유형',name:'성장몰입형',color:'#1E6E40',bgColor:'#EAF7EE',
-    tagline:'배운 걸 바로 현장에 올려놓는 타입이에요.\n어제보다 오늘이 조금 더 나아지고 있어요.',
+    tagline:'배우고 바뀌는 흐름이 살아있는 타입이에요.\n성장하는 감각이 이번 달 가장 뚜렷하게 나타났어요.',
     strengths:['세미나·유튜브·SNS로 스스로 배움을 찾아가는 능동성이 있어요','배운 것을 다음 시술에 바로 적용하는 빠른 실행력이 있어요','1년 후 내 모습이 구체적으로 그려져 있고 방향이 명확해요'],
     cautions:['배우는 것에 집중하느라 고객경험·마케팅 관리가 소홀해질 수 있어요','"아직 부족해"라는 생각에 현재 성취를 스스로 인정하지 못해요','기술만 쌓다 보면 수입으로 연결하는 전략이 빠질 수 있어요'],
     leaderTip:['"이번 달 배워서 시술에 써봤잖아, 그게 보였어"라고 구체적으로 말해주세요','"지금 하는 것도 충분히 잘하고 있어"라는 현재 인정의 말이 꼭 필요해요','매월 배운 기술 1가지를 함께 체크하는 루틴을 만들어봐요'],
     context:'성장·방향 점수가 높게 나왔어요. 배우고 적용하는 흐름이 좋은 달이에요. 다만 성장에 집중하다 고객경험이나 경제 관리가 약해지지 않도록 균형이 필요해요.',
     trap:'"더 배워야 해"라는 생각에 지금 잘하고 있는 것들을 스스로 인정하지 못하는 패턴이 반복될 수 있어요.'},
   ALLROUNDER:{key:'ALLROUNDER',emoji:'🌟',label:'이달의 나의 유형',name:'살롱에이스형',color:'#5B6A20',bgColor:'#F5F8EA',
-    tagline:'어느 자리에 놓아도 무너지지 않는 타입이에요.\n기술, 관계, 태도 — 세 가지가 함께 돌아가고 있어요.',
+    tagline:'어느 한 곳이 무너지지 않는 타입이에요.\n살롱 안에서 가장 믿고 맡길 수 있는 사람이에요.',
     strengths:['6개 영역이 고르게 안정적인 이번 달 — 살롱에서 기준이 되는 존재예요','신규 고객 응대부터 단골 관리, 후배 케어까지 어느 자리에서도 믿음직해요','기술·고객경험·경제까지 연결되는 선순환 구조가 만들어지고 있어요'],
     cautions:['"딱히 특기가 없는 것 같다"는 불안감을 혼자 느끼고 있을 수 있어요','모든 걸 잘하려다 정작 본인이 가장 하고 싶은 것을 못 찾을 수 있어요','지금 이 균형을 유지하면서 한 단계 더 올라갈 집중 전략이 필요해요'],
     leaderTip:['"어느 자리에 있어도 믿음직해"라는 말을 직접 전해주세요','"지금 가장 더 파고들고 싶은 게 뭐야?"라고 질문해서 숨은 욕구를 꺼내줘요','다음 성장 목표를 함께 하나 골라서 집중하는 분기 계획을 세워봐요'],
     context:'전 영역이 고르게 안정적으로 나왔어요. 기술·고객경험·관계·성장·경제가 함께 돌아가는 가장 이상적인 달이에요.',
     trap:'"나는 딱히 잘하는 게 없어"라는 불안이 생겨 스스로를 과소평가하는 함정에 빠지기 쉬워요. 균형 자체가 강점이에요.'},
   DRIVER:{key:'DRIVER',emoji:'🔥',label:'이달의 나의 유형',name:'목표드라이브형',color:'#B03010',bgColor:'#FFF3EE',
-    tagline:'목표가 생기면 바로 행동으로 내려오는 타입이에요.\n머릿속 계획이 실제 숫자로 연결될 때 가장 살아나요.',
+    tagline:'목표를 숫자와 행동으로 내려놓는 타입이에요.\n생각에서 그치지 않고 실제로 움직이는 사람이에요.',
     strengths:['월 매출 목표·재예약률 목표를 스스로 세우고 실행하는 추진력이 있어요','수입과 지출을 파악하고 객단가·추가 시술 제안으로 수입을 높이는 전략이 있어요','1년 후 목표가 구체적이고 지금 하는 것들이 그 방향과 맞다고 느끼는 달이에요'],
     cautions:['목표에 집중하다 고객과의 대화·감정 케어가 줄어들 수 있어요','빠른 페이스로 달리다 몸이 먼저 지쳐서 슬럼프가 갑자기 올 수 있어요','관계·태도 영역이 상대적으로 낮아지지 않도록 챙겨봐요'],
     leaderTip:['"이번 달 목표 중에 이룬 게 뭐야?"라고 같이 확인해줘요','"달리다 지칠 때가 있는데 요즘 페이스는 괜찮아?"라고 먼저 물어봐요','팀원들과의 관계도 함께 챙기도록 유도해줘요'],
     context:'성장·방향과 경제·설계 점수가 다른 영역보다 두드러지게 높아요. 목표 의식과 수입 관리가 살아있는 달이에요.',
     trap:'목표 숫자에 집중하다 고객과의 감정적 연결이 약해지는 것을 놓치기 쉬워요. 수치도 중요하지만 관계가 수치를 만들어요.'},
   MENTOR:{key:'MENTOR',emoji:'👑',label:'이달의 나의 유형',name:'살롱멘토형',color:'#5A3A80',bgColor:'#F3EEFF',
-    tagline:'옆 사람을 먼저 챙기는 타입이에요.\n당신이 있을 때 살롱 분위기가 달라져요.',
+    tagline:'팀을 살리는 힘이 있는 타입이에요.\n당신이 있어서 살롱의 온도가 달라져요.',
     strengths:['동료·후배를 먼저 챙기고 기술과 노하우를 아낌없이 나눠줘요','피드백을 잘 수용하고 살롱 분위기를 긍정적으로 만드는 힘이 있어요','고객 앞에서 팀으로 보이게 만드는 프로페셔널한 태도가 있어요'],
     cautions:['팀을 챙기느라 본인의 기술 성장이나 경제 관리가 소홀해질 수 있어요','남을 챙기다 본인 컨디션이 소진되는 경우가 생길 수 있어요','본인의 성장·방향에도 투자할 시간이 필요해요'],
     leaderTip:['"팀 챙기면서 본인이 힘든 건 없어?"라고 먼저 물어봐요','"본인은 요즘 뭘 배우고 싶어?"라고 본인 성장에 관심 가져줘요','멘토링 기여를 공식적으로 인정해주는 것이 큰 동기부여가 돼요'],
     context:'관계·태도 점수가 압도적으로 높아요. 살롱 안에서 중심을 잡고 팀을 이끌어가는 달이에요.',
     trap:'가르치는 것에 집중하다 본인의 커리어 방향이나 수입 관리가 흐릿해지는 패턴을 조심해요.'},
   BURNOUT_RISK:{key:'BURNOUT_RISK',emoji:'🌊',label:'이달의 나의 유형',name:'번아웃위험형',color:'#C03030',bgColor:'#FDEAEA',
-    tagline:'지금 몸과 마음이 한계 신호를 보내고 있어요.\n열심히 해온 만큼 쌓인 것도 있어요 — 회복이 먼저예요.',
+    tagline:'지금 몸과 마음이 함께 신호를 보내고 있어요.\n더 밀어붙이기보다 먼저 회복하는 게 맞는 달이에요.',
     strengths:['힘든 상황에서도 현장을 지키고 있다는 것 자체가 이미 대단해요','감정 조절이 어려운 상황에서도 고객 앞에서 최선을 다하고 있어요','이 상태를 인식하고 있다는 것이 회복의 첫 번째 단계예요'],
     cautions:['지금은 성장보다 회복이 먼저예요 — 배움은 나중에 해도 돼요','컨디션이 바닥인 상태에서 무리하면 더 긴 슬럼프로 이어질 수 있어요','멘토나 가까운 사람에게 솔직하게 말하는 게 지금 할 수 있는 가장 용감한 일이에요'],
     leaderTip:['"요즘 어때? 진짜로."라고 물어봐줘요','"쉬어도 돼"라는 말을 직접 해줘요','"지금 제일 힘든 게 뭐야? 일 말고도."라고 깊이 들어가 봐요'],
     context:'컨디션·멘탈 점수가 위험 수준으로 낮아요. 몸과 마음이 모두 소진된 상태예요. 지금 가장 필요한 건 쉬는 것이에요.',
     trap:'열심히 하면 나아질 거라는 생각에 계속 달리다 완전히 무너지는 패턴을 조심해야 해요. 지금 멈추는 게 더 빠른 회복이에요.'},
   LAUNCHER:{key:'LAUNCHER',emoji:'🧭',label:'이달의 나의 유형',name:'방향탐색형',color:'#7A50C0',bgColor:'#F0EEFF',
-    tagline:'아직 어디에 힘을 줄지 선명하지 않은 달이에요.\n하고 싶은 마음은 있는데 행동이 하나로 모이지 않아요.',
+    tagline:'방향을 찾고 있는 달이에요.\n큰 목표보다 오늘 하나를 해보는 게 먼저예요.',
     strengths:['지금 이 상태를 인식하고 체크하고 있다는 것 자체가 변화의 시작이에요','방향을 찾고 싶다는 마음이 있다면 언제든 달라질 수 있어요','솔직하게 자신을 바라보는 용기가 있어요'],
     cautions:['"뭘 해야 할지 모르겠다"는 생각에 아무것도 안 하다가 시간이 흘러버릴 수 있어요','전반적으로 낮은 점수가 오래 지속되면 번아웃으로 이어질 수 있어요','지금 당장 모든 걸 바꾸려 하지 말고 하나만 골라봐요'],
     leaderTip:['"처음 이 일 시작했을 때 어떤 디자이너가 되고 싶었어?"라고 물어봐요','"지금 가장 힘든 게 뭐야?"라고 솔직하게 꺼낼 수 있게 해줘요','"지금 가장 필요한 게 뭐야? 내가 도울 수 있어"라고 먼저 손 내밀어봐요'],
     context:'전반적인 점수가 낮게 나왔어요. 지쳐서이거나 방향을 잃은 달일 수 있어요. 멘토와 대화가 가장 필요한 달이에요.',
     trap:'"지금 뭘 해야 할지 모르겠다"는 생각에 작은 것 하나도 결정하지 못하는 패턴을 조심해요. 작은 것 하나만 결정해도 흐름이 바뀌어요.'},
   PORTFOLIO:{key:'PORTFOLIO',emoji:'📸',label:'이달의 나의 유형',name:'포트폴리오형',color:'#C05A10',bgColor:'#FFF3E8',
-    tagline:'내 일을 기록하고 알리는 감각이 있는 타입이에요.\n잘한 것을 쌓아두는 것 자체가 경쟁력이에요.',
+    tagline:'시술 결과물을 기록하고 나를 브랜딩하는 타입.\n잘한 것을 쌓아두는 것 자체가 경쟁력이에요.',
     strengths:['SNS와 포트폴리오로 나만의 스타일을 알리는 개인 브랜딩 감각이 있어요','시술 결과물을 꾸준히 기록하는 성실함이 있어요','고객경험 영역에서 상대적으로 높은 에너지를 쏟고 있어요'],
     cautions:['SNS에 집중하다 재예약 권유나 추가 시술 제안 같은 직접적인 마케팅이 약할 수 있어요','콘텐츠 관리에 에너지를 쓰다 시술 현장 집중도가 흐려질 수 있어요','포트폴리오와 실제 기술·고객경험이 함께 성장해야 지속 가능해요'],
     leaderTip:['"이번 달 올린 것 중에 제일 마음에 드는 게 뭐야?"라고 관심 있게 물어봐요','"팔로워보다 재예약이 먼저야"라고 실질적 연결을 함께 고민해봐요','SNS 활동을 살롱 마케팅과 연계할 기회를 만들어줘요'],
@@ -1403,18 +1386,13 @@ const TYPE_DETAIL_DATA = {
       "고객이 사진을 찍거나 강하게 만족을 표현하는 순간들이 쌓이고 있어요."
     ],
     pitfalls: [
-      "시술 마무리할 때 '다음 달에 이 부분 이어서 잡아드릴까요?' 한 마디 추가해보기 — 고객이 거울 보는 그 순간이 타이밍이에요.",
-      "이번 달 고객 반응이 가장 좋았던 시술 하나를 사진으로 남기고, 어떤 상담 흐름이었는지 메모해두기.",
-      "마음에 드는 결과물 1장을 SNS나 카카오톡 채널에 올리기 — 잘한 걸 쌓아두는 것 자체가 나를 알리는 첫 단계예요."
+      "기술이 좋아도 다음 방문으로 이어지는 말이 없으면, 고객은 결과는 기억하지만 디자이너는 잊어버릴 수 있어요.",
+      "내 기준이 높아서 생기는 압박인지, 실제로 보완해야 할 부분인지 구분하지 못하면 불필요하게 소모될 수 있어요."
     ],
     leaderFocus: [
       "고객이 만족한 그 순간을 그냥 넘기고 있는지, 아니면 재예약이나 다음 제안으로 자연스럽게 이어가고 있는지 같이 짚어봐요. 거울 앞에서 어떤 말 한마디가 고객의 다음 선택을 만드는지, 그 언어를 함께 만들어주면 성장 속도가 달라져요.",
       "지금 본인이 부족하다고 느끼는 게 실제 고객 불만에서 오는 건지, 아니면 기준이 높아서 생기는 압박인지 구분해주면 좋아요. 객관적인 반응과 본인 체감 사이의 차이를 정리해주는 것만으로도 불필요한 소모가 줄어요.",
       "지금 가장 반응 좋은 시술 하나를 대표 기술로 키울 수 있는지 같이 이야기해봐요. 사진, 상담 멘트, 후기 키워드, 재방문 루틴까지 하나로 묶으면 '잘하는 디자이너'에서 '그걸 맡기고 싶은 디자이너'로 올라갈 수 있어요."
-    ],
-    traps: [
-      "재예약 권유를 안 한 게 아니라 '결과가 좋으면 알아서 오겠지'라고 생각하고 있진 않나요.",
-      "내 기준이 높아서 생기는 스트레스인지, 실제 고객 불만인지 구분 못 하면 혼자 소모돼요."
     ],
     nextFocus: "시술 만족에서 멈추지 말고, 고객의 다음 선택까지 연결하기."
   },
@@ -1433,18 +1411,13 @@ const TYPE_DETAIL_DATA = {
       "고객과의 관계를 한 번의 시술이 아니라 이어지는 연결로 보고 있어요."
     ],
     pitfalls: [
-      "고객이 자리에서 일어나기 전에 다음 방문 메뉴 하나를 자연스럽게 제안해보기 — '다음엔 이것도 해보시면 좋을 것 같아요' 정도면 충분해요.",
-      "단골 고객 한 명에게 '지인 소개해주시면 감사 서비스 드릴게요' 말로 직접 꺼내보기 — 좋아하는 사람한테 먼저 말하는 게 제일 자연스러워요.",
-      "이번 달 재방문한 고객 수를 한 번 세어보기 — 감각으로만 알고 있던 걸 숫자로 확인하면 다음 목표가 생겨요."
+      "좋은 사람으로 기억되는 것과 전문가로 기억되는 건 달라요. 두 가지를 함께 쌓아야 해요.",
+      "고객을 배려하다 보면 필요한 제안을 망설이게 되는 경우가 있어요. 그 망설임이 오히려 고객에게 덜 도움이 되는 순간이 생길 수 있어요."
     ],
     leaderFocus: [
       "고객이 다시 오는 이유가 편안함인지, 결과물인지, 신뢰감인지 같이 구분해봐요. 이걸 알아야 앞으로 어떤 방향으로 본인을 알릴지 더 선명하게 잡을 수 있어요.",
       "재예약은 되는데 추가 제안이 약하다면, 고객을 불편하게 할까 봐 필요한 말을 줄이고 있는 건 아닌지 같이 봐요. 억지 세일즈가 아니라 '고객을 더 좋게 만들기 위한 말'의 구조를 함께 만들어주는 게 필요해요.",
       "좋은 관계가 많다는 것과, 그 관계가 리뷰나 소개로 남는 건 다른 구조예요. 그 연결 장치를 같이 만들어주면 지금의 강점이 더 단단한 자산이 돼요."
-    ],
-    traps: [
-      "좋은 관계가 곧 재방문을 보장한다고 착각하기 쉬워요. 좋아하는 것과 다시 선택하는 건 달라요.",
-      "필요한 추가 제안을 '부담줄까봐' 안 하면, 오히려 고객에게 덜 도움이 되는 거예요."
     ],
     nextFocus: "고객이 좋아하는 나를, 고객이 다시 선택할 이유로 더 선명하게 만들기."
   },
@@ -1463,18 +1436,13 @@ const TYPE_DETAIL_DATA = {
       "지금 하는 일이 미래와 연결된다는 감각이 살아 있어요."
     ],
     pitfalls: [
-      "이번 달 배운 것 중 딱 하나만 골라 다음 달 시술에 써보고, 고객 반응을 짧게 메모해두기 — 적용해본 것만 진짜 내 것이 돼요.",
-      "배우고 싶은 게 3개 이상이면 지금 당장 하나만 남기고 나머지는 다음 달로 미루기 — 동시에 잡으면 다 흩어져요.",
-      "이번 달 가장 잘된 시술 하나를 선배나 멘토에게 먼저 말해보기 — 인정받는 경험이 다음 성장 에너지가 돼요."
+      "계속 배우는 것 자체가 성취처럼 느껴질 수 있어요. 적용되지 않은 배움은 쌓이는 게 아니라 흩어져요.",
+      "우선순위 없이 여러 피드백을 동시에 붙잡으면 오히려 기준이 흔들릴 수 있어요."
     ],
     leaderFocus: [
       "이번 달 배운 것 중에서 실제 고객 반응이나 결과물 변화로 이어진 게 뭔지 같이 분리해봐요. 더 많이 배우는 것보다 '무엇이 현장에서 실제로 작동했는가'를 확인할 때 성장의 질이 달라져요.",
       "배우고 싶은 게 많다면, 이번 달 하나만 내 것으로 남길 게 뭔지 같이 골라봐요. 배움→적용→기록→피드백 사이클을 한 번이라도 끝까지 돌리는 경험이 중요해요.",
       "피드백은 잘 듣는데, 들은 것들이 내 기준 안에서 정리되지 않아 방향이 계속 넓어지는 건 아닌지 같이 봐요. 버릴 것과 남길 것을 함께 정리해줄수록 이 유형은 더 빠르게 선명해져요."
-    ],
-    traps: [
-      "배우는 것 자체가 성취처럼 느껴지면, 적용 안 된 배움이 쌓이기만 하고 실력은 제자리예요.",
-      "피드백을 너무 많이 받으면 기준이 흔들려요. 이번 달 하나만 골라서 끝까지 가봐야 해요."
     ],
     nextFocus: "더 많이 배우기보다, 하나를 끝까지 내 것으로 남기기."
   },
@@ -1493,18 +1461,13 @@ const TYPE_DETAIL_DATA = {
       "지금 성과뿐 아니라 다음 단계를 준비하는 힘도 보여요."
     ],
     pitfalls: [
-      "다음 달 가장 자신 있는 시술 하나를 골라 '이 시술은 나한테 맡겨' 말할 수 있을 때까지 집중해보기 — 균형이 강점이지만 대표 무기가 있어야 선택받아요.",
-      "그 시술 중심으로 상담 멘트, 사후 안내, SNS 사진까지 하나의 루틴으로 묶어보기.",
-      "이번 달 스스로 잘했다고 생각한 순간 하나를 멘토에게 먼저 말해보기 — 본인이 과소평가하는 경향이 있어서, 말로 꺼내는 연습이 필요해요."
+      "다 잘하고 있을수록 '내가 특별히 압도적인 건 뭘까?'라는 공백이 생길 수 있어요.",
+      "주변의 신뢰를 많이 받는 만큼, 정작 본인이 정체감을 먼저 느끼는 경우가 있어요."
     ],
     leaderFocus: [
       "지금 잘하는 것들 중에서 다음 3개월 동안 대표 무기로 키울 게 뭔지 같이 좁혀봐요. 시그니처 메뉴, 고매출 구조, 후배 육성, 포트폴리오 확장 중 가장 확장성이 큰 하나를 정하고 1개월 실행 기준까지 내려주는 게 중요해요.",
       "성과는 안정적인데 요즘 일이 예전만큼 설레지 않는다면, 그걸 반드시 같이 짚어야 해요. 살롱에이스형은 부족해서 멈추는 게 아니라 다음 도약축이 보이지 않아 정체감을 느끼는 경우가 많아요.",
       "주변에서는 믿고 맡기는데 스스로 부족하다고 느끼는 게 있다면, 그게 진짜 보완점인지 아니면 높은 기준에서 오는 압박인지 같이 구분해줘요. '정말 키울 것'과 '괜히 불안해하지 않아도 되는 것'을 나눠주는 것만으로 방향이 잡혀요."
-    ],
-    traps: [
-      "다 잘하는 만큼 '나만의 것'이 없다는 공백이 생겨요. 균형이 강점이지만 대표 무기가 없으면 선택받기 어려워요.",
-      "주변 신뢰가 높을수록 정작 본인이 정체감을 먼저 느껴요. 지금 성장하고 있는 건지 확인이 필요해요."
     ],
     nextFocus: "균형을 유지하면서, 하나를 확실한 대표 무기로 키우기."
   },
@@ -1523,18 +1486,13 @@ const TYPE_DETAIL_DATA = {
       "미래 목표와 현재 행동이 어느 정도 맞물려 있어요."
     ],
     pitfalls: [
-      "이번 달 한 행동 중 실제로 예약이나 재방문으로 이어진 것 딱 하나 골라서, 다음 달에 매주 반복할 루틴으로 못 박아두기.",
-      "제안 후 고객 반응이 어색했던 순간을 하나 떠올리고, 그 말을 다르게 바꿔서 종이에 써보기 — 말이 바뀌면 반응이 바뀌어요.",
-      "이번 달 가장 바빴던 날을 떠올리고, 그 에너지가 실제 매출로 이어졌는지 확인해보기 — 바쁜 것과 효과적인 건 달라요."
+      "행동량이 많다고 성과 전략이 정확한 건 아니에요. 바쁜 것과 효과적인 건 달라요.",
+      "목표에 집중하다 보면 고객이 느끼는 압박을 놓칠 수 있어요."
     ],
     leaderFocus: [
       "이번 달 한 행동 중에서 실제로 효과 있었던 것과, 바쁘게 했지만 결과가 약했던 걸 같이 분리해봐요. 이 유형은 동기부여보다 '어떤 행동이 실제 성과를 냈는가'를 분석할 때 훨씬 빠르게 성장해요.",
       "다음 목표를 키우려면 고객 수, 객단가, 재방문, 소개, 콘텐츠 중 어느 레버를 먼저 올릴지 정해야 해요. 막연한 매출 목표 대신, 그 목표를 움직이는 핵심 지표 하나를 같이 골라줘요.",
       "제안이 늘었더라도 고객이 '이건 나를 위한 말이다'라고 느끼는지 같이 봐줘요. 제안의 타이밍, 근거, 마무리 문장까지 잡아주면 실행력이 매출뿐 아니라 신뢰로도 연결돼요."
-    ],
-    traps: [
-      "바쁘게 움직이는 것과 효과적으로 움직이는 건 달라요. 행동량이 많아도 방향이 틀리면 소모예요.",
-      "목표 숫자에 집중하다 고객과의 감정적 연결이 끊기면, 수치가 올라도 단골이 빠져나가요."
     ],
     nextFocus: "더 많이 움직이기보다, 가장 성과 난 행동을 반복 가능하게 만들기."
   },
@@ -1553,18 +1511,13 @@ const TYPE_DETAIL_DATA = {
       "살롱의 온도를 높이고, 팀에 대한 신뢰를 키우는 역할을 하고 있어요."
     ],
     pitfalls: [
-      "다음 달 내 기술·매출 목표 딱 하나를 정하고, 후배 케어와 완전히 분리된 시간을 주 1회라도 확보해보기.",
-      "지금 내가 대신 해주고 있는 일 중 하나를 골라서 후배가 직접 해보게 넘겨주기 — 도와주는 것과 떠안는 건 달라요.",
-      "이번 달 내가 배우고 싶었는데 못 한 것 하나를 멘토에게 말해보기 — 챙겨주는 사람도 채워져야 계속 줄 수 있어요."
+      "남을 챙기다 보면 내 성장이 뒤로 밀리는 게 눈에 안 띄게 생겨요.",
+      "도움과 떠안음의 경계가 흐려지면, 헌신이 소모로 바뀌는 시점이 와요."
     ],
     leaderFocus: [
       "팀을 챙기는 시간만큼 내 기술, 매출, 브랜드를 키우는 시간도 실제로 확보되고 있는지 같이 점검해봐요. 기여가 많아 보이는 만큼, 자기 확장이 조용히 늦어지는 경우가 많아요.",
       "지금 하고 있는 도움이 상대를 성장시키는 건지, 아니면 내가 대신 떠안고 있는 건지 같이 구분해봐요. 선의를 역할로 구조화해줘야 헌신이 소모가 되지 않아요.",
       "앞으로 좋은 선배에 머물 건지, 아니면 영향력이 더 분명한 리더로 갈 건지 방향을 같이 정리해봐요. 후배 케어, 현장 피드백, 팀 분위기 관리 중 어디에 리더십을 얹을지 잡아주면 방향이 선명해져요."
-    ],
-    traps: [
-      "팀을 챙기는 사이 내 기술·매출이 조용히 뒤처지고 있을 수 있어요. 헌신이 자기 성장을 갉아먹는 구조예요.",
-      "도움과 떠안음의 경계가 흐려지면, 어느 순간 소모로 바뀌어요. 선의가 역할이 되면 안 돼요."
     ],
     nextFocus: "도와주는 사람에서, 영향력을 설계하는 사람으로 한 단계 올라가기."
   },
@@ -1583,18 +1536,13 @@ const TYPE_DETAIL_DATA = {
       "회복 구조가 정리되면, 원래 가진 강점이 다시 살아날 가능성이 충분히 있어요."
     ],
     pitfalls: [
-      "퇴근 후 연락 차단 시간을 하루 1시간만 정해보기 — 완벽하게 안 지켜도 괜찮아요, 의식적으로 끊는 연습이 먼저예요.",
-      "이번 주 가장 지쳤던 순간 하나를 떠올리고, 그 상황이 줄어들 수 있는지 멘토와 같이 이야기해보기 — 혼자 해결하려 하지 않아도 돼요.",
-      "지금 하고 있는 일 중 안 해도 되는 것 하나를 골라서 실제로 줄여보기 — 더 하는 게 아니라 덜 하는 게 지금 가장 필요한 행동이에요."
+      "소진된 상태에서 세운 목표는 쉽게 자기비난으로 돌아와요. 지금은 목표보다 회복이 먼저예요.",
+      "'왜 의욕이 없지?'만 붙잡으면 원인을 못 찾아요. 어디서 새고 있는지를 봐야 해요."
     ],
     leaderFocus: [
       "지금 가장 먼저 줄여야 할 게 업무량인지, 고객 감정소모인지, 관계 스트레스인지, 일정 압박인지 같이 분리해봐요. 이 유형에게는 동기부여보다 소진 원인을 나눠보는 게 먼저예요.",
       "일이 싫어진 건지, 지금 방식으로는 더 못 버티겠는 건지 꼭 같이 구분해봐야 해요. 이 차이를 못 잡으면 불필요하게 스스로를 비난하거나, 정말 바꿔야 할 구조를 그냥 넘기게 돼요.",
       "최근에 가장 빠르게 지쳤던 장면 하나를 같이 잡아봐요. 그게 줄일 수 있는 건지 확인하고, 예약 밀도, 역할 분담, 퇴근 후 연결, 감정 소모 상황을 구체적으로 조정해줘요."
-    ],
-    traps: [
-      "지금 상태에서 세운 목표는 대부분 자기비난으로 돌아와요. 더 하려 하기 전에 뭘 줄일지를 봐야 해요.",
-      "'왜 의욕이 없지?'만 붙잡으면 원인을 못 찾아요. 어디서 에너지가 새고 있는지를 봐야 해요."
     ],
     nextFocus: "더 잘하려고 밀어붙이기 전에, 덜 무너지는 구조를 먼저 만들기."
   },
@@ -1613,18 +1561,13 @@ const TYPE_DETAIL_DATA = {
       "기준이 하나 생기면 불안도, 비교도 자연스럽게 줄어들어요."
     ],
     pitfalls: [
-      "재예약 멘트 하루 1회, 시술 사진 주 2회 중 딱 하나만 골라서 다음 달 내내 반복해보기 — 방향은 움직이다 보면 생겨요.",
-      "이번 주 안에 멘토와 '다음 달 딱 하나의 행동'을 같이 정하고 말로 약속해보기 — 혼자 정한 것보다 훨씬 실행이 잘 돼요.",
-      "지금 하고 싶은 것 3개를 종이에 쓰고, 그 중 가장 작게 시작할 수 있는 것 하나만 골라보기 — 큰 그림보다 첫 발이 먼저예요."
+      "생각만 정리하다가 한 달이 또 지나갈 수 있어요. 완벽한 방향보다 일단 한 번 움직이는 게 먼저예요.",
+      "주변과 비교하며 조급해지면, 본인에게 맞는 첫 단계를 고르는 게 더 어려워져요."
     ],
     leaderFocus: [
       "지금 가장 먼저 바꾸고 싶은 게 매출인지, 기술인지, 고객반응인지, 일하는 태도인지 같이 하나로 좁혀봐요. 목표가 없는 게 아니라, 목표 축이 여러 개로 퍼져 있어서 실행이 안 되는 경우가 많아요.",
       "하고 싶은 마음은 있는데 행동으로 안 내려오는 이유가 막연함인지, 자신감 부족인지, 방법을 몰라서인지 같이 구분해봐요. 원인을 나눠줘야 다음 행동의 난이도를 맞출 수 있어요.",
       "이번 달 딱 하나만 반복한다면 뭘 할지 같이 정해봐요. 재예약 멘트 하루 1회, 시술 사진 주 2회처럼 작고 측정 가능한 행동으로 내려주고, 다음에 실행 여부를 같이 확인하는 것만으로도 흐름이 달라져요."
-    ],
-    traps: [
-      "생각만 정리하다 한 달이 또 지나가요. 완벽한 방향보다 일단 한 번 움직이는 게 먼저예요.",
-      "주변과 비교하며 조급해지면, 정작 나에게 맞는 첫 단계가 더 안 보여요."
     ],
     nextFocus: "방향을 찾으려 하기보다, 방향이 생기게 할 행동 하나를 반복하기."
   },
@@ -1643,18 +1586,13 @@ const TYPE_DETAIL_DATA = {
       "고객경험 영역에 높은 에너지를 쏟고 있어요."
     ],
     pitfalls: [
-      "다음에 올릴 콘텐츠 하나에 '예약 문의는 DM으로' 또는 '다음 달 예약 오픈했어요' 한 줄 추가해보기 — 올리는 것과 연결하는 건 달라요.",
-      "오늘 시술한 고객 중 한 명에게 결과물 사진 찍어드리고 리뷰 남겨달라고 직접 말로 부탁해보기 — 부탁해야 남겨줘요.",
-      "이번 달 올린 것 중 반응이 가장 좋았던 게 뭔지 확인하고, 그 이유를 한 줄로 정리해보기 — 잘 된 걸 알아야 반복할 수 있어요."
+      "콘텐츠에 에너지를 쓰다 시술 현장 집중도가 흐려질 수 있어요.",
+      "포트폴리오와 실제 기술, 고객경험이 함께 성장해야 오래 갈 수 있어요."
     ],
     leaderFocus: [
       "'이번 달 올린 것 중에 제일 마음에 드는 게 뭐야?'라고 관심 있게 물어봐요. 콘텐츠를 살롱 마케팅과 연결할 기회를 만들어주는 것도 큰 동기가 돼요.",
       "'팔로워보다 재예약이 먼저야'라는 연결을 같이 고민해봐요. SNS 활동이 실제 예약으로 이어지는 구조를 함께 만들어줘야 해요.",
       "콘텐츠 올리는 데 집중하다 오늘 시술한 고객과의 대화가 짧아지고 있지 않은지 같이 봐줘요."
-    ],
-    traps: [
-      "콘텐츠 올리는 데 에너지를 다 쓰면, 오늘 시술한 고객과의 대화가 짧아져요.",
-      "팔로워가 느는 것과 예약이 느는 건 다른 구조예요. 연결 장치 없이 올리기만 하면 브랜딩이 아니라 일기예요."
     ],
     nextFocus: "콘텐츠를 실제 고객의 다음 선택과 연결하는 구조 만들기."
   }
@@ -1980,7 +1918,10 @@ function showResult() {
     red: { badge:'위험 — 지금 당장 멈춰도 괜찮아요', title:'열심히 하는 게 오히려 독이 될 수 있는 시기예요.', desc:'쉬는 것도 성장이에요.\n멘토에게 솔직하게 말하는 게 지금 할 수 있는 가장 용감한 일이에요.' }
   };
   const sig = sigContent[totalSigKey];
-  document.getElementById('signalBadge').innerHTML = '';
+  document.getElementById('signalBadge').innerHTML = `
+    <div class="signal-msg-title">${sig.title}</div>
+    <div class="signal-msg-desc">${sig.desc}</div>
+  `;
 
   // ② 영역별 점수 + 설명
   const AREA_DESC = {
@@ -2257,9 +2198,9 @@ function showResult() {
       ${td.diagnosis.map(d=>`<p class="td-context" style="margin-bottom:6px;">${d}</p>`).join('')}
     </div>` : ''}
 
-    <div class="td-section">
-      <span class="td-label ctx">✨ 이번 달 가장 빛난 순간</span>
-      <p class="td-context" style="margin-top:6px;line-height:1.8;">${shineMsg}</p>
+    <div class="td-section" style="background:var(--green-lt);border-radius:var(--rsm);padding:14px 16px;">
+      <span class="td-label" style="color:var(--green);font-size:12px;font-weight:700;">✨ 이번 달 가장 빛난 순간</span>
+      <p class="td-context" style="color:var(--text);margin-top:8px;line-height:1.8;">${shineMsg}</p>
     </div>
 
     ${td.strengths && td.strengths.length ? `<div class="td-section">
@@ -2267,14 +2208,9 @@ function showResult() {
       <ul class="td-list">${td.strengths.map(s=>`<li data-bullet="✓">${s}</li>`).join('')}</ul>
     </div>` : ''}
 
-    ${td.traps && td.traps.length ? `<div class="td-section">
-      <span class="td-label trp">⚠️ 놓치기 쉬운 함정</span>
-      <ul class="td-list">${td.traps.map(s=>`<li data-bullet="△">${s}</li>`).join('')}</ul>
-    </div>` : ''}
-
     ${td.pitfalls && td.pitfalls.length ? `<div class="td-section">
-      <span class="td-label tip">🎯 다음 달 바로 해볼 것</span>
-      <ul class="td-list">${td.pitfalls.map(s=>`<li data-bullet="→">${s}</li>`).join('')}</ul>
+      <span class="td-label trp">⚡ 놓치기 쉬운 함정</span>
+      <ul class="td-list">${td.pitfalls.map(s=>`<li data-bullet="△">${s}</li>`).join('')}</ul>
     </div>` : ''}
 
     ${td.leaderFocus && td.leaderFocus.length ? `<div class="td-section">
@@ -2382,12 +2318,16 @@ function shareMentor() {
   const headlineText = td2.headline || '';
   const personalMsgText = r.personalMsg || '';
 
-  const shareUrl2 = window.location.href;
   const text = `[나침반 결과 공유]
 
 유형: ${r.typeEmoji} ${r.typeName}
 헤드라인: ${headlineText}
-🔗 ${shareUrl2}
+
+[이번 달 영역 점수]
+${scoreLines}
+
+[이번 달 실제 포인트]
+${personalMsgText}
 
 [리더와 함께 보면 좋은 핵심]
 ${leaderFocusLines}
@@ -2397,7 +2337,9 @@ ${leaderFocusLines}
 - 이 목표를 잡은 이유: ${r.memoWhy||''}
 - 구체적 실행 방법: ${r.memoHow||''}
 - 이번 달 고마웠던 점: ${r.memoGratitude||''}
-`;
+
+${'='.repeat(24)}
+🧭 헤어디자이너 성장 나침반`;
 
   if(navigator.clipboard){
     navigator.clipboard.writeText(text).then(()=>{
@@ -2762,7 +2704,7 @@ async function renderLibrary() {
           const fileUrl = item.file_path
             ? `${SUPA_URL}/storage/v1/object/public/${BUCKET}/${item.file_path}`
             : item.url;
-          html += `<div class="lib-card" onclick="openLibItem('${fileUrl}')">
+          html += `<div class="lib-card" onclick="openLibItem('${fileUrl}',${item.id})">
             <div class="lib-card-inner">
               <div class="lib-card-icon">${TYPE_ICON[item.type]||'📄'}</div>
               <div class="lib-card-info">
@@ -2784,7 +2726,7 @@ async function renderLibrary() {
       html += `<div class="lib-section"><div class="lib-section-title">📁 기타 <span class="lib-tag">${uncatItems.length}개</span></div>`;
       uncatItems.forEach(item => {
         const fileUrl = item.file_path ? `${SUPA_URL}/storage/v1/object/public/${BUCKET}/${item.file_path}` : item.url;
-        html += `<div class="lib-card" onclick="openLibItem('${fileUrl}')"><div class="lib-card-inner">
+        html += `<div class="lib-card" onclick="openLibItem('${fileUrl}',${item.id})"><div class="lib-card-inner">
           <div class="lib-card-icon">${TYPE_ICON[item.type]||'📄'}</div>
           <div class="lib-card-info"><div class="lib-card-title">${item.title}</div></div>
           <span class="lib-card-badge ${item.type}">${TYPE_LABEL[item.type]||item.type}</span>
@@ -2820,18 +2762,15 @@ async function renderLibrary() {
 
 /* 카테고리 관리 */
 function openCatManager() {
-  const cats = loadCats();
+  const existing = document.getElementById('catModal');
+  if (existing) existing.remove();
   const modal = document.createElement('div');
   modal.id = 'catModal';
   modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:600;display:flex;align-items:flex-end;';
-  modal.innerHTML = `<div style="background:var(--surface);width:100%;max-width:520px;margin:0 auto;border-radius:20px 20px 0 0;padding:24px 20px 40px;max-height:80vh;overflow-y:auto;">
-    <div style="font-size:16px;font-weight:700;margin-bottom:16px;">⚙️ 카테고리 관리</div>
-    <div id="catList" style="margin-bottom:16px;">
-      ${cats.map((c,i) => `<div style="display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--border);">
-        <span style="flex:1;font-size:14px;">${CAT_ICON[c]||'📁'} ${c}</span>
-        <button onclick="deleteCat(${i})" style="background:#FDEAEA;color:#B53535;border:none;padding:4px 10px;border-radius:6px;font-size:12px;cursor:pointer;">삭제</button>
-      </div>`).join('')}
-    </div>
+  modal.innerHTML = `<div style="background:var(--surface);width:100%;max-width:520px;margin:0 auto;border-radius:20px 20px 0 0;padding:24px 20px 40px;max-height:88vh;overflow-y:auto;">
+    <div style="font-size:16px;font-weight:700;margin-bottom:4px;">⚙️ 카테고리 관리</div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:16px;">✏️ 이름 클릭 시 수정 · ↑↓ 버튼으로 순서 변경</div>
+    <div id="catList" style="margin-bottom:16px;"></div>
     <div style="display:flex;gap:8px;margin-bottom:16px;">
       <input type="text" id="newCatInp" placeholder="새 카테고리 이름" style="flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--rsm);font-size:14px;background:var(--bg);color:var(--text);outline:none;font-family:'Noto Sans KR',sans-serif;">
       <button onclick="addCat()" style="background:var(--green);color:#fff;border:none;padding:10px 16px;border-radius:var(--rsm);font-size:14px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">추가</button>
@@ -2839,6 +2778,73 @@ function openCatManager() {
     <button onclick="closeCatModal()" style="width:100%;padding:14px;background:var(--surface2);border:none;border-radius:var(--rsm);font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">닫기</button>
   </div>`;
   document.body.appendChild(modal);
+  renderCatList();
+}
+
+function renderCatList() {
+  const cats = loadCats();
+  const el = document.getElementById('catList');
+  if (!el) return;
+  el.innerHTML = cats.map((c, i) => `
+    <div id="catRow_${i}" style="display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--border);">
+      <!-- 순서 버튼 -->
+      <div style="display:flex;flex-direction:column;gap:2px;flex-shrink:0;">
+        <button onclick="moveCat(${i},-1)" ${i===0?'disabled':''} style="width:24px;height:22px;border:1px solid var(--border);border-radius:4px;background:var(--surface);color:var(--text2);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;${i===0?'opacity:.3;cursor:not-allowed;':''}">▲</button>
+        <button onclick="moveCat(${i},1)" ${i===cats.length-1?'disabled':''} style="width:24px;height:22px;border:1px solid var(--border);border-radius:4px;background:var(--surface);color:var(--text2);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;${i===cats.length-1?'opacity:.3;cursor:not-allowed;':''}">▼</button>
+      </div>
+      <!-- 이름 (클릭 시 편집) -->
+      <span id="catLabel_${i}" onclick="startEditCat(${i})" style="flex:1;font-size:14px;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .1s;" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background=''">${c}</span>
+      <!-- 편집 input (숨김) -->
+      <input id="catEditInp_${i}" type="text" value="${c}" onblur="finishEditCat(${i})" onkeydown="if(event.key==='Enter')finishEditCat(${i});if(event.key==='Escape')cancelEditCat(${i})" style="display:none;flex:1;font-size:14px;padding:4px 8px;border:1.5px solid var(--green);border-radius:6px;background:var(--surface);color:var(--text);outline:none;font-family:'Noto Sans KR',sans-serif;">
+      <!-- 삭제 -->
+      <button onclick="deleteCat(${i})" style="background:#FDEAEA;color:#B53535;border:none;padding:4px 10px;border-radius:6px;font-size:12px;cursor:pointer;flex-shrink:0;">삭제</button>
+    </div>
+  `).join('');
+}
+
+function startEditCat(i) {
+  const label = document.getElementById('catLabel_'+i);
+  const inp = document.getElementById('catEditInp_'+i);
+  if (!label || !inp) return;
+  label.style.display = 'none';
+  inp.style.display = 'block';
+  inp.focus();
+  inp.select();
+}
+
+function finishEditCat(i) {
+  const label = document.getElementById('catLabel_'+i);
+  const inp = document.getElementById('catEditInp_'+i);
+  if (!label || !inp) return;
+  const newName = inp.value.trim();
+  if (!newName) { cancelEditCat(i); return; }
+  const cats = loadCats();
+  if (newName !== cats[i] && cats.includes(newName)) {
+    alert('이미 있는 이름이에요.');
+    inp.focus(); return;
+  }
+  cats[i] = newName;
+  saveCats(cats);
+  renderCatList();
+}
+
+function cancelEditCat(i) {
+  const cats = loadCats();
+  const label = document.getElementById('catLabel_'+i);
+  const inp = document.getElementById('catEditInp_'+i);
+  if (!label || !inp) return;
+  inp.value = cats[i];
+  inp.style.display = 'none';
+  label.style.display = '';
+}
+
+function moveCat(i, dir) {
+  const cats = loadCats();
+  const j = i + dir;
+  if (j < 0 || j >= cats.length) return;
+  [cats[i], cats[j]] = [cats[j], cats[i]];
+  saveCats(cats);
+  renderCatList();
 }
 
 function closeCatModal() {
@@ -2852,8 +2858,7 @@ function deleteCat(i) {
   if (!confirm(`"${cats[i]}" 카테고리를 삭제할까요?`)) return;
   cats.splice(i, 1);
   saveCats(cats);
-  closeCatModal();
-  openCatManager();
+  renderCatList();
 }
 
 function addCat() {
@@ -2865,12 +2870,23 @@ function addCat() {
   cats.push(name);
   saveCats(cats);
   inp.value = '';
-  closeCatModal();
-  openCatManager();
+  renderCatList();
 }
 
-function openLibItem(url) {
-  if (url) window.open(url, '_blank');
+function openLibItem(url, id) {
+  if (id <= 4) {
+    showSection('home');
+    return;
+  }
+  // id 5 이상 — 비밀번호 확인
+  const pw = prompt('비밀번호를 입력하세요');
+  if (pw === null) return;
+  const adminPw = localStorage.getItem('adminPw') || '1234';
+  if (pw === adminPw) {
+    if (url) window.open(url, '_blank');
+  } else {
+    alert('비밀번호가 틀렸습니다.');
+  }
 }
 
 async function delLibItem(e, id) {
@@ -3073,19 +3089,13 @@ function onFileSelect() {
 }
 
 // 로고 클릭 동작
-let _logoClickCount = 0;
-let _logoClickTimer = null;
 function onLogoClick() {
   if (isAdmin) {
+    // 관리자면 자료실로 이동 + 업로드 시트 열기
     goLibrary();
     setTimeout(() => openAdminSheet(), 200);
-    return;
-  }
-  _logoClickCount++;
-  clearTimeout(_logoClickTimer);
-  _logoClickTimer = setTimeout(() => { _logoClickCount = 0; }, 1500);
-  if (_logoClickCount >= 5) {
-    _logoClickCount = 0;
+  } else {
+    // 비관리자면 로그인 팝업
     openAdminLogin();
   }
 }
@@ -3097,23 +3107,8 @@ function updateAdminDot() {
 }
 
 // 초기값
-// date select 연동
-function getMonthInputValue() {
-  const y = document.getElementById('monthInputYear')?.value || '';
-  const m = document.getElementById('monthInputMonth')?.value || '';
-  const d = document.getElementById('monthInputDay')?.value || '';
-  return y && m && d ? y+'-'+m+'-'+d : '';
-}
-// hidden input 동기화
-['monthInputYear','monthInputMonth','monthInputDay'].forEach(id => {
-  const el = document.getElementById(id);
-  if(el) el.addEventListener('change', () => {
-    const mi = document.getElementById('monthInput');
-    if(mi) mi.value = getMonthInputValue();
-  });
-});
 const mi=document.getElementById('monthInput');
-if(mi){ mi.value = getMonthInputValue(); }
+if(mi){const n=new Date();mi.value=n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0');}
 </script>
 </body>
 </html>
