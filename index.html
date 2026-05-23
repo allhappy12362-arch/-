@@ -3634,7 +3634,18 @@ async function addCat() {
 }
 
 function openLibItem(url) {
-  if (url) window.open(url, '_blank');
+  if (!url) return;
+  // 엑셀 파일(.xlsx, .xls)은 다운로드로 처리
+  if (/\.(xlsx|xls)(\?|$)/i.test(url)) {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = url.split('/').pop().split('?')[0] || '파일.xlsx';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } else {
+    window.open(url, '_blank');
+  }
 }
 
 async function delLibItem(e, id) {
