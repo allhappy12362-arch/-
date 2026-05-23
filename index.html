@@ -52,6 +52,11 @@ body {
   gap: 8px;
 }
 .logo { flex-shrink: 0; }
+.logo-text-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
   font-family: 'Playfair Display', serif;
   font-size: 16px;
   color: var(--green);
@@ -82,7 +87,6 @@ body {
 }
 .hdr-btn.on { color: var(--green); border-bottom-color: var(--green); font-weight: 700; }
 @media (max-width: 480px) {
-  .logo-subtitle { display: none; }
   .hdr-btn { padding: 0 10px; font-size: 12px; }
 }
 
@@ -578,6 +582,12 @@ body {
 
 /* 유형 상세 섹션 */
 .type-detail { padding: 20px 20px; }
+/* 헤어파트너 결과 상세 */
+.hp-sec { margin-bottom: 18px; }
+.hp-sec-t { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.hp-ul { margin: 0; padding-left: 18px; font-size: 13px; color: var(--text2); }
+.hp-next { margin-top: 6px; padding: 12px 14px; background: var(--green-lt);
+  border-radius: 10px; font-size: 13px; font-weight: 700; color: var(--green); line-height: 1.6; }
 .td-section { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
 .td-section:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
 .td-label { font-size: 11px; padding: 4px 12px; margin-bottom: 12px; }
@@ -950,8 +960,10 @@ body {
     <polygon points="11,20 9,12 11,13 13,12" fill="#ccc"/>
     <line x1="2" y1="11" x2="20" y2="11" stroke="var(--border)" stroke-width="1"/>
   </svg>
-  <span style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--green);letter-spacing:-0.02em;">나침반</span>
-  <span style="font-size:10px;color:var(--text3);font-weight:400;" class="logo-subtitle">당신의 성공을 응원합니다</span>
+  <span class="logo-text-wrap">
+    <span style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--green);letter-spacing:-0.02em;line-height:1.1;">나침반</span>
+    <span style="font-size:10px;color:var(--text3);font-weight:400;line-height:1.1;" class="logo-subtitle">당신의 성공을 응원합니다</span>
+  </span>
   <span id="adminDot" class="logo-admin-dot"></span>
 </div>
   <div class="hdr-right">
@@ -976,19 +988,19 @@ body {
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;">
         
         <!-- 헤어디자이너 - 활성 -->
-        <div onclick="startDesignerDiag()" style="background:var(--surface);border:1.5px solid var(--green);border-radius:var(--r);padding:20px 16px;cursor:pointer;transition:box-shadow .15s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.1)'" onmouseout="this.style.boxShadow=''">
+        <div id="diagCard-designer" onclick="selectDiag('designer')" style="background:var(--surface);border:1.5px solid var(--green);border-radius:var(--r);padding:20px 16px;cursor:pointer;transition:box-shadow .15s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.1)'" onmouseout="this.style.boxShadow=''">
           <div style="font-size:32px;margin-bottom:10px;">✂️</div>
           <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">헤어디자이너</div>
           <div style="font-size:11px;color:var(--text2);line-height:1.5;">월간 자가진단<br>26문항</div>
           <div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--green);background:var(--green-lt);padding:3px 10px;border-radius:999px;display:inline-block;">진단 가능</div>
         </div>
 
-        <!-- 헤어파트너 - 준비중 -->
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px 16px;opacity:0.6;">
+        <!-- 헤어파트너 - 활성 -->
+        <div id="diagCard-partner" onclick="selectDiag('partner')" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px 16px;cursor:pointer;transition:box-shadow .15s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.1)'" onmouseout="this.style.boxShadow=''">
           <div style="font-size:32px;margin-bottom:10px;">🤝</div>
           <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">헤어파트너</div>
-          <div style="font-size:11px;color:var(--text2);line-height:1.5;">파트너십 진단<br>준비 중</div>
-          <div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--text3);background:var(--surface2);padding:3px 10px;border-radius:999px;display:inline-block;">준비 중</div>
+          <div style="font-size:11px;color:var(--text2);line-height:1.5;">파트너십 진단<br>20문항</div>
+          <div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--green);background:var(--green-lt);padding:3px 10px;border-radius:999px;display:inline-block;">진단 가능</div>
         </div>
 
         <!-- 헤어관리자 - 준비중 -->
@@ -1009,17 +1021,17 @@ body {
 
       </div>
 
-      <div class="start-card">
+      <div class="start-card" id="startCard">
         <div class="start-card-top">
-          <h2></h2>
-          <p>매달 솔직하게, 나를 점검하는 루틴</p>
+          <h2 id="startCardTitle">✂️ 헤어디자이너 진단</h2>
+          <p id="startCardSub">매달 솔직하게, 나를 점검하는 루틴</p>
         </div>
         <div class="start-card-body">
           <span class="lbl">이름 / 닉네임</span>
           <input type="text" id="nameInput" class="inp" placeholder="예: 김미용" autocomplete="off">
           <span class="lbl">진단 날짜</span>
           <input type="date" id="monthInput" class="inp">
-          <button class="btn-go" onclick="startSurvey()">진단 시작하기 →</button>
+          <button class="btn-go" id="startBtn" onclick="startSelectedDiag()">진단 시작하기 →</button>
         </div>
       </div>
     </div>
@@ -1142,6 +1154,106 @@ body {
         <div id="printLeaderText" style="font-size:13px;line-height:1.7;color:#333;min-height:60px;"></div>
       </div>
 
+    </div>
+  </div>
+</div>
+
+<!-- ════════ 헤어파트너 진단 ════════ -->
+<div class="screen" id="scr-hp-survey">
+  <div class="survey-wrap">
+    <div class="prog-bar-wrap">
+      <div class="prog-meta">
+        <span style="font-size:12px;color:var(--text3);">🤝 헤어파트너 진단 중</span>
+        <span class="prog-cnt" id="hpProgCnt"></span>
+      </div>
+      <div class="prog-track"><div class="prog-fill" id="hpProgFill" style="width:0%"></div></div>
+    </div>
+    <div class="q-body" id="hpQBody">
+      <div class="q-text" id="hpQText"></div>
+      <div class="opts" id="hpOptList"></div>
+      <div class="q-nav">
+        <button class="nav-btn" id="hpBtnPrev" onclick="hpGo(-1)">← 이전</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ 헤어파트너 결과 ════════ -->
+<div class="screen" id="scr-hp-result">
+  <div class="result-scroll">
+    <div class="result-inner">
+      <div class="type-hero" id="hpTypeHero">
+        <span class="type-emoji" id="hpTypeEmoji"></span>
+        <div class="type-label">이달의 나의 유형</div>
+        <div class="type-name" id="hpTypeName"></div>
+        <div class="type-tagline" id="hpTypeTagline"></div>
+      </div>
+      <div class="r-card" style="margin:14px 20px 0;">
+        <div class="chart-box"><div class="chart-inner"><canvas id="hpRadar"></canvas></div></div>
+      </div>
+      <div class="r-card" style="margin:10px 20px 0;">
+        <div class="r-card-tit">📊 이번 달 영역별 상태</div>
+        <div id="hpAreaList" style="padding:4px 0;"></div>
+      </div>
+      <div class="r-card" style="margin:10px 20px 0;">
+        <div class="r-card-tit" id="hpTypeDetailTit"></div>
+        <div class="type-detail" id="hpTypeDetail"></div>
+      </div>
+
+      <!-- 이번 달 나의 기록 -->
+      <div class="r-card" style="margin:10px 20px 0;">
+        <div class="r-card-tit">✍️ 이번 달 나의 기록</div>
+        <div style="padding:16px 18px;display:flex;flex-direction:column;gap:20px;">
+          <div>
+            <div class="memo-input-label">🎯 무엇을 — 이번 달 목표</div>
+            <div class="memo-input-hint">한 가지만 골라요. 여러 개보다 하나가 더 강해요.</div>
+            <textarea id="hpMemoWhat" class="memo-ta" placeholder="예: 와인딩 속도 줄이기 / 먼저 인사 건네기 / 시술 도구 이름 다 외우기"></textarea>
+          </div>
+          <div>
+            <div class="memo-input-label">💡 왜 — 이 목표를 잡은 이유</div>
+            <div class="memo-input-hint">이 목표가 나에게 왜 중요한지 적어봐요.</div>
+            <textarea id="hpMemoWhy" class="memo-ta" placeholder="예: 기본기가 탄탄해야 디자이너 준비가 된다고 느껴서"></textarea>
+          </div>
+          <div>
+            <div class="memo-input-label">🧭 어떻게 — 구체적인 실행 방법</div>
+            <div class="memo-input-hint">내일부터 할 수 있는 행동으로 적어봐요.</div>
+            <textarea id="hpMemoHow" class="memo-ta" placeholder="예: 매일 퇴근 전 와인딩 10개 연습 / 출근하면 먼저 인사하기"></textarea>
+          </div>
+          <div>
+            <div class="memo-input-label">🙏 감사한 점 — 이번 달 고마웠던 것</div>
+            <div class="memo-input-hint">작은 것도 좋아요. 적어두면 다음 달이 달라져요.</div>
+            <textarea id="hpMemoThanks" class="memo-ta" placeholder="예: 멘토가 천천히 알려줘서 / 동료가 힘들 때 도와줘서"></textarea>
+          </div>
+          <div>
+            <div class="memo-input-label">❓ 멘토에게 묻고 싶은 것</div>
+            <div class="memo-input-hint">상담 때 꼭 물어보고 싶은 걸 적어둬요.</div>
+            <textarea id="hpMemoAsk" class="memo-ta" placeholder="예: 어떤 기술부터 더 연습하면 좋을까요?"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- 멘토 한마디 -->
+      <div class="leader-box" style="margin:10px 20px 0;">
+        <div class="leader-tit">👤 멘토 한마디</div>
+        <div class="leader-body">
+          <div class="leader-sub">멘토가 이 결과를 보고 한마디 남겨줘요. 상담 시작점이 돼요.</div>
+          <textarea id="hpLeaderTA" class="leader-ta" placeholder="이번 달 느낀 점, 잘한 점, 함께 이야기하고 싶은 것..."></textarea>
+        </div>
+      </div>
+
+      <div class="result-btns">
+        <button class="bn" onclick="hpGoStart()">다시 하기</button>
+        <button class="bn" onclick="showScreen('home')">홈으로</button>
+      </div>
+
+      <div style="margin:10px 20px 0;">
+        <button class="btn-mentor-share" onclick="hpShareMentor()">
+          💬 멘토에게 공유하기
+        </button>
+        <div style="font-size:11px;color:var(--text3);text-align:center;margin-top:8px;line-height:1.6;">
+          결과 요약 + 이번 달 목표 + 물어볼 것이 복사돼요<br>카톡에 바로 붙여넣기 하세요 😊
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -1803,20 +1915,67 @@ function showScreen(id) {
     const el=document.getElementById('tab-'+t);
     if(el) el.classList.toggle('on', t===id);
   });
+  // 헤어파트너 진단 화면에서는 '진단' 탭을 활성 상태로 유지
+  if(id==='hp-survey'||id==='hp-result'){
+    const homeTab=document.getElementById('tab-home');
+    if(homeTab) homeTab.classList.add('on');
+  }
   // FAB: 자료실+관리자일 때만 표시
   const fab = document.getElementById('adminFab');
   if(fab) fab.classList.toggle('on', id==='library' && isAdmin);
   window.scrollTo(0,0);
 }
+/* ━━━ 진단 종류 선택 (통합 입력 카드) ━━━ */
+let selectedDiagType = 'designer';
+
+function selectDiag(type, skipScroll){
+  selectedDiagType = type;
+  // 그리드 카드 테두리 강조
+  ['designer','partner'].forEach(t=>{
+    const c=document.getElementById('diagCard-'+t);
+    if(c) c.style.border = (t===type)
+      ? '1.5px solid var(--green)' : '1px solid var(--border)';
+  });
+  // 입력 카드 제목/부제/버튼 갱신
+  const title=document.getElementById('startCardTitle');
+  const sub=document.getElementById('startCardSub');
+  const btn=document.getElementById('startBtn');
+  if(type==='partner'){
+    title.textContent='🤝 헤어파트너 진단';
+    sub.textContent='디자이너가 되기 위한 나의 성장 점검';
+    btn.textContent='헤어파트너 진단 시작 →';
+    document.getElementById('nameInput').placeholder='예: 김파트너';
+  } else {
+    title.textContent='✂️ 헤어디자이너 진단';
+    sub.textContent='매달 솔직하게, 나를 점검하는 루틴';
+    btn.textContent='진단 시작하기 →';
+    document.getElementById('nameInput').placeholder='예: 김미용';
+  }
+  // 입력 카드로 스크롤
+  if(!skipScroll){
+    setTimeout(()=>{
+      const card=document.getElementById('startCard');
+      if(card) card.scrollIntoView({behavior:'smooth',block:'center'});
+    },100);
+  }
+}
+
+function startSelectedDiag(){
+  if(selectedDiagType==='partner'){
+    // 통합 입력칸 값을 파트너 진단으로 전달
+    hpName = (document.getElementById('nameInput').value||'').trim() || '익명';
+    hpMonth = document.getElementById('monthInput').value || new Date().toISOString().slice(0,10);
+    hpAns = new Array(HP.QS.length).fill(null);
+    hpCur = 0; hpResult = null;
+    showScreen('hp-survey');
+    hpRenderQ();
+  } else {
+    startSurvey();
+  }
+}
+
 function startDesignerDiag() {
-  // 기존 헤어디자이너 진단 시작
-  document.getElementById('nameInp') && (document.getElementById('nameInp').value = '');
-  showScreen('home');
-  // start-card 스크롤
-  setTimeout(() => {
-    const card = document.querySelector('.start-card');
-    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }, 100);
+  selectDiag('designer');
 }
 
 let _homeTabClickCount = 0;
@@ -2514,6 +2673,7 @@ function setHistTab(tab) {
 function renderHistory() {
   const hist = loadHist();
   const el = document.getElementById('histContent');
+  if (currentHistTab === 'partner') { hpRenderHistory(el); return; }
   if (currentHistTab !== 'designer') {
     el.innerHTML = `<div class="hist-empty"><span class="he-icon">🧭</span>아직 준비 중인 진단이에요.<br>곧 업데이트될 예정이에요.</div>`;
     return;
@@ -2640,6 +2800,506 @@ function toggleTlCard(item) {
   const exp = item.querySelector('.tl-card-expanded');
   if(exp) exp.classList.toggle('on');
 }
+
+/* ===== 헤어파트너 진단 모듈 시작 ===== */
+/* ══════════════════════════════════════════════════
+   헤어파트너 진단 모듈 (독립 네임스페이스: HP)
+   디자이너 진단/자료실 코드와 완전히 분리됨
+══════════════════════════════════════════════════ */
+const HP = (() => {
+
+  /* ── 문항 (20개) ── opts는 왼쪽=낮음 → 오른쪽=높음 ── */
+  const QS = [
+    {cat:"컨디션·멘탈", q:"이번 달 일하는 날 대부분 활기차게 출근할 수 있었다",
+      opts:["전혀 아니다","거의 아니다","보통이다","대체로 그렇다","항상 그렇다"]},
+    {cat:"컨디션·멘탈", q:"힘들거나 지치는 날에도 기본 태도(인사·표정)를 유지할 수 있었다",
+      opts:["거의 못했다","가끔 했다","절반 정도","대체로 했다","항상 했다"]},
+    {cat:"컨디션·멘탈", q:"몸·마음 관리를 위해 이번 달 뭔가를 실천했다 (수면·스트레칭·산책 등)",
+      opts:["안 했다","1번","2번","3번","4번 이상"]},
+    {cat:"컨디션·멘탈", q:"퇴근 후 일과 분리된 회복 시간을 충분히 가졌다",
+      opts:["전혀 아니다","거의 아니다","보통이다","대체로 그렇다","항상 그렇다"]},
+    {cat:"기술·학습", q:"이번 달 배운 기술·지식을 연습이나 보조 업무에 직접 적용해봤다",
+      opts:["안 했다","1번","2번","3번","4번 이상"]},
+    {cat:"기술·학습", q:"모르는 것이 생겼을 때 스스로 찾아보거나 멘토에게 먼저 질문했다",
+      opts:["거의 안 했다","가끔 했다","절반 정도","대체로 했다","항상 했다"]},
+    {cat:"기술·학습", q:"트렌드·헤어 기술 공부를 이번 달 했다 (유튜브·교재·세미나 등)",
+      opts:["안 했다","1번","2번","3번","4번 이상"]},
+    {cat:"기술·학습", q:"내가 보완해야 할 기술이 무엇인지 구체적으로 알고 있다",
+      opts:["전혀 모른다","막연하게 안다","보통이다","어느 정도 안다","매우 구체적이다"]},
+    {cat:"보조·현장", q:"멘토 디자이너의 시술을 도울 때 실수 없이 미리 준비하고 정리했다",
+      opts:["거의 못했다","가끔 했다","절반 정도","대체로 했다","항상 했다"]},
+    {cat:"보조·현장", q:"지시를 받기 전에 다음에 할 일을 스스로 파악하고 움직였다",
+      opts:["거의 없었다","가끔 있었다","절반 정도","대체로 그랬다","항상 그랬다"]},
+    {cat:"보조·현장", q:"고객 응대(인사·안내·음료 등)에서 먼저 적극적으로 행동했다",
+      opts:["거의 없었다","가끔 있었다","절반 정도","대체로 그랬다","항상 그랬다"]},
+    {cat:"보조·현장", q:"실수했을 때 같은 실수를 반복하지 않으려 메모하거나 따로 점검했다",
+      opts:["안 했다","가끔 했다","절반 정도","대체로 했다","항상 했다"]},
+    {cat:"관계·태도", q:"멘토에게 피드백을 받았을 때 반발심이 들어도 일단 받아들이고 해봤다",
+      opts:["거의 못했다","가끔 했다","절반 정도","대체로 했다","항상 했다"]},
+    {cat:"관계·태도", q:"동료 파트너가 바쁘거나 힘들어 보일 때 먼저 도움을 건넸다",
+      opts:["거의 없었다","가끔 있었다","절반 정도","대체로 그랬다","항상 그랬다"]},
+    {cat:"관계·태도", q:"맡은 청소·정리·준비 같은 기본 업무를 빠짐없이 해냈다",
+      opts:["거의 못했다","가끔 빠졌다","절반 정도","대체로 했다","항상 했다"]},
+    {cat:"관계·태도", q:"멘토에게 배운 것을 감사하게 여기고 표현한 적이 있었다",
+      opts:["전혀 아니다","거의 아니다","보통이다","대체로 그렇다","항상 그렇다"]},
+    {cat:"성장·방향", q:"디자이너가 된 이후의 내 모습이 지금 구체적으로 그려진다",
+      opts:["전혀 없다","막연하게 있다","보통이다","어느 정도 있다","매우 구체적이다"]},
+    {cat:"성장·방향", q:"이번 달 일하면서 보람·성취감을 느낀 날이 절반 이상이었다",
+      opts:["거의 없었다","가끔 있었다","절반 정도","절반 이상","거의 매일"]},
+    {cat:"보조·현장", q:"고객에게 제품을 추천하거나 혜택·이벤트를 먼저 안내한 적이 있었다",
+      opts:["없었다","1번","2번","3번","4번 이상"]},
+    {cat:"성장·방향", q:"지금 이 과정이 내가 원하는 방향과 맞다고 느낀 날이 절반 이상이었다",
+      opts:["거의 없었다","가끔 있었다","절반 정도","절반 이상","거의 매일"]},
+  ];
+
+  /* ── 보기별 유형 점수표 ── 보기 5개(0~4) 각각에 유형별 가중치 ──
+     유형: EARNEST(성실수련) SHARP(현장감각) SHAKEN(멘탈흔들림) SEEKER(방향탐색) PASSIVE(소극관망)
+     BALANCED(균형성장)는 점수표에 없음 → 게이트로 판정 */
+  const SCORE_MAP = {
+    0:[{SHAKEN:8,SEEKER:1},{SHAKEN:5},{SHAKEN:1},{EARNEST:1},{EARNEST:2,SHARP:1}],
+    1:[{SHAKEN:9,PASSIVE:2},{SHAKEN:6},{SHAKEN:2},{SHARP:2,EARNEST:1},{SHARP:4,EARNEST:1}],
+    2:[{SHAKEN:6,SEEKER:1,PASSIVE:1},{SHAKEN:4},{SHAKEN:1},{EARNEST:2},{EARNEST:4}],
+    3:[{SHAKEN:7},{SHAKEN:5},{SHAKEN:1},{},{EARNEST:1}],
+    4:[{EARNEST:-4,SEEKER:3,PASSIVE:2},{EARNEST:-1,SEEKER:1},{EARNEST:2},{EARNEST:5,SHARP:1},{EARNEST:8,SHARP:2}],
+    5:[{EARNEST:-3,PASSIVE:7},{PASSIVE:3},{EARNEST:2},{EARNEST:5,SHARP:2,PASSIVE:-2},{EARNEST:8,SHARP:3,PASSIVE:-4}],
+    6:[{EARNEST:-5,SEEKER:3},{EARNEST:-2,SEEKER:1},{EARNEST:3},{EARNEST:6},{EARNEST:9}],
+    7:[{SEEKER:6,EARNEST:-2},{SEEKER:3},{EARNEST:1},{EARNEST:4},{EARNEST:7}],
+    8:[{PASSIVE:5,SHARP:-3},{PASSIVE:2},{SHARP:1},{SHARP:5},{SHARP:8,EARNEST:1}],
+    9:[{PASSIVE:9,SHARP:-3},{PASSIVE:5},{SHARP:2},{SHARP:6,PASSIVE:-2},{SHARP:10,PASSIVE:-4}],
+    10:[{PASSIVE:7,SHARP:-2},{PASSIVE:4},{SHARP:2},{SHARP:5,PASSIVE:-1},{SHARP:8,PASSIVE:-3}],
+    11:[{PASSIVE:5,EARNEST:-3},{PASSIVE:2},{EARNEST:2},{EARNEST:5,SHARP:1},{EARNEST:8,SHARP:2}],
+    12:[{EARNEST:-4,SEEKER:2,PASSIVE:2},{PASSIVE:1},{EARNEST:2},{EARNEST:5,SHARP:1},{EARNEST:8,SHARP:2}],
+    13:[{PASSIVE:6,SHARP:-2},{PASSIVE:3},{SHARP:2},{SHARP:5,PASSIVE:-1},{SHARP:8,PASSIVE:-3}],
+    14:[{PASSIVE:6,EARNEST:-3,SHAKEN:1},{PASSIVE:3,EARNEST:-1},{EARNEST:1},{EARNEST:4,SHARP:1},{EARNEST:7,SHARP:2}],
+    15:[{PASSIVE:4,SEEKER:1},{PASSIVE:2},{SHARP:1},{SHARP:4},{SHARP:6,EARNEST:1}],
+    16:[{SEEKER:9},{SEEKER:6},{SEEKER:2},{EARNEST:3},{EARNEST:6}],
+    17:[{SEEKER:6,SHAKEN:5},{SEEKER:4,SHAKEN:3},{},{EARNEST:3},{EARNEST:6}],
+    18:[{PASSIVE:7,SHARP:-3},{PASSIVE:3},{SHARP:2},{SHARP:6,EARNEST:1,PASSIVE:-2},{SHARP:9,EARNEST:2,PASSIVE:-4}],
+    19:[{SEEKER:10,SHAKEN:3},{SEEKER:6},{SEEKER:2},{EARNEST:4},{EARNEST:7}],
+  };
+
+  const TYPE_KEYS = ["EARNEST","SHARP","SHAKEN","SEEKER","PASSIVE"];
+  const CATS = ["컨디션·멘탈","기술·학습","보조·현장","관계·태도","성장·방향"];
+  const COLORS = ["#3A6349","#C0793A","#9B6DE8","#E05C8A","#3A8DBE"];
+
+  /* ── 6개 유형 정의 ── */
+  const TYPES = {
+    EARNEST:{key:"EARNEST",emoji:"🌱",name:"성실수련형",color:"#1E6E40",bg:"#EAF7EE",
+      tagline:"꾸준히 쌓는 사람이에요.\n오늘의 연습이 내일의 실력이 되는 흐름이에요.",
+      headline:"이번 달, 묵묵히 쌓아 올린 시간이 가장 컸어요.",
+      diagnosis:[
+        "배운 것을 그냥 흘려보내지 않고, 연습이나 보조 업무에서 직접 써보려는 흐름이 이번 달 내내 살아 있었어요.",
+        "모르는 게 생기면 스스로 찾거나 멘토에게 묻고, 받은 피드백을 다음에 반영하는 태도가 보였어요.",
+        "다만 기본기에 집중할수록 현장에서 먼저 움직이는 순발력은 더디게 늘 수 있어요. 연습한 것을 현장에서 써보는 연결이 필요한 시점이에요."],
+      shine:"배운 것을 다음 날 바로 연습하거나 보조에 적용해본 순간들이 이번 달 차곡차곡 쌓였어요.",
+      strengths:["배운 것을 그냥 흘려보내지 않고 연습·보조 업무에 적용해봐요","모르는 것을 스스로 찾고 멘토에게 질문하는 능동성이 있어요","피드백을 받아들이고 다음에 반영하는 태도가 있어요"],
+      cautions:["기본기에 집중하다 현장 눈치·순발력이 더디게 늘 수 있어요","\"아직 부족하다\"는 생각에 지금의 성장을 스스로 인정 못 할 수 있어요","혼자 묵묵히 하다 도움이 필요할 때 말 못 하고 끌어안을 수 있어요"],
+      mentorTip:["\"이번 달 연습한 게 보였어\"라고 구체적으로 짚어주세요","현장에서 먼저 움직여보는 작은 미션을 하나 줘보세요","잘하고 있는 부분을 분명히 인정해주는 말이 필요해요"],
+      next:"꾸준한 연습을 현장 감각으로 연결하기."},
+    SHARP:{key:"SHARP",emoji:"⚡",name:"현장감각형",color:"#B5651D",bg:"#FFF3E6",
+      tagline:"눈치 빠르게 움직이는 사람이에요.\n현장이 당신 덕분에 매끄럽게 돌아가요.",
+      headline:"이번 달, 현장을 읽는 눈이 가장 빛났어요.",
+      diagnosis:[
+        "지시를 받기 전에 다음 할 일을 먼저 파악하고 움직이는 흐름이 이번 달 강하게 나타났어요.",
+        "고객 응대와 보조에서 적극적으로 행동하고, 동료가 힘들 때 먼저 손을 건네는 모습이 보였어요.",
+        "다만 빠르게 움직이는 데 집중하다 보면 깊이 있는 기술 연습 시간이 뒤로 밀릴 수 있어요. 현장 감각에 기본기를 더해야 할 시점이에요."],
+      shine:"누가 시키지 않아도 다음 상황을 먼저 읽고 준비해, 현장이 매끄럽게 돌아가게 만든 순간이 많았어요.",
+      strengths:["지시 전에 다음 할 일을 파악하고 먼저 움직여요","고객 응대와 보조에서 적극적으로 행동해요","동료가 힘들 때 먼저 손을 건네는 분위기 메이커예요"],
+      cautions:["빠르게 움직이느라 기본기·기술 공부가 뒤로 밀릴 수 있어요","현장 대응에 능해 정작 깊이 있는 연습 시간이 부족할 수 있어요","눈치껏 다 받아주다 본인이 먼저 지칠 수 있어요"],
+      mentorTip:["\"네 덕분에 현장이 편하다\"는 인정의 말을 전해주세요","기술 연습 루틴을 하나 같이 정해주면 균형이 잡혀요","다 떠안지 않아도 된다고 말해주세요"],
+      next:"빠른 현장 감각에 기술 기본기를 더하기."},
+    BALANCED:{key:"BALANCED",emoji:"🌟",name:"균형성장형",color:"#5B6A20",bg:"#F5F8EA",
+      tagline:"어느 한 곳이 무너지지 않는 사람이에요.\n파트너 단계에서 가장 안정적인 흐름이에요.",
+      headline:"이번 달, 어느 곳도 무너지지 않고 고르게 굴러갔어요.",
+      diagnosis:[
+        "멘탈·학습·현장·태도가 한쪽으로 치우치지 않고 고르게 살아 있는 흐름이 이번 달 나타났어요.",
+        "어느 한 가지로 버티는 게 아니라, 파트너로서 기본기 전체가 안정적으로 잡혀 있는 상태예요.",
+        "다만 고르게 잘할수록 다음에 무엇에 집중할지가 흐려지기 쉬워요. 지금은 부족한 곳을 메우기보다 한 단계 도약할 한 축을 정할 시기예요."],
+      shine:"어느 영역도 크게 흔들리지 않고, 멘토가 믿고 맡길 수 있는 안정감을 보여준 한 달이었어요.",
+      strengths:["멘탈·학습·현장·태도가 고르게 안정적이에요","어느 자리에 둬도 믿고 맡길 수 있어요","성장의 기반이 단단하게 잡혀 있어요"],
+      cautions:["\"딱히 특기가 없는 것 같다\"는 불안을 느낄 수 있어요","고르게 잘하다 다음에 집중할 목표가 흐려질 수 있어요","안정적이라 도전 기회를 스스로 미룰 수 있어요"],
+      mentorTip:["\"기본이 단단하다\"고 분명히 인정해주세요","다음에 집중할 한 가지 목표를 같이 골라주세요","한 단계 위 역할을 살짝 맡겨 도전을 끌어내 주세요"],
+      next:"안정된 기반 위에서 집중할 한 가지를 정하기."},
+    SHAKEN:{key:"SHAKEN",emoji:"🌧",name:"멘탈흔들림형",color:"#C03030",bg:"#FDEAEA",
+      tagline:"지금 몸과 마음이 신호를 보내고 있어요.\n더 밀어붙이기보다 회복이 먼저인 달이에요.",
+      headline:"이번 달, 몸과 마음이 함께 쉬어가자는 신호를 보내고 있어요.",
+      diagnosis:[
+        "컨디션과 멘탈 쪽 점수가 낮게 나왔어요. 활기차게 출근하거나 회복 시간을 갖는 게 이번 달 쉽지 않았던 것 같아요.",
+        "그런 상태에서도 현장을 지키고 기본 태도를 유지하려 한 것 자체가 이미 큰 힘이에요.",
+        "지금 가장 필요한 건 더 노력하는 게 아니라 회복이에요. 무리해서 달리면 더 긴 슬럼프로 이어질 수 있어요."],
+      shine:"지치고 힘든 날에도 자리를 지키고 맡은 일을 해낸 것 — 그 버팀 자체가 이번 달 가장 빛난 부분이에요.",
+      strengths:["힘든 상황에서도 현장을 지키고 있다는 것 자체가 대단해요","이 상태를 인식하고 점검하고 있다는 게 회복의 시작이에요","어려운 날에도 최선을 다하려는 마음이 있어요"],
+      cautions:["지금은 성장보다 회복이 먼저예요 — 배움은 나중에 해도 돼요","컨디션이 바닥일 때 무리하면 더 긴 슬럼프로 이어져요","혼자 견디지 말고 멘토에게 솔직하게 말하는 게 필요해요"],
+      mentorTip:["\"요즘 어때? 진짜로.\"라고 먼저 물어봐 주세요","\"쉬어도 돼\"라는 말을 직접 해주세요","업무량이나 환경에서 덜어줄 수 있는 게 있는지 살펴봐 주세요"],
+      next:"성장보다 회복을 먼저 챙기기."},
+    SEEKER:{key:"SEEKER",emoji:"🧭",name:"방향탐색형",color:"#7A50C0",bg:"#F0EEFF",
+      tagline:"방향을 찾고 있는 달이에요.\n큰 목표보다 오늘 하나를 해보는 게 먼저예요.",
+      headline:"이번 달, 어디로 가야 할지 방향을 고민하고 있어요.",
+      diagnosis:[
+        "성장·방향 쪽 점수가 낮게 나왔어요. 디자이너가 된 이후의 모습이나 이 일의 의미가 아직 흐릿한 상태일 수 있어요.",
+        "방향이 흐릿하면 배움도 손에 잘 안 잡혀요. 동기가 약해지는 건 게을러서가 아니라 길이 안 보여서예요.",
+        "지금은 먼 목표를 세우기보다, 이번 주에 해볼 작은 하나를 정하는 게 흐름을 바꾸는 출발점이에요."],
+      shine:"흐릿한 가운데서도 솔직하게 자신을 들여다보고 진단을 끝까지 마친 것 — 그게 방향을 찾는 첫걸음이에요.",
+      strengths:["솔직하게 자신을 바라보는 용기가 있어요","방향을 찾고 싶다는 마음이 있다면 언제든 달라질 수 있어요","지금 점검하고 있다는 것 자체가 변화의 출발점이에요"],
+      cautions:["\"왜 하는지 모르겠다\"는 생각에 동기가 식을 수 있어요","목표가 흐릿하면 배움도 손에 잘 안 잡혀요","멀리 보려다 오늘 할 작은 하나를 놓칠 수 있어요"],
+      mentorTip:["\"처음 이 일 시작할 때 어떤 마음이었어?\"라고 물어봐 주세요","멀리 말고 이번 주에 해볼 작은 목표 하나를 같이 정해주세요","디자이너가 된 모습을 구체적으로 그려보게 도와주세요"],
+      next:"먼 목표보다 이번 주 작은 하나를 정하기."},
+    PASSIVE:{key:"PASSIVE",emoji:"🌀",name:"소극관망형",color:"#5A6570",bg:"#EEF0F2",
+      tagline:"시키는 일은 해내지만, 아직 먼저 나서진 않는 달이에요.\n한 걸음 먼저가 성장의 문을 열어줘요.",
+      headline:"이번 달, 맡은 일은 해냈지만 한 걸음 먼저는 아직이에요.",
+      diagnosis:[
+        "주어진 일은 성실히 해내지만, 지시를 받기 전에 먼저 움직이거나 질문하는 모습은 이번 달 적게 나타났어요.",
+        "조용히 현장을 지켜보며 흐름을 익히고 있는 단계예요. 가능성이 없는 게 아니라 아직 드러나지 않았을 뿐이에요.",
+        "다만 기다리는 동안 배울 기회는 옆으로 지나가요. 하루 한 번이라도 먼저 움직이는 것이 성장 속도를 바꿔요."],
+      shine:"맡겨진 일을 빠짐없이 해내며 현장의 한 자리를 묵묵히 지킨 것 — 그 성실함이 이번 달의 바탕이에요.",
+      strengths:["주어진 일은 빠지지 않고 해내는 성실함이 있어요","조용히 현장을 지켜보며 흐름을 익히고 있어요","아직 드러나지 않았을 뿐 가능성은 충분해요"],
+      cautions:["지시를 기다리는 동안 배울 기회가 옆으로 지나갈 수 있어요","먼저 질문·행동하지 않으면 성장 속도가 더뎌져요","관망이 길어지면 스스로 \"난 원래 이렇다\"고 굳어질 수 있어요"],
+      mentorTip:["작게라도 먼저 행동했을 때 바로 알아봐 주고 인정해주세요","\"이건 네가 맡아볼래?\"라고 구체적인 역할을 줘보세요","질문하기 편한 분위기를 먼저 만들어주세요"],
+      next:"기다리기보다 하루 한 번 먼저 움직여보기."},
+  };
+
+  /* ── 유형별 가능 점수 범위 (정규화용) ── */
+  function calcRanges(){
+    const r={};
+    TYPE_KEYS.forEach(t=>{
+      let min=0,max=0;
+      for(let q=0;q<QS.length;q++){
+        const vals=(SCORE_MAP[q]||[]).map(o=>o[t]||0);
+        min+=Math.min(...vals,0); max+=Math.max(...vals,0);
+      }
+      r[t]={min,max};
+    });
+    return r;
+  }
+  const RANGES=calcRanges();
+
+  function rawScores(ans){
+    const raw={}; TYPE_KEYS.forEach(t=>raw[t]=0);
+    ans.forEach((ai,qi)=>{
+      const pm=SCORE_MAP[qi]?.[ai]||{};
+      Object.entries(pm).forEach(([t,v])=>{ if(raw[t]!==undefined) raw[t]+=v; });
+    });
+    return raw;
+  }
+  function normalize(raw){
+    const n={};
+    TYPE_KEYS.forEach(t=>{
+      const{min,max}=RANGES[t];
+      n[t]= max===min ? 0 : Math.round(((raw[t]-min)/(max-min))*1000)/10;
+    });
+    return n;
+  }
+  // 5점 척도 전체 평균(0~100)
+  function answerAvg(ans){
+    return Math.round((ans.reduce((s,v)=>s+v,0)/(QS.length*4))*1000)/10;
+  }
+  // 영역별 점수(차트용, 단순 평균)
+  function catScores(ans){
+    const raw={},cnt={},sc={};
+    CATS.forEach(c=>{raw[c]=0;cnt[c]=0;});
+    QS.forEach((q,i)=>{ if(ans[i]!=null){raw[q.cat]+=(ans[i]+1);cnt[q.cat]++;} });
+    CATS.forEach(c=>{ sc[c]= cnt[c]>0 ? Math.round(raw[c]/(cnt[c]*5)*1000)/10 : 0; });
+    return sc;
+  }
+
+  /* ── 유형 판정 ── */
+  function judge(ans){
+    if(!Array.isArray(ans)||ans.length!==QS.length||ans.some(v=>!Number.isInteger(v)||v<0||v>4))
+      return null;
+    const raw=rawScores(ans);
+    const ns=normalize(raw);
+    const avg=answerAvg(ans);
+
+    // 부정 유형 신호
+    const negKeys=["SHAKEN","SEEKER","PASSIVE"];
+    const negMax=Math.max(...negKeys.map(t=>ns[t]));
+    // 긍정 유형
+    const posKeys=["EARNEST","SHARP"];
+    const posVals=posKeys.map(t=>ns[t]);
+    const posMin=Math.min(...posVals), posMax=Math.max(...posVals);
+
+    // 게이트 1: 멘탈흔들림 — 컨디션 문항(0~3)에서 낮은 답이 많고 SHAKEN이 가장 높을 때
+    const lowCond=[0,1,2,3].filter(i=>ans[i]<=1).length;
+    const shakenGate = ns.SHAKEN>=55 && lowCond>=2 && ns.SHAKEN>=negMax-2;
+
+    // 게이트 2: 방향탐색 — 방향 문항(16~19)에서 낮은 답이 많고 SEEKER가 높을 때
+    const lowDir=[16,17,18,19].filter(i=>ans[i]<=1).length;
+    const seekerGate = ns.SEEKER>=55 && lowDir>=2 && ns.SEEKER>=negMax-2;
+
+    // 게이트 3: 균형성장 — 전체 평균 높고 + 긍정 둘 다 안정 + 부정 신호 다 낮음
+    const balancedGate = avg>=68 && posMin>=48 && (posMax-posMin)<=30
+                       && ns.SHAKEN<=42 && ns.SEEKER<=42 && ns.PASSIVE<=42;
+
+    let type;
+    if(balancedGate){ type="BALANCED"; }
+    else if(shakenGate && ns.SHAKEN>=ns.SEEKER){ type="SHAKEN"; }
+    else if(seekerGate){ type="SEEKER"; }
+    else {
+      // 일반 판정: 5개 유형 정규화 점수 최고값
+      const rank=TYPE_KEYS.map(t=>({t,s:ns[t]})).sort((a,b)=>b.s-a.s);
+      type=rank[0].t;
+      // 최고점이 너무 낮으면(전반적으로 애매) 방향탐색으로
+      if(rank[0].s<35) type="SEEKER";
+    }
+    return { type, scores:ns, raw, answerAvg:avg, cat:catScores(ans) };
+  }
+
+  return { QS, SCORE_MAP, TYPE_KEYS, CATS, COLORS, TYPES, RANGES, judge, catScores };
+})();
+
+/* ══════════════════════════════════════════════════
+   헤어파트너 진단 — 화면 흐름 / 상태
+══════════════════════════════════════════════════ */
+let hpAns = new Array(HP.QS.length).fill(null);
+let hpCur = 0, hpMoving = false, hpChart = null, hpResult = null;
+let hpName = '', hpMonth = '';
+const HP_STORE_KEY = 'hairpartner_v1';
+
+function hpStart(){
+  hpName = (document.getElementById('nameInput')?.value||'').trim() || '익명';
+  hpMonth = document.getElementById('monthInput')?.value || new Date().toISOString().slice(0,10);
+  hpAns = new Array(HP.QS.length).fill(null);
+  hpCur = 0; hpResult = null;
+  showScreen('hp-survey');
+  hpRenderQ();
+}
+
+function hpRenderQ(){
+  const q = HP.QS[hpCur];
+  const pct = Math.round((hpCur+1)/HP.QS.length*100);
+  document.getElementById('hpProgFill').style.width = pct+'%';
+  document.getElementById('hpProgCnt').textContent = (hpCur+1)+' / '+HP.QS.length;
+  document.getElementById('hpQText').textContent = q.q;
+  document.getElementById('hpBtnPrev').disabled = hpCur===0;
+  document.getElementById('hpQBody').scrollTop = 0;
+  const ol = document.getElementById('hpOptList'); ol.innerHTML='';
+  q.opts.forEach((txt,i)=>{
+    const d=document.createElement('div');
+    d.className='opt'+(hpAns[hpCur]===i?' sel':'');
+    d.innerHTML=`<div class="opt-dot"></div><div class="opt-score">${i+1}</div><div class="opt-label">${txt}</div>`;
+    d.onclick=()=>{
+      if(hpMoving) return;
+      hpMoving=true;
+      hpAns[hpCur]=i;
+      document.querySelectorAll('#hpOptList .opt').forEach(o=>o.classList.remove('sel'));
+      d.classList.add('sel');
+      setTimeout(()=>{ hpMoving=false; hpGo(1); },220);
+    };
+    ol.appendChild(d);
+  });
+}
+
+function hpGo(dir){
+  if(dir===1 && hpCur===HP.QS.length-1){ hpShowResult(); return; }
+  hpCur=Math.max(0,Math.min(HP.QS.length-1,hpCur+dir));
+  hpRenderQ();
+}
+
+function hpShowResult(){
+  const r = HP.judge(hpAns);
+  if(!r){ alert('모든 문항에 답해주세요.'); return; }
+  hpResult = r;
+  const t = HP.TYPES[r.type];
+
+  // 히어로
+  const hero = document.getElementById('hpTypeHero');
+  hero.style.background = t.bg;
+  document.getElementById('hpTypeEmoji').textContent = t.emoji;
+  document.getElementById('hpTypeName').textContent = t.name;
+  document.getElementById('hpTypeName').style.color = t.color;
+  document.getElementById('hpTypeTagline').textContent = t.tagline;
+
+  // 레이더 차트 (영역별)
+  hpDrawChart(r.cat);
+
+  // 영역별 점수 리스트
+  const al = document.getElementById('hpAreaList'); al.innerHTML='';
+  HP.CATS.forEach((c,i)=>{
+    const v=r.cat[c];
+    const sig = v>=70?'#3A6349':v>=45?'#C0793A':'#B53535';
+    al.innerHTML += `<div style="display:flex;align-items:center;gap:10px;padding:8px 18px;">
+      <span style="font-size:12px;color:var(--text2);width:84px;flex-shrink:0;">${c}</span>
+      <div style="flex:1;height:8px;background:var(--surface2);border-radius:999px;overflow:hidden;">
+        <div style="height:100%;width:${v}%;background:${sig};border-radius:999px;"></div>
+      </div>
+      <span style="font-size:12px;font-weight:700;color:${sig};width:38px;text-align:right;">${v}</span>
+    </div>`;
+  });
+
+  // 유형 상세 (디자이너 진단과 동일 구조)
+  const detail = document.getElementById('hpTypeDetail');
+  detail.innerHTML = `
+    ${t.headline ? `<div class="td-oneline" style="font-size:15px;font-weight:700;line-height:1.6;color:var(--text);padding:4px 0 8px;">"${t.headline}"</div>` : ''}
+
+    ${t.diagnosis && t.diagnosis.length ? `<div class="td-section">
+      <span class="td-label ctx">🔍 이번 달 진단</span>
+      ${t.diagnosis.map(d=>`<p class="td-context" style="margin-bottom:6px;">${d}</p>`).join('')}
+    </div>` : ''}
+
+    ${t.shine ? `<div class="td-section" style="background:var(--green-lt);border-radius:var(--rsm);padding:14px 16px;">
+      <span class="td-label" style="color:var(--green);font-size:12px;font-weight:700;">✨ 이번 달 가장 빛난 순간</span>
+      <p class="td-context" style="color:var(--text);margin-top:8px;line-height:1.8;">${t.shine}</p>
+    </div>` : ''}
+
+    ${t.strengths && t.strengths.length ? `<div class="td-section">
+      <span class="td-label str">💚 강점</span>
+      <ul class="td-list">${t.strengths.map(s=>`<li data-bullet="✓">${s}</li>`).join('')}</ul>
+    </div>` : ''}
+
+    ${t.cautions && t.cautions.length ? `<div class="td-section">
+      <span class="td-label trp">⚡ 놓치기 쉬운 함정</span>
+      <ul class="td-list">${t.cautions.map(s=>`<li data-bullet="△">${s}</li>`).join('')}</ul>
+    </div>` : ''}
+
+    ${t.mentorTip && t.mentorTip.length ? `<div class="td-section">
+      <span class="td-label tip">🧭 멘토와 소통하면 좋을 것</span>
+      <ul class="td-list">${t.mentorTip.map((s,i)=>`<li data-bullet="${i+1}">${s}</li>`).join('')}</ul>
+    </div>` : ''}
+
+    ${t.next ? `<div class="td-section" style="background:var(--green-lt);border-radius:var(--rsm);padding:12px 14px;margin-top:4px;">
+      <span class="td-label" style="color:var(--green);font-size:12px;font-weight:700;">📌 다음 달 집중 포인트</span>
+      <p class="td-context" style="color:var(--green);font-weight:600;margin-top:6px;">${t.next}</p>
+    </div>` : ''}
+  `;
+  document.getElementById('hpTypeDetailTit').textContent = t.emoji+' '+t.name+' 유형 상세';
+
+  hpSaveHist(r);
+
+  // 메모/멘토 한마디 칸 초기화 + 자동저장 바인딩
+  ['hpMemoWhat','hpMemoWhy','hpMemoHow','hpMemoThanks','hpMemoAsk','hpLeaderTA'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){ el.value=''; el.oninput=hpSaveMemo; }
+  });
+
+  showScreen('hp-result');
+}
+
+/* ── 메모/멘토 한마디를 최근 진단 기록에 저장 ── */
+function hpSaveMemo(){
+  const h=hpLoadHist();
+  if(!h.length) return;
+  const last=h[h.length-1];
+  last.memo={
+    what:document.getElementById('hpMemoWhat')?.value||'',
+    why:document.getElementById('hpMemoWhy')?.value||'',
+    how:document.getElementById('hpMemoHow')?.value||'',
+    thanks:document.getElementById('hpMemoThanks')?.value||'',
+    ask:document.getElementById('hpMemoAsk')?.value||'',
+    leader:document.getElementById('hpLeaderTA')?.value||''
+  };
+  try{ localStorage.setItem(HP_STORE_KEY,JSON.stringify(h.slice(-24))); }catch(e){}
+}
+
+function hpDrawChart(cat){
+  const ctx=document.getElementById('hpRadar');
+  if(hpChart){ hpChart.destroy(); hpChart=null; }
+  hpChart=new Chart(ctx,{
+    type:'radar',
+    data:{ labels:HP.CATS,
+      datasets:[{ data:HP.CATS.map(c=>cat[c]),
+        backgroundColor:'rgba(58,99,73,.15)', borderColor:'#3A6349',
+        borderWidth:2, pointBackgroundColor:'#3A6349', pointRadius:3 }]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      scales:{ r:{ min:0,max:100, ticks:{display:false,stepSize:25},
+        grid:{color:'#e5e5e5'}, angleLines:{color:'#e5e5e5'},
+        pointLabels:{font:{size:11},color:'#555'} }},
+      plugins:{ legend:{display:false} }}
+  });
+}
+
+/* ── 히스토리 저장 (localStorage, 디자이너와 키 분리) ── */
+function hpLoadHist(){
+  try{ return JSON.parse(localStorage.getItem(HP_STORE_KEY)||'[]'); }catch(e){ return []; }
+}
+function hpSaveHist(r){
+  const h=hpLoadHist();
+  h.push({ name:hpName, month:hpMonth, type:r.type, cat:r.cat, scores:r.scores, ts:Date.now() });
+  try{ localStorage.setItem(HP_STORE_KEY,JSON.stringify(h.slice(-24))); }catch(e){}
+}
+
+function hpGoStart(){
+  showScreen('home');
+  selectDiag('partner');
+}
+
+/* ── 멘토에게 공유하기 (결과+메모를 텍스트로 복사) ── */
+function hpShareMentor(){
+  if(!hpResult) return;
+  const t = HP.TYPES[hpResult.type];
+  const v = id => (document.getElementById(id)?.value||'').trim() || '(작성 안 함)';
+
+  const scoreLines = HP.CATS.map(c=>`  ${c}: ${hpResult.cat[c]}점`).join('\n');
+
+  const text =
+`[나침반 헤어파트너 진단 결과]
+
+이름: ${hpName}
+날짜: ${hpMonth}
+유형: ${t.emoji} ${t.name}
+${t.tagline.replace(/\n/g,' ')}
+
+[이번 달 영역 점수]
+${scoreLines}
+
+[이번 달 나의 기록]
+🎯 이번 달 목표: ${v('hpMemoWhat')}
+💡 목표를 잡은 이유: ${v('hpMemoWhy')}
+🧭 구체적 실행 방법: ${v('hpMemoHow')}
+🙏 이번 달 고마웠던 점: ${v('hpMemoThanks')}
+❓ 멘토에게 묻고 싶은 것: ${v('hpMemoAsk')}
+
+${'='.repeat(24)}
+🤝 헤어파트너 성장 나침반`;
+
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text)
+      .then(()=>showToast('📋 복사됐어요! 카톡에 바로 붙여넣기 하세요 😊'))
+      .catch(()=>alert(text));
+  } else {
+    const ta=document.createElement('textarea');
+    ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); showToast('📋 복사됐어요!'); }
+    catch(e){ alert(text); }
+    document.body.removeChild(ta);
+  }
+}
+
+/* ── 헤어파트너 히스토리 렌더 ── */
+function hpRenderHistory(el){
+  const hist = hpLoadHist();
+  if(!hist.length){
+    el.innerHTML = `<div class="hist-empty"><span class="he-icon">🤝</span>아직 헤어파트너 진단 기록이 없어요.<br>첫 진단을 완료하면<br>여기에 기록이 쌓여요.</div>`;
+    return;
+  }
+  const names=[...new Set(hist.map(h=>h.name))];
+  let html='';
+  names.forEach(name=>{
+    const recs=hist.filter(h=>h.name===name).sort((a,b)=>b.month>a.month?1:-1);
+    html+=`<div style="margin-bottom:28px;">
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+        <span style="background:var(--green-lt);color:var(--green);font-size:11px;padding:3px 10px;border-radius:999px;font-weight:700;">${name}</span>
+        <span style="font-size:11px;color:var(--text3);">${recs.length}회 진단</span>
+      </div>
+      <div class="timeline">`;
+    recs.forEach(rec=>{
+      const t=HP.TYPES[rec.type]||{emoji:'🧭',name:rec.type,color:'#777'};
+      html+=`<div class="tl-item">
+        <div class="tl-dot" style="background:${t.color};"></div>
+        <div class="tl-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:13px;font-weight:700;color:var(--text);">${t.emoji} ${t.name}</span>
+            <span style="font-size:11px;color:var(--text3);">${rec.month}</span>
+          </div>
+        </div>
+      </div>`;
+    });
+    html+=`</div></div>`;
+  });
+  el.innerHTML=html;
+}
+
+/* ===== 헤어파트너 진단 모듈 끝 ===== */
 
 
 /* ━━━━━━━━━━━━━━━━━━━━
@@ -2931,7 +3591,6 @@ async function delLibItem(e, id) {
 }
 
 /* 자료 순서 변경 (▲▼) */
-let _libItemsCache = [];
 async function moveLibItemOrder(e, id, dir) {
   e.stopPropagation();
 
@@ -2942,6 +3601,12 @@ async function moveLibItemOrder(e, id, dir) {
   }
   if (!res.ok) { alert('목록을 불러오지 못했어요.'); return; }
   const all = await res.json();
+
+  // sort_order 컬럼 존재 여부 확인
+  if (all.length > 0 && !('sort_order' in all[0])) {
+    alert('순서 기능을 쓰려면 Supabase에서 먼저 아래 SQL을 실행해야 해요.\n\nALTER TABLE library_items ADD COLUMN sort_order integer DEFAULT 0;\n\n(Supabase 대시보드 → SQL Editor)');
+    return;
+  }
 
   // 대상 자료가 속한 카테고리의 자료만 추출
   const target = all.find(it => it.id === id);
@@ -2959,12 +3624,20 @@ async function moveLibItemOrder(e, id, dir) {
     for (let k = 0; k < siblings.length; k++) {
       const r = await supaFetch(REST_URL + `/library_items?id=eq.${siblings[k].id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+        headers: { 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
         body: JSON.stringify({ sort_order: k })
       });
+      const bodyText = await r.text();
       if (!r.ok) {
-        const err = await r.text();
-        alert('순서 저장 실패: sort_order 컬럼이 있는지 확인해주세요.\n' + err.slice(0,120));
+        alert('순서 저장 실패 (' + r.status + ')\n' + bodyText.slice(0,150));
+        return;
+      }
+      // 실제 저장 검증: 응답에 sort_order가 k로 반영됐는지 확인
+      let saved = null;
+      try { saved = JSON.parse(bodyText); } catch(_) {}
+      const row = Array.isArray(saved) ? saved[0] : saved;
+      if (!row || row.sort_order !== k) {
+        alert('순서 값이 저장되지 않았어요.\nSupabase에 sort_order 컬럼이 있는지 확인해주세요.\n\nALTER TABLE library_items ADD COLUMN sort_order integer DEFAULT 0;');
         return;
       }
     }
@@ -3268,6 +3941,8 @@ function updateAdminDot() {
 // 초기값
 const mi=document.getElementById('monthInput');
 if(mi){const n=new Date();mi.value=n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0');}
+// 진단 종류 기본 선택: 헤어디자이너 (첫 로드는 스크롤 생략)
+if(document.getElementById('diagCard-designer')) selectDiag('designer', true);
 </script>
 </body>
 
