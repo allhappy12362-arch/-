@@ -3338,15 +3338,71 @@ async function supaFetch(path, options={}) {
 const TYPE_ICON = { link: '🔗', pdf: '📄', video: '▶️', image: '🖼️', excel: '📊', word: '📝', ppt: '📑', file: '📎' };
 const TYPE_LABEL = { link: '링크', pdf: 'PDF', video: '영상', image: '이미지', excel: '엑셀', word: '워드', ppt: 'PPT', file: '파일' };
 
-const DEFAULT_CATS = ['스탭 필독', '주니어 디자이너', '디자이너', '기술·시술', '멘탈·커리어', '경제·설계', '공지'];
+const DEFAULT_CATS = ['미용자료'];
 const CAT_ICON = {};
 function getCatIcon(cat) { return '🧭'; }
 
+/* 카테고리 — Supabase library_cats 테이블에 영구 저장.
+   화면 코드는 동기 loadCats()로 캐시를 읽고, syncCats()가 캐시를 채운다. */
+let _catCache = null;          // null이면 아직 미동기화
+let _catRows = [];             // [{id, name, sort_order}]
+
 function loadCats() {
-  try { return JSON.parse(localStorage.getItem('compass_cats_v1') || 'null') || [...DEFAULT_CATS]; }
-  catch(e) { return [...DEFAULT_CATS]; }
+  if (_catCache) return [..._catCache];
+  // 아직 동기화 전 — localStorage 백업 또는 기본값으로 임시 표시
+  try {
+    const ls = JSON.parse(localStorage.getItem('compass_cats_v1') || 'null');
+    if (Array.isArray(ls) && ls.length) return [...ls];
+  } catch(e) {}
+  return [...DEFAULT_CATS];
 }
-function saveCats(cats) { localStorage.setItem('compass_cats_v1', JSON.stringify(cats)); }
+
+// Supabase에서 카테고리를 불러와 캐시에 채움
+async function syncCats() {
+  try {
+    const res = await supaFetch(REST_URL + '/library_cats?select=*&order=sort_order.asc,id.asc');
+    if (!res.ok) throw new Error('load fail ' + res.status);
+    let rows = await res.json();
+    // 테이블이 비어 있으면 기본 카테고리 '미용자료' 1개 생성
+    if (!rows.length) {
+      const ins = await supaFetch(REST_URL + '/library_cats', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+        body: JSON.stringify({ name: '미용자료', sort_order: 0 })
+      });
+      if (ins.ok) rows = await ins.json();
+      else rows = [{ id: null, name: '미용자료', sort_order: 0 }];
+    }
+    _catRows = rows;
+    _catCache = rows.map(r => r.name);
+    try { localStorage.setItem('compass_cats_v1', JSON.stringify(_catCache)); } catch(e) {}
+  } catch(e) {
+    console.error('syncCats 실패:', e);
+    if (!_catCache) _catCache = [...DEFAULT_CATS];
+  }
+}
+
+// 카테고리 목록 저장 — 캐시 갱신 + Supabase 전체 재작성
+async function saveCats(cats) {
+  _catCache = [...cats];
+  try { localStorage.setItem('compass_cats_v1', JSON.stringify(cats)); } catch(e) {}
+  try {
+    // 기존 행 전부 삭제 후 새 순서대로 재삽입 (단순·확실)
+    await supaFetch(REST_URL + '/library_cats?id=gte.0', { method: 'DELETE' });
+    const payload = cats.map((name, i) => ({ name, sort_order: i }));
+    if (payload.length) {
+      const res = await supaFetch(REST_URL + '/library_cats', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) _catRows = await res.json();
+    }
+  } catch(e) {
+    console.error('saveCats 실패:', e);
+    alert('카테고리 저장에 실패했어요. 인터넷 상태를 확인하거나, library_cats 테이블이 있는지 확인해주세요.');
+  }
+}
 
 function goLibrary() {
   document.querySelectorAll('.hdr-btn').forEach(b => b.classList.remove('on'));
@@ -3355,7 +3411,8 @@ function goLibrary() {
   document.getElementById('scr-library').classList.add('on');
   document.getElementById('adminFab').classList.toggle('on', isAdmin);
   window.scrollTo(0,0);
-  setTimeout(() => renderLibrary(), 50);
+  // 카테고리를 Supabase에서 먼저 동기화한 뒤 렌더
+  syncCats().then(() => renderLibrary());
 }
 
 async function renderLibrary() {
@@ -3522,7 +3579,7 @@ function startEditCat(i) {
   inp.select();
 }
 
-function finishEditCat(i) {
+async function finishEditCat(i) {
   const label = document.getElementById('catLabel_'+i);
   const inp = document.getElementById('catEditInp_'+i);
   if (!label || !inp) return;
@@ -3534,7 +3591,7 @@ function finishEditCat(i) {
     inp.focus(); return;
   }
   cats[i] = newName;
-  saveCats(cats);
+  await saveCats(cats);
   renderCatList();
 }
 
@@ -3548,12 +3605,12 @@ function cancelEditCat(i) {
   label.style.display = '';
 }
 
-function moveCat(i, dir) {
+async function moveCat(i, dir) {
   const cats = loadCats();
   const j = i + dir;
   if (j < 0 || j >= cats.length) return;
   [cats[i], cats[j]] = [cats[j], cats[i]];
-  saveCats(cats);
+  await saveCats(cats);
   renderCatList();
 }
 
@@ -3563,22 +3620,22 @@ function closeCatModal() {
   renderLibrary();
 }
 
-function deleteCat(i) {
+async function deleteCat(i) {
   const cats = loadCats();
   if (!confirm(`"${cats[i]}" 카테고리를 삭제할까요?`)) return;
   cats.splice(i, 1);
-  saveCats(cats);
+  await saveCats(cats);
   renderCatList();
 }
 
-function addCat() {
+async function addCat() {
   const inp = document.getElementById('newCatInp');
   const name = inp.value.trim();
   if (!name) return;
   const cats = loadCats();
   if (cats.includes(name)) { alert('이미 있는 카테고리예요.'); return; }
   cats.push(name);
-  saveCats(cats);
+  await saveCats(cats);
   inp.value = '';
   renderCatList();
 }
@@ -3947,6 +4004,8 @@ const mi=document.getElementById('monthInput');
 if(mi){const n=new Date();mi.value=n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0');}
 // 진단 종류 기본 선택: 헤어디자이너 (첫 로드는 스크롤 생략)
 if(document.getElementById('diagCard-designer')) selectDiag('designer', true);
+// 카테고리를 Supabase에서 미리 동기화 (자료실·자료추가 시트에서 바로 쓰도록)
+if(typeof syncCats==='function') syncCats();
 </script>
 </body>
 
