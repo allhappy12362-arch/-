@@ -3009,6 +3009,7 @@ const HP = (() => {
     const raw=rawScores(ans);
     const ns=normalize(raw);
     const avg=answerAvg(ans);
+    const cat=catScores(ans);
 
     // 부정 유형 신호
     const negKeys=["SHAKEN","SEEKER","PASSIVE"];
@@ -3026,22 +3027,25 @@ const HP = (() => {
     const lowDir=[16,17,18,19].filter(i=>ans[i]<=1).length;
     const seekerGate = ns.SEEKER>=55 && lowDir>=2 && ns.SEEKER>=negMax-2;
 
-    // 게이트 3: 균형성장 — 전체 평균 높고 + 긍정 둘 다 안정 + 부정 신호 다 낮음
-    const balancedGate = avg>=68 && posMin>=48 && (posMax-posMin)<=30
-                       && ns.SHAKEN<=42 && ns.SEEKER<=42 && ns.PASSIVE<=42;
+    // 게이트 3: 균형성장 — 전체 평균 높고 + 긍정 둘 다 견고 + 부정 신호 낮고
+    //           + 5개 영역 어느 하나도 무너지지 않고(catMin) + 영역 간 격차도 작을 때(catSpread)
+    const catVals = CATS.map(c=>cat[c]);
+    const catMin = Math.min(...catVals);
+    const catSpread = Math.max(...catVals) - catMin;
+    const balancedGate = avg>=74 && posMin>=58 && (posMax-posMin)<=24
+                       && ns.SHAKEN<=35 && ns.SEEKER<=35 && ns.PASSIVE<=35
+                       && catMin>=66 && catSpread<=22;
 
     let type;
     if(balancedGate){ type="BALANCED"; }
     else if(shakenGate && ns.SHAKEN>=ns.SEEKER){ type="SHAKEN"; }
     else if(seekerGate){ type="SEEKER"; }
     else {
-      // 일반 판정: 5개 유형 정규화 점수 최고값
+      // 일반 판정: 5개 유형 정규화 점수 최고값을 그대로 사용
       const rank=TYPE_KEYS.map(t=>({t,s:ns[t]})).sort((a,b)=>b.s-a.s);
       type=rank[0].t;
-      // 최고점이 너무 낮으면(전반적으로 애매) 방향탐색으로
-      if(rank[0].s<35) type="SEEKER";
     }
-    return { type, scores:ns, raw, answerAvg:avg, cat:catScores(ans) };
+    return { type, scores:ns, raw, answerAvg:avg, cat };
   }
 
   return { QS, SCORE_MAP, TYPE_KEYS, CATS, COLORS, TYPES, RANGES, judge, catScores };
