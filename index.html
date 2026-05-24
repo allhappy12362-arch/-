@@ -561,6 +561,11 @@ body {
 .type-emoji { font-size: 60px; margin-bottom: 12px; }
 .type-name { font-size: clamp(26px, 7vw, 34px); margin-bottom: 14px; }
 .type-tagline { font-size: 14px; line-height: 1.85; }
+.type-context {
+  font-size: 13px; line-height: 1.8;
+  opacity: .72; margin-top: 12px;
+  padding: 0 4px;
+}
 
 /* 신호등 배지 */
 .signal-badge { font-size: 14px; padding: 8px 18px; margin-top: 18px; }
@@ -746,6 +751,26 @@ body {
 .signal-badge.yellow .signal-dot { background: #F5C518; box-shadow: 0 0 6px #F5C518; }
 .signal-badge.red    .signal-dot { background: #EF4444; box-shadow: 0 0 6px #EF4444; }
 
+.signal-divider {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; opacity: .55;
+  margin-top: 22px; padding-top: 16px;
+  border-top: 1px solid currentColor;
+  border-image: linear-gradient(to right, transparent, currentColor 20%, currentColor 80%, transparent) 1;
+}
+.signal-guide {
+  font-size: 11.5px; line-height: 1.6;
+  opacity: .6; margin-top: 7px;
+}
+.signal-verdict {
+  display: inline-block; margin-top: 12px;
+  font-size: 14px; font-weight: 800;
+  padding: 5px 16px; border-radius: 999px;
+  letter-spacing: 0.02em;
+}
+.signal-verdict.signal-green  { background: #22C55E; color: #fff; }
+.signal-verdict.signal-yellow { background: #F5C518; color: #3a2e00; }
+.signal-verdict.signal-red    { background: #EF4444; color: #fff; }
 .signal-msg-title {
   font-size: 15px; font-weight: 700;
   margin-top: 14px; position: relative;
@@ -787,7 +812,7 @@ body {
   margin-bottom: 6px;
 }
 .area-sig { font-size: 14px; flex-shrink: 0; width: 20px; text-align: center; }
-.area-name { font-size: 13px; font-weight: 600; color: var(--text); width: 76px; flex-shrink: 0; }
+.area-name { font-size: 12px; font-weight: 600; color: var(--text); width: 92px; flex-shrink: 0; white-space: nowrap; letter-spacing: -0.02em; }
 .area-bar-wrap { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
 .area-bar-fill { height: 100%; border-radius: 3px; transition: width .5s cubic-bezier(.4,0,.2,1); }
 .area-score { font-size: 13px; font-weight: 700; width: 38px; text-align: right; flex-shrink: 0; }
@@ -1062,6 +1087,7 @@ body {
         <div class="type-label" id="typeLabel"></div>
         <div class="type-name" id="typeName"></div>
         <div class="type-tagline" id="typeTagline"></div>
+        <div class="type-context" id="typeContext"></div>
         <div id="signalBadge"></div>
       </div>
 
@@ -2094,15 +2120,19 @@ function showResult() {
   document.getElementById('typeLabel').textContent=y+'년 '+parseInt(m)+'월 '+parseInt(d)+'일 · '+uName+'님의 유형';
   document.getElementById('typeName').textContent=type.name;
   document.getElementById('typeTagline').textContent=type.tagline;
+  document.getElementById('typeContext').textContent=type.context||'';
 
-  // ── 신호등 (전체 평균 원점수 기준) ──
+  // ── 종합 컨디션 신호등 (6개 영역 평균 기준) ──
   const sigContent = {
-    green: { badge:'좋음 — 지금 잘 가고 있어요', title:'방향도 맞고, 속도도 좋아요.', desc:'지금 이 흐름을 유지하는 게 가장 중요해요.\n멈추지 말고, 과속도 하지 말고 — 이대로 가요.' },
-    yellow: { badge:'주의 — 방향 점검이 필요해요', title:'가고는 있는데, 어디로 가는지 모를 때.', desc:'속도보다 방향이 먼저예요.\n잠깐 멈춰서 "나 지금 왜 달리고 있지?" 한 번만 물어봐요.' },
-    red: { badge:'위험 — 지금 당장 멈춰도 괜찮아요', title:'열심히 하는 게 오히려 독이 될 수 있는 시기예요.', desc:'쉬는 것도 성장이에요.\n멘토에게 솔직하게 말하는 게 지금 할 수 있는 가장 용감한 일이에요.' }
+    green: { badge:'좋음', verdict:'좋음', title:'전반적으로 잘 굴러간 달이에요.', desc:'6개 영역 점수가 고르게 안정적이에요.\n큰 흔들림 없이 잘 해낸 달이라는 뜻이니, 지금 이 리듬을 그대로 유지해 봐요.' },
+    yellow: { badge:'주의', verdict:'주의', title:'한 번 점검이 필요한 달이에요.', desc:'6개 영역 평균이 조금 낮아졌어요.\n크게 무너진 건 아니지만 무리가 쌓이고 있을 수 있어요. 가장 신경 쓰이는 영역 하나만 골라 살펴봐요.' },
+    red: { badge:'위험', verdict:'위험', title:'지금은 멈춰도 괜찮은 달이에요.', desc:'6개 영역 평균이 많이 낮아졌어요.\n더 밀어붙이기보다 회복이 먼저예요. 멘토에게 솔직하게 말하는 게 지금 할 수 있는 가장 용감한 일이에요.' }
   };
   const sig = sigContent[totalSigKey];
   document.getElementById('signalBadge').innerHTML = `
+    <div class="signal-divider">이번 달 종합 컨디션</div>
+    <div class="signal-guide">기술·고객경험·관계·성장·경제·컨디션 6개 영역 점수를 모두 합쳐 본 결과예요.</div>
+    <div class="signal-verdict signal-${totalSigKey}">${sig.verdict}</div>
     <div class="signal-msg-title">${sig.title}</div>
     <div class="signal-msg-desc">${sig.desc}</div>
   `;
