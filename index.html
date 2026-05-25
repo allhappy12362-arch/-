@@ -968,7 +968,7 @@ body {
     <div class="hdr-btn on" id="tab-home" onclick="tabHomeClick()">진단</div>
     <div class="hdr-btn" id="tab-history" onclick="goHistory()">기록</div>
     <div class="hdr-btn" id="tab-library" onclick="goLibrary()">자료실</div>
-    <div class="hdr-btn" id="tab-suggest" onclick="goSuggest()">건의함</div>
+    <div class="hdr-btn" id="tab-suggest" onclick="goSuggest()">건의함<span id="suggestBadge" style="display:none;background:#D33;color:#fff;font-size:9px;font-weight:700;border-radius:999px;padding:1px 5px;margin-left:3px;vertical-align:top;"></span></div>
     <div class="hdr-btn" id="tab-result" onclick="tryGoResult()" style="display:none">결과</div>
   </div>
 </header>
@@ -3896,6 +3896,36 @@ function goSuggest() {
   document.getElementById('adminFab').classList.remove('on');
   window.scrollTo(0,0);
   renderSuggestList();
+  // 건의함을 열면 '확인 시점'을 현재로 갱신하고 배지 숨김
+  if (isAdmin) {
+    try { localStorage.setItem('suggest_seen_at', new Date().toISOString()); } catch(e) {}
+    const badge = document.getElementById('suggestBadge');
+    if (badge) badge.style.display = 'none';
+  }
+}
+
+/* 안 읽은 건의 개수 배지 갱신 (관리자만) */
+async function updateSuggestBadge() {
+  const badge = document.getElementById('suggestBadge');
+  if (!badge || !isAdmin) { if(badge) badge.style.display='none'; return; }
+  try {
+    let seen = '';
+    try { seen = localStorage.getItem('suggest_seen_at') || ''; } catch(e) {}
+    // 확인 시점 이후에 등록된 건의만 카운트
+    const filter = seen
+      ? '/suggestions?select=id&created_at=gt.' + encodeURIComponent(seen)
+      : '/suggestions?select=id';
+    const res = await supaFetch(REST_URL + filter);
+    if (!res.ok) return;
+    const items = await res.json();
+    const n = items.length;
+    if (n > 0) {
+      badge.textContent = n > 99 ? '99+' : n;
+      badge.style.display = 'inline-block';
+    } else {
+      badge.style.display = 'none';
+    }
+  } catch(e) {}
 }
 
 async function submitSuggest() {
@@ -3967,6 +3997,7 @@ async function checkAdminPw() {
       isAdmin = true;
       closeAdminLogin();
       updateAdminDot();
+      updateSuggestBadge();
       document.getElementById('adminFab').classList.add('on');
       goLibrary();
     } else {
