@@ -1366,9 +1366,10 @@ body {
       <span class="admin-lbl">파일 선택</span>
       <label style="display:block;padding:12px 14px;border:1.5px dashed var(--border);border-radius:var(--rsm);background:var(--bg);cursor:pointer;text-align:center;font-size:13px;color:var(--text2);">
         📎 파일 선택하기
-        <input type="file" id="adminFileInp" style="display:none" onchange="onFileSelect()" accept=".pdf,.jpg,.jpeg,.png,.mp4,.mov,.xlsx,.xls,.docx,.doc,.pptx,.ppt,.zip">
+        <input type="file" id="adminFileInp" multiple style="display:none" onchange="onFileSelect()" accept=".pdf,.jpg,.jpeg,.png,.mp4,.mov,.xlsx,.xls,.docx,.doc,.pptx,.ppt,.zip">
       </label>
       <div id="adminFileName" style="font-size:12px;color:var(--green);margin-top:6px;padding-left:4px;"></div>
+      <div id="adminFileMultiHint" style="font-size:11px;color:var(--text3);margin-top:4px;padding-left:4px;display:none;">이미지는 여러 장을 한 번에 선택할 수 있어요. 각 사진이 자료로 등록돼요.</div>
     </div>
     <div class="admin-btn-row">
       <button class="admin-btn cancel" onclick="closeAdminSheet()">취소</button>
@@ -3789,6 +3790,7 @@ function toggleAdminInputMode() {
   const type = document.getElementById('adminType').value;
   const fileRow = document.getElementById('adminFileRow');
   const urlRow = document.getElementById('adminUrlRow');
+  const multiHint = document.getElementById('adminFileMultiHint');
   if (type === 'link') {
     fileRow.style.display = 'none';
     urlRow.style.display = 'block';
@@ -3796,48 +3798,58 @@ function toggleAdminInputMode() {
     fileRow.style.display = 'block';
     urlRow.style.display = 'none';
   }
+  // 이미지 타입일 때만 '여러 장 가능' 안내 표시
+  if (multiHint) multiHint.style.display = (type === 'image') ? 'block' : 'none';
+}
+
+// 파일 1개를 Storage에 업로드하고 file_path 반환
+async function uploadOneFile(file) {
+  const ext = file.name.split('.').pop();
+  const path = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+  const upRes = await fetch(`${STORAGE_URL}/object/${BUCKET}/${path}`, {
+    method: 'POST',
+    headers: {
+      'apikey': SUPA_KEY,
+      'Authorization': 'Bearer ' + SUPA_KEY,
+      'Content-Type': file.type,
+      'x-upsert': 'true'
+    },
+    body: file
+  });
+  if (!upRes.ok) throw new Error('파일 업로드 실패: ' + file.name);
+  return path;
+}
+
+// library_items에 1건 등록
+async function insertLibItem(item) {
+  let res = await supaFetch(REST_URL + '/library_items', {
+    method: 'POST',
+    headers: { 'Prefer': 'return=minimal' },
+    body: JSON.stringify(item)
+  });
+  if (!res.ok) {
+    // sort_order 컬럼이 없을 경우 제외 후 재시도
+    const it2 = { ...item }; delete it2.sort_order;
+    res = await supaFetch(REST_URL + '/library_items', {
+      method: 'POST',
+      headers: { 'Prefer': 'return=minimal' },
+      body: JSON.stringify(it2)
+    });
+  }
+  if (!res.ok) throw new Error('저장 실패');
 }
 
 async function saveLibItem() {
   const title = document.getElementById('adminTitle').value.trim();
   const type = document.getElementById('adminType').value;
-  if (!title) { alert('제목을 입력해주세요.'); return; }
+  const catName = document.getElementById('adminCat').value;
+  const desc = document.getElementById('adminDesc').value.trim();
 
   const btn = document.querySelector('.admin-btn.primary');
   btn.textContent = '저장 중...';
   btn.disabled = true;
 
   try {
-    let filePath = null;
-    let url = null;
-
-    if (type === 'link') {
-      url = document.getElementById('adminUrl').value.trim();
-      if (!url) { alert('URL을 입력해주세요.'); btn.textContent='저장'; btn.disabled=false; return; }
-    } else {
-      const fileInp = document.getElementById('adminFileInp');
-      const file = fileInp.files[0];
-      if (!file) { alert('파일을 선택해주세요.'); btn.textContent='저장'; btn.disabled=false; return; }
-      
-      // Storage 업로드
-      const ext = file.name.split('.').pop();
-      const path = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
-      const upRes = await fetch(`${STORAGE_URL}/object/${BUCKET}/${path}`, {
-        method: 'POST',
-        headers: {
-          'apikey': SUPA_KEY,
-          'Authorization': 'Bearer ' + SUPA_KEY,
-          'Content-Type': file.type,
-          'x-upsert': 'true'
-        },
-        body: file
-      });
-      if (!upRes.ok) { throw new Error('파일 업로드 실패'); }
-      filePath = path;
-    }
-
-    const catName = document.getElementById('adminCat').value;
-
     // 해당 카테고리의 마지막 순서 계산
     let nextOrder = 0;
     try {
@@ -3850,33 +3862,36 @@ async function saveLibItem() {
       }
     } catch(_) {}
 
-    const item = {
-      cat: catName,
-      type,
-      title,
-      item_desc: document.getElementById('adminDesc').value.trim(),
-      url: url || null,
-      file_path: filePath || null,
-      sort_order: nextOrder
-    };
+    if (type === 'link') {
+      if (!title) { alert('제목을 입력해주세요.'); btn.textContent='저장'; btn.disabled=false; return; }
+      const url = document.getElementById('adminUrl').value.trim();
+      if (!url) { alert('URL을 입력해주세요.'); btn.textContent='저장'; btn.disabled=false; return; }
+      await insertLibItem({ cat:catName, type, title, item_desc:desc, url, file_path:null, sort_order:nextOrder });
 
-    let res = await supaFetch(REST_URL + '/library_items', {
-      method: 'POST',
-      headers: { 'Prefer': 'return=minimal' },
-      body: JSON.stringify(item)
-    });
+    } else {
+      const files = document.getElementById('adminFileInp').files;
+      if (!files || files.length === 0) { alert('파일을 선택해주세요.'); btn.textContent='저장'; btn.disabled=false; return; }
 
-    // sort_order 컬럼이 없을 경우 해당 필드 제외 후 재시도
-    if (!res.ok) {
-      delete item.sort_order;
-      res = await supaFetch(REST_URL + '/library_items', {
-        method: 'POST',
-        headers: { 'Prefer': 'return=minimal' },
-        body: JSON.stringify(item)
-      });
+      if (files.length === 1) {
+        // 파일 1개 — 제목 필수
+        if (!title) { alert('제목을 입력해주세요.'); btn.textContent='저장'; btn.disabled=false; return; }
+        const path = await uploadOneFile(files[0]);
+        await insertLibItem({ cat:catName, type, title, item_desc:desc, url:null, file_path:path, sort_order:nextOrder });
+
+      } else {
+        // 파일 여러 개 — 각 파일이 자료 1건. 제목 비었으면 파일명 사용
+        for (let i = 0; i < files.length; i++) {
+          btn.textContent = `저장 중... (${i+1}/${files.length})`;
+          const f = files[i];
+          const path = await uploadOneFile(f);
+          // 제목: 입력했으면 "제목 (1)", 비었으면 파일명
+          const baseName = f.name.replace(/\.[^.]+$/, '');
+          const itemTitle = title ? `${title} (${i+1})` : baseName;
+          await insertLibItem({ cat:catName, type, title:itemTitle, item_desc:desc, url:null, file_path:path, sort_order:nextOrder + i });
+        }
+      }
     }
 
-    if (!res.ok) throw new Error('저장 실패');
     document.getElementById('adminOverlay').classList.remove('on');
     renderLibrary();
   } catch(e) {
@@ -4008,10 +4023,17 @@ async function checkAdminPw() {
   }
 }
 
-// 파일 선택시 파일명 표시
+// 파일 선택시 파일명 표시 (여러 개 대응)
 function onFileSelect() {
-  const file = document.getElementById('adminFileInp').files[0];
-  document.getElementById('adminFileName').textContent = file ? file.name : '';
+  const files = document.getElementById('adminFileInp').files;
+  const nameEl = document.getElementById('adminFileName');
+  if (!files || files.length === 0) {
+    nameEl.textContent = '';
+  } else if (files.length === 1) {
+    nameEl.textContent = files[0].name;
+  } else {
+    nameEl.textContent = `${files.length}개 파일 선택됨`;
+  }
 }
 
 // 로고 클릭 동작
