@@ -4077,6 +4077,18 @@ if(mi){const n=new Date();mi.value=n.getFullYear()+'-'+String(n.getMonth()+1).pa
 if(document.getElementById('diagCard-designer')) selectDiag('designer', true);
 // 카테고리를 Supabase에서 미리 동기화 (자료실·자료추가 시트에서 바로 쓰도록)
 if(typeof syncCats==='function') syncCats();
+// ━━━ 딥링크: URL이 #library 면 자료실 바로 열기 (멘토뷰 ?view= 는 제외) ━━━
+(function openByHash(){
+  if(new URLSearchParams(location.search).get('view')) return; // 멘토뷰 우선
+  if(location.hash === '#library') {
+    goLibrary();
+  }
+})();
+// 뒤로가기 등으로 해시가 바뀔 때도 반응
+window.addEventListener('hashchange', ()=>{
+  if(location.hash === '#library') goLibrary();
+  else if(location.hash === '' || location.hash === '#home') showScreen('home');
+});
 </script>
 </body>
 
